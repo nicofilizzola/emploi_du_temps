@@ -20,10 +20,10 @@
         </div>
         
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
-            <input type="text" placeholder="Chercher un événement..." class="form-control my-4">
-            <div>
+            <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
+            <div id="#js-session-events">
                 {% for event in events %}
-                    <button class="btn btn-secondary btn-block">{{ event }}</button>
+                    <button class="btn btn-secondary btn-block js-event-button">{{ event }}</button>
                 {% endfor %}
             </div>
         </div>
