@@ -15,7 +15,8 @@ class SessionType extends AbstractType
         $builder
             ->add('start', null, [
                 'label' => 'À partir de :',
-                'data' => new DateTimeImmutable
+                'data' => new DateTimeImmutable,
+                //'class' => 'form-control'
             ])
             ->add('until', null, [
                 // add one year

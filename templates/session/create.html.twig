@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row mt-5">  
+        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+            <h1 class="text-center">Créer une nouvelle session</h1>
+            {{ form_start(sessionForm)}}
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        {{ form_row(sessionForm.start) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(sessionForm.until) }}
+                    </div>
+                </div>
+                <p class="mt-4 text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem, porro reprehenderit architecto, repudiandae esse totam omnis, incidunt consequatur temporibus possimus ex nobis magni hic? Earum, ipsa sed. Libero, possimus commodi.</p>
+                <button type="submit" class="btn btn-primary btn-block mt-4" id="js-session-submit-button">Envoyer</button>
+                <script>
+                    document.querySelector('#js-session-submit-button').addEventListener('click', function(event){
+                        if (!window.confirm('Vous en êtes sûr ?')){
+                            event.preventDefault();
+                        }
+                    })
+                </script>
+            </div>
+        </div>
+
+    {{ form_end(sessionForm) }}
+
+<!--
+    <div id="calendar">
+    </div>
+
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+        });
+        calendar.render();
+        calendar.gotoDate('2020-03-22');
+    });
+    </script>
+-->
+{% endblock %}
+
+
