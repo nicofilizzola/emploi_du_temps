@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SessionController!{% endblock %}
+
+{% block body %}
+    <h1>Créer une nouvelle session</h1>
+    {{ form_start(sessionForm)}}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(sessionForm.start) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(sessionForm.until) }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="js-session-submit-button">Envoyer</button>
+        <script>
+            document.querySelector('#js-session-submit-button').addEventListener('click', function(event){
+                if (!window.confirm('Vous en êtes sûr ?')){
+                    event.preventDefault();
+                }
+            })
+        </script>
+
+    {{ form_end(sessionForm) }}
+
+<!--
+    <div id="calendar">
+    </div>
+
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+        });
+        calendar.render();
+        calendar.gotoDate('2020-03-22');
+    });
+    </script>
+-->
+{% endblock %}
+
+
