@@ -1,26 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SessionController!{% endblock %}
-
 {% block body %}
-    <h1>Créer une nouvelle session</h1>
-    {{ form_start(sessionForm)}}
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_row(sessionForm.start) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(sessionForm.until) }}
+    <div class="row mt-5">  
+        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+            <h1 class="text-center">Créer une nouvelle session</h1>
+            {{ form_start(sessionForm)}}
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        {{ form_row(sessionForm.start) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(sessionForm.until) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4" id="js-session-submit-button">Envoyer</button>
+                <script>
+                    document.querySelector('#js-session-submit-button').addEventListener('click', function(event){
+                        if (!window.confirm('Vous en êtes sûr ?')){
+                            event.preventDefault();
+                        }
+                    })
+                </script>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="js-session-submit-button">Envoyer</button>
-        <script>
-            document.querySelector('#js-session-submit-button').addEventListener('click', function(event){
-                if (!window.confirm('Vous en êtes sûr ?')){
-                    event.preventDefault();
-                }
-            })
-        </script>
 
     {{ form_end(sessionForm) }}
 
