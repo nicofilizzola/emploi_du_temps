@@ -7,17 +7,44 @@
             <div id="calendar">
             </div>
 
-            <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
+            <script type="module">
+           /*document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                 });
                 calendar.render();
                 calendar.gotoDate('{{ session.start | date('Y-m-d') }}');
+            });*/
+            import { Calendar } from '@fullcalendar/core';
+            import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                let draggableEl = document.getElementById('mydraggable');
+                let calendarEl = document.getElementById('mycalendar');
+
+                let calendar = new Calendar(calendarEl, {
+                    plugins: [ interactionPlugin ],
+                    droppable: true
+                });
+
+                calendar.render();
+
+                new Draggable(draggableEl);
             });
             </script>
         </div>
+        
+        {#
+        <table>
+            <thead>
+
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        #}
         
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
             <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
