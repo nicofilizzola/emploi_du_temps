@@ -72,12 +72,12 @@ class SessionController extends AbstractController
             $dateDiff = date_diff($startDate, $untilDate)->d;
             $startDateTimestamp = $startDate->getTimestamp();
             $untilDateTimestamp = $untilDate->getTimestamp();
-            if ($dateDiff < $this::MIN_CLASS_DAYS /*|| $startDateTimestamp < $untilDateTimestamp*/){
+            if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp){
                 $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
                 return $this->redirectToRoute('app_session_create');
             }
 
-            
+            dd('else');
             for ($i = 0; $i <= $dateDiff; $i++) {
                 $dateTimestamp = date('Y-m-d', $startDateTimestamp + 60 * 60 * 24 * $i);
                 $date = new DateTimeImmutable($dateTimestamp);
