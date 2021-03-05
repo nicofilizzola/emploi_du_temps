@@ -3,7 +3,7 @@
 {% block body %}
     <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
     <div class="row mt-4 justify-content-center">  
-        <div class="mx-1 col-md-6 bg-light rounded p-5"> 
+        {# <div class="mx-1 col-md-6 bg-light rounded p-5"> 
             <div id="calendar">
             </div>
 
@@ -33,9 +33,8 @@
                 new Draggable(draggableEl);
             });
             </script>
-        </div>
+        </div> #}
         
-        {#
         <table>
             <thead>
 
@@ -44,7 +43,6 @@
 
             </tbody>
         </table>
-        #}
         
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
             <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">

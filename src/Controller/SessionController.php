@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -19,7 +20,7 @@ class SessionController extends AbstractController
 {
     private $em;
     private $repo;
-    const DATE_TIMESTAMP = 86400;
+    const MIN_CLASS_DAYS = 200;
 
     public function __construct(EntityManagerInterface $em, SessionRepository $repo){
         $this->em = $em;
@@ -66,14 +67,19 @@ class SessionController extends AbstractController
             $this->em->persist($session);
             $this->em->flush();
 
-            $dateDiff = date_diff($session->getStart(), $session->getUntil())->d;
-            if ($dateDiff < 100){
-                // Exception
+            $startDate = $session->getStart();
+            $untilDate = $session->getUntil();
+            $dateDiff = date_diff($startDate, $untilDate)->d;
+            $startDateTimestamp = $startDate->getTimestamp();
+            $untilDateTimestamp = $untilDate->getTimestamp();
+            if ($dateDiff < $this::MIN_CLASS_DAYS /*|| $startDateTimestamp < $untilDateTimestamp*/){
+                $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
+                return $this->redirectToRoute('app_session_create');
             }
 
-            $startDateTimestamp = $session->getStart()->getTimestamp();
+            
             for ($i = 0; $i <= $dateDiff; $i++) {
-                $dateTimestamp = date('Y-m-d', $startDateTimestamp + 86400 * $i);
+                $dateTimestamp = date('Y-m-d', $startDateTimestamp + 60 * 60 * 24 * $i);
                 $date = new DateTimeImmutable($dateTimestamp);
 
                 $day = new Day;
