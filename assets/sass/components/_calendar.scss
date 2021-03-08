@@ -1,0 +1,17 @@
+.calendar{
+    border-collapse: collapse;
+    &, & td, & th{
+        border: 1px solid black;
+    }
+    .day{
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */ 
+        transition: 0.3s;
+        cursor: pointer;
+        &:hover{
+            background-color: $light;
+        }
+    }
+}
