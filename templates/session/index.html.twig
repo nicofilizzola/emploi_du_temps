@@ -5,34 +5,37 @@
         <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
         <div class="row mt-4 justify-content-center">  
             <div class="mx-1 p-3 col-md-6 bg-light rounded">
+
+                {% set i = 0 %}
                 {% for month in days | batch(35) %}
                     <table class="calendar w-100">
                         <thead>
                             <tr>
+                                <th class="px-3 py-1">DIM</th>
                                 <th class="px-3 py-1">LUN</th>
                                 <th class="px-3 py-1">MAR</th>
                                 <th class="px-3 py-1">MER</th>
                                 <th class="px-3 py-1">JEU</th>
                                 <th class="px-3 py-1">VEN</th>
                                 <th class="px-3 py-1">SAM</th>
-                                <th class="px-3 py-1">DIM</th>
                             </tr>
                         </thead> 
                         <tbody>
                             {% for week in month | batch(7) %}
-                                    <tr>
+                                <tr>
+                                    
                                     {% for day in week %}
                                         <td class="p-3 day">
                                             <div>
-                                                {{ day.date | date('d D')}}
+                                                {{ day.date | date('d') }}
                                             </div>
                                             <div>
-
+                                                {{ day.date | date('D') }}
                                             </div>
-                                        </td>
+                                        </td> 
                                     {% endfor %}
-                                    </tr>
-                                {% endfor %}
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 {% endfor %}

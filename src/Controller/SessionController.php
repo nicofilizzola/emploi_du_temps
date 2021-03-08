@@ -36,7 +36,7 @@ class SessionController extends AbstractController
     {        
         if ($this->repo->findAll()){
             $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
-            $days = $this->dayRepo->findBy(['session' => $latestSession->getId()]);
+            $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
             $events = [
                 'Cours',
                 'Vacances',
@@ -72,19 +72,25 @@ class SessionController extends AbstractController
         $form->handleRequest($req);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $this->em->persist($session);
-            $this->em->flush();
-
             $startDate = $session->getStart();
             $untilDate = $session->getUntil();
             $dateDiff = date_diff($startDate, $untilDate)->days;
             $startDateTimestamp = $startDate->getTimestamp();
             $untilDateTimestamp = $untilDate->getTimestamp();
+
             if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp){
                 // add exception if selected year is not a precedent year (if untildate('y') is repeated)
                 $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
                 return $this->redirectToRoute('app_session_create');
             }
+            //dd(date('w', $startDateTimestamp));
+            if (date('w', $startDateTimestamp) != 0){
+                $this->addFlash('warning', 'La date de début doit être un dimanche.');
+                return $this->redirectToRoute('app_session_create');
+            }
+
+            $this->em->persist($session);
+            $this->em->flush();
 
             for ($i = 0; $i <= $dateDiff; $i++) {
                 $dateSet = date('Y-m-d', $startDateTimestamp + 60 * 60 * 24 * $i);
@@ -98,7 +104,7 @@ class SessionController extends AbstractController
                 $this->em->flush();
             }
             $this->addFlash('success', 'Session créée avec succès !');
-            return $this->redirectToRoute('app_session_create');
+            return $this->redirectToRoute('app_session');
         }
         return $this->render('session/create.html.twig', [
             'sessionForm' => $formView,
