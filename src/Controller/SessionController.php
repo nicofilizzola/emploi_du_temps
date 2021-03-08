@@ -32,7 +32,6 @@ class SessionController extends AbstractController
      */
     public function index(Request $req): Response
     {        
-        // do this if there is a session in the db
         if ($this->repo->findAll()){
             $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
             $events = [
@@ -56,9 +55,6 @@ class SessionController extends AbstractController
         }
 
         return $this->render('session/index.html.twig');
-        
-
-        // if no session in db
     }
 
     /**
@@ -77,7 +73,7 @@ class SessionController extends AbstractController
 
             $startDate = $session->getStart();
             $untilDate = $session->getUntil();
-            $dateDiff = date_diff($startDate, $untilDate)->d;
+            $dateDiff = date_diff($startDate, $untilDate)->days;
             $startDateTimestamp = $startDate->getTimestamp();
             $untilDateTimestamp = $untilDate->getTimestamp();
             if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp){
@@ -97,11 +93,9 @@ class SessionController extends AbstractController
                 $this->em->persist($day);
                 $this->em->flush();
             }
-
             $this->addFlash('success', 'Session créée avec succès !');
             return $this->redirectToRoute('app_session_create');
         }
-
         return $this->render('session/create.html.twig', [
             'sessionForm' => $formView,
         ]);
