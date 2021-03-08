@@ -5,40 +5,42 @@
         <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
         <div class="row mt-4 justify-content-center">  
             <div class="mx-1 p-3 col-md-6 bg-light rounded">
-
-                {% set i = 0 %}
-                {% for month in days | batch(35) %}
-                    <table class="calendar w-100">
-                        <thead>
-                            <tr>
-                                <th class="px-3 py-1">DIM</th>
-                                <th class="px-3 py-1">LUN</th>
-                                <th class="px-3 py-1">MAR</th>
-                                <th class="px-3 py-1">MER</th>
-                                <th class="px-3 py-1">JEU</th>
-                                <th class="px-3 py-1">VEN</th>
-                                <th class="px-3 py-1">SAM</th>
-                            </tr>
-                        </thead> 
-                        <tbody>
-                            {% for week in month | batch(7) %}
-                                <tr>
-                                    
-                                    {% for day in week %}
-                                        <td class="p-3 day">
-                                            <div>
-                                                {{ day.date | date('d') }}
-                                            </div>
-                                            <div>
-                                                {{ day.date | date('D') }}
-                                            </div>
-                                        </td> 
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endfor %}
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for month in days | batch(35) %}
+                            <div class="swiper-slide px-5 pt-4" >
+                                <table class="calendar w-100">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-3 py-1">DIM</th>
+                                            <th class="px-3 py-1">LUN</th>
+                                            <th class="px-3 py-1">MAR</th>
+                                            <th class="px-3 py-1">MER</th>
+                                            <th class="px-3 py-1">JEU</th>
+                                            <th class="px-3 py-1">VEN</th>
+                                            <th class="px-3 py-1">SAM</th>
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        {% for week in month | batch(7) %} 
+                                            <tr>
+                                                {% for day in week %}
+                                                    <td class="p-3 day">
+                                                        <div>
+                                                            {{ day.date | date('d M') }}
+                                                        </div>
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
             </div>    
             
             
@@ -46,7 +48,7 @@
                 <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
                 <div id="#js-session-events">
                     {% for event in events %}
-                        <button class="btn btn-secondary btn-block js-event-button">{{ event }}</button>
+                        <button class="btn btn-secondary btn-block js-event-button event-{{loop.index}}">{{ event }}</button>
                     {% endfor %}
                 </div>
             </div>
@@ -58,10 +60,44 @@
             </div>
         </div>
 
-<!--
-    <button class="btn btn-primary fixed-top rounded-circle">+</button>
-    <a id="js-session-create-button" class="hidden" href="{{ path('app_session_create') }}"></a>
--->
+        {# SCRIPTS #}
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script>
+        // swiper
+            const swiper = new Swiper('.swiper-container', {
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        </script>
+
+        <script>
+        // searchbar
+            var events = document.querySelectorAll('.js-event-button');
+            var searchbar = document.querySelector('#js-session-searchbar');
+            searchbar.addEventListener('keyup', function(e){
+                events.forEach(event => {
+                    if (event.textContent.toLowerCase().indexOf(searchbar.value.toLowerCase()) == -1){
+                        event.classList.add('d-none');
+                    } else {
+                        if (event.className.indexOf('d-none') !== -1){
+                            event.classList.remove('d-none');
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            var eventSelected = false;
+            events.forEach(element => {
+                element.addEventListener('click', function(){
+                    eventSelected = element.classList[element.classList.length - 1];
+                    console.log(eventSelected);
+                })
+            })
+        </script>
 
 
     {% else %}
