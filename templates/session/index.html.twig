@@ -1,69 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
-    <div class="row mt-4 justify-content-center">  
-        {# <div class="mx-1 col-md-6 bg-light rounded p-5"> 
-            <div id="calendar">
-            </div>
+    {% if session is defined and events is defined %}
+        <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
+        <div class="row mt-4 justify-content-center">  
+            <table>
+                <thead>
 
-            <script type="module">
-           /*document.addEventListener('DOMContentLoaded', function() {
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                });
-                calendar.render();
-                calendar.gotoDate('{{ session.start | date('Y-m-d') }}');
-            });*/
-            import { Calendar } from '@fullcalendar/core';
-            import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+                </thead>
+                <tbody>
 
-            document.addEventListener('DOMContentLoaded', function() {
-                let draggableEl = document.getElementById('mydraggable');
-                let calendarEl = document.getElementById('mycalendar');
-
-                let calendar = new Calendar(calendarEl, {
-                    plugins: [ interactionPlugin ],
-                    droppable: true
-                });
-
-                calendar.render();
-
-                new Draggable(draggableEl);
-            });
-            </script>
-        </div> #}
-        
-        <table>
-            <thead>
-
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-        
-        <div class="mx-1 p-3 col-md-3 bg-dark rounded">
-            <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
-            <div id="#js-session-events">
-                {% for event in events %}
-                    <button class="btn btn-secondary btn-block js-event-button">{{ event }}</button>
-                {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="mx-1 p-3 col-md-3 bg-dark rounded">
+                <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
+                <div id="#js-session-events">
+                    {% for event in events %}
+                        <button class="btn btn-secondary btn-block js-event-button">{{ event }}</button>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="my-5 row">
-        <div class="col-md-9 mx-auto">
-            <button class="btn btn-primary btn-block">Sauvegarder les changements</button>
+        <div class="my-5 row">
+            <div class="col-md-9 mx-auto">
+                <button class="btn btn-primary btn-block">Sauvegarder les changements</button>
+            </div>
         </div>
-    </div>
-        
+
 <!--
     <button class="btn btn-primary fixed-top rounded-circle">+</button>
     <a id="js-session-create-button" class="hidden" href="{{ path('app_session_create') }}"></a>
 -->
+
+
+    {% else %}
+        <div class="row mt-5">  
+        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+            <h1 class="text-center">Il n'y a pas de session disponible. <a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
+            </div>
+        </div>  
+    {% endif %}       
+
 {% endblock %}
 
 

@@ -32,25 +32,33 @@ class SessionController extends AbstractController
      */
     public function index(Request $req): Response
     {        
-        $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
-        $events = [
-            'Cours',
-            'Vacances',
-            'Vacances (Zone C)',
-            'PTUT',
-            'Stage 1A',
-            'Stage 2A',
-            'Stage 3A',
-            'Conseil de l\'IUT',
-            'Conseil de direction de l\'IUT',
-            'Conseil Départamental',
-            'Jurys semestre'
-        ];
+        // do this if there is a session in the db
+        if ($this->repo->findAll()){
+            $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
+            $events = [
+                'Cours',
+                'Vacances',
+                'Vacances (Zone C)',
+                'PTUT',
+                'Stage 1A',
+                'Stage 2A',
+                'Stage 3A',
+                'Conseil de l\'IUT',
+                'Conseil de direction de l\'IUT',
+                'Conseil Départamental',
+                'Jurys semestre'
+            ];
+    
+            return $this->render('session/index.html.twig', [
+                'session' => $latestSession,
+                'events' => $events
+            ]);
+        }
 
-        return $this->render('session/index.html.twig', [
-            'session' => $latestSession,
-            'events' => $events
-        ]);
+        return $this->render('session/index.html.twig');
+        
+
+        // if no session in db
     }
 
     /**
@@ -73,14 +81,14 @@ class SessionController extends AbstractController
             $startDateTimestamp = $startDate->getTimestamp();
             $untilDateTimestamp = $untilDate->getTimestamp();
             if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp){
+                // add exception if selected year is not a precedent year (if untildate('y') is repeated)
                 $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
                 return $this->redirectToRoute('app_session_create');
             }
 
-            dd('else');
             for ($i = 0; $i <= $dateDiff; $i++) {
-                $dateTimestamp = date('Y-m-d', $startDateTimestamp + 60 * 60 * 24 * $i);
-                $date = new DateTimeImmutable($dateTimestamp);
+                $dateSet = date('Y-m-d', $startDateTimestamp + 60 * 60 * 24 * $i);
+                $date = new DateTimeImmutable($dateSet);
 
                 $day = new Day;
                 $day->setDate($date);
