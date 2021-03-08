@@ -6,6 +6,7 @@ use App\Entity\Day;
 use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\SessionRepository;
+use App\Repository\DayRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,9 +23,10 @@ class SessionController extends AbstractController
     private $repo;
     const MIN_CLASS_DAYS = 200;
 
-    public function __construct(EntityManagerInterface $em, SessionRepository $repo){
+    public function __construct(EntityManagerInterface $em, SessionRepository $repo, DayRepository $dayRepo){
         $this->em = $em;
         $this->repo = $repo;
+        $this->dayRepo = $dayRepo;
     }
 
     /**
@@ -34,6 +36,7 @@ class SessionController extends AbstractController
     {        
         if ($this->repo->findAll()){
             $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
+            $days = $this->dayRepo->findBy(['session' => $latestSession->getId()]);
             $events = [
                 'Cours',
                 'Vacances',
@@ -50,6 +53,7 @@ class SessionController extends AbstractController
     
             return $this->render('session/index.html.twig', [
                 'session' => $latestSession,
+                'days' => $days,
                 'events' => $events
             ]);
         }

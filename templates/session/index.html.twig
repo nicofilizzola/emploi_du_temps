@@ -4,14 +4,40 @@
     {% if session is defined and events is defined %}
         <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
         <div class="row mt-4 justify-content-center">  
-            <table>
-                <thead>
+            <div class="mx-1 p-3 col-md-6 bg-light rounded">
+                {% for month in days | batch(35) %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>LUN</td>
+                                <td>MAR</td>
+                                <td>MER</td>
+                                <td>JEU</td>
+                                <td>VEN</td>
+                                <td>SAM</td>
+                                <td>DIM</td>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            {% for week in month | batch(7) %}
+                                    <tr>
+                                    {% for day in week %}
+                                        <td>
+                                            <div>
+                                                {{ day.date | date('d')}}
+                                            </div>
+                                            <div>
 
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>    
+            
             
             <div class="mx-1 p-3 col-md-3 bg-dark rounded">
                 <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
