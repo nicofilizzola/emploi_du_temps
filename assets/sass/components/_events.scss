@@ -1,35 +1,35 @@
 .event-{
     &1{ background-color: $red;
-        &:hover{ background-color: darken($color: $red, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $red, $amount: 10); }    
     }
     &2{ background-color: $orange;
-        &:hover{ background-color: darken($color: $orange, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $orange, $amount: 10); }    
     }
     &3{ background-color: $yellow;
-        &:hover{ background-color: darken($color: $yellow, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $yellow, $amount: 10); }    
     }
     &4{ background-color: $green;
-        &:hover{ background-color: darken($color: $green, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $green, $amount: 10); }    
     }
     &5{ background-color: $greenish;
-        &:hover{ background-color: darken($color: $greenish, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $greenish, $amount: 10); }    
     }
     &6{ background-color: $blue;
-        &:hover{ background-color: darken($color: $blue, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $blue, $amount: 10); }    
     }
     &7{ background-color: $darkBlue;
-        &:hover{ background-color: darken($color: $darkBlue, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $darkBlue, $amount: 10); }    
     }
     &8{ background-color: $violet;
-        &:hover{ background-color: darken($color: $violet, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $violet, $amount: 10); }    
     }
     &9{ background-color: $magenta;
-        &:hover{ background-color: darken($color: $magenta, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $magenta, $amount: 10); }    
     }
     &10{ background-color: $dark;
-        &:hover{ background-color: darken($color: $dark, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $dark, $amount: 10); }    
     }
     &11{ background-color: $darkGreen;
-        &:hover{ background-color: darken($color: $darkGreen, $amount: 10); }    
+        &:hover, &:active, &:focus{ background-color: darken($color: $darkGreen, $amount: 10); }    
     }
 }

@@ -8,7 +8,7 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         {% for month in days | batch(35) %}
-                            <div class="swiper-slide px-5 pt-4" >
+                            <form class="swiper-slide px-5 pt-4" action="" method="post">
                                 <table class="calendar w-100">
                                     <thead>
                                         <tr>
@@ -29,13 +29,16 @@
                                                         <div>
                                                             {{ day.date | date('d M') }}
                                                         </div>
+                                                        <input type="checkbox">
+                                                        <input type="checkbox">
+                                                        <input type="checkbox">
                                                     </td>
                                                 {% endfor %}
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
+                            </form>
                         {% endfor %}
                     </div>
                     <div class="swiper-button-prev"></div>
@@ -69,6 +72,7 @@
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                allowTouchMove: false
             });
         </script>
 
@@ -94,9 +98,19 @@
             events.forEach(element => {
                 element.addEventListener('click', function(){
                     eventSelected = element.classList[element.classList.length - 1];
-                    console.log(eventSelected);
-                })
-            })
+                });
+            });
+            var days = document.querySelectorAll('.day');
+            days.forEach(element => {
+                element.addEventListener('click', function(){
+                    if (element.children[2].checked){
+                        element.children[2].checked = false;
+                    } else {
+                        element.children[2].checked = true;
+                    } 
+                    
+                });
+            });
         </script>
 
 
