@@ -7,11 +7,12 @@
             <div class="mx-1 p-3 col-md-6 bg-light rounded">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
+                        {% set loopCounter = 0 %}
                         {% for monthDays in monthsDays %}
                             {% if monthDays is empty == false %}
                                 
-                                <form class="swiper-slide px-5 pt-4" action="" method="post">
-                                    <h2>{{ monthDays[0].date | date('M') }}</h2>
+                                <form class="swiper-slide px-5 py-4" action="" method="post">
+                                    <h2 class="mb-3">{{ monthDays[0].date | date('F') }}</h2>
                                     <table class="calendar w-100">
                                         <thead>
                                             <tr>
@@ -28,13 +29,14 @@
                                             {% for week in monthDays | batch(7) %} 
                                                 <tr>
                                                     {% for day in week %}
-                                                        <td class="p-3 day">
+                                                        {% set loopCounter = loopCounter + 1 %}
+                                                        <td class="p-3 day" id="js-day-{{ loopCounter }}">
                                                             <div>
                                                                 {{ day.date | date('d') }}
                                                             </div>
-                                                            <input type="checkbox">
-                                                            <input type="checkbox">
-                                                            <input type="checkbox">
+                                                            {% for event in events %}
+                                                                <input type="checkbox" value="{{ loop.index }}">
+                                                            {% endfor %}
                                                         </td>
                                                     {% endfor %}
                                                 </tr>
@@ -55,7 +57,10 @@
                 <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
                 <div id="#js-session-events">
                     {% for event in events %}
-                        <button class="btn btn-secondary btn-block js-event-button event-{{loop.index}}">{{ event }}</button>
+                        <button class="btn btn-secondary btn-block js-event-button d-flex align-items-center justify-content-between" id="js-event-{{ loop.index }}">
+                            <span>{{ event }}</span>
+                            <div style="width: 20px; height: 20px" class="event-{{ loop.index }} rounded-circle"></div>
+                        </button>
                     {% endfor %}
                 </div>
             </div>
@@ -82,10 +87,10 @@
 
         <script>
         // searchbar
-            var events = document.querySelectorAll('.js-event-button');
+            var eventBtns = document.querySelectorAll('.js-event-button');
             var searchbar = document.querySelector('#js-session-searchbar');
             searchbar.addEventListener('keyup', function(e){
-                events.forEach(event => {
+                eventBtns.forEach(event => {
                     if (event.textContent.toLowerCase().indexOf(searchbar.value.toLowerCase()) == -1){
                         event.classList.add('d-none');
                     } else {
@@ -98,22 +103,38 @@
         </script>
 
         <script>
+        // Assign event
+            var assignEventMode = false;
+            var assignEventModeCounter = 0;
             var eventSelected = false;
-            events.forEach(element => {
+            var eventStartDate, eventEndDate;
+            // Activate assignEventMode on EventBtn click
+            eventBtns.forEach(element => {
                 element.addEventListener('click', function(){
-                    eventSelected = element.classList[element.classList.length - 1];
+                    eventSelected = element.id.replace( /^\D+/g, '');
+                    assignEventMode = true;
                 });
             });
+            // Assign events to days
             var days = document.querySelectorAll('.day');
             days.forEach(element => {
                 element.addEventListener('click', function(){
-                    if (element.children[2].checked){
-                        element.children[2].checked = false;
-                    } else {
-                        element.children[2].checked = true;
-                    } 
-                    
-                });
+                    if (assignEventMode) {
+                        element.children[eventSelected].checked = true;
+                        assignEventModeCounter++;
+                        if (assignEventModeCounter == 1){
+                            eventStartDate = element.id.replace( /^\D+/g, '');
+                        } else if (assignEventModeCounter == 2) {
+                            eventEndDate = element.id.replace( /^\D+/g, '');
+                            // Check everything between start and end
+                            while (eventStartDate + 1 <= eventEndDate){
+                                document.getElementById('js-day-' + eventStartDate).children[eventSelected].checked = true;;
+                                eventStartDate++;
+                            }
+                            assignEventModeCounter = 0;
+                        }
+                    }
+                 });
             });
         </script>
 
