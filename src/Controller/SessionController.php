@@ -20,13 +20,33 @@ use Symfony\Component\Validator\Constraints\Date;
 class SessionController extends AbstractController
 {
     private $em;
-    private $repo;
+    private $sessionRepo;
+    private $dayRepo;
+
     const MIN_CLASS_DAYS = 200;
 
-    public function __construct(EntityManagerInterface $em, SessionRepository $repo, DayRepository $dayRepo){
+    public function __construct(EntityManagerInterface $em, SessionRepository $sessionRepo, DayRepository $dayRepo){
         $this->em = $em;
-        $this->repo = $repo;
+        $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
+    }
+
+    public function getMonthsDays($days){
+        $monthsDays = [
+            // 12 months max
+            [],[],[],[],[],[],[],[],[],[],[],[], 
+        ];
+        $i = 0;
+        foreach ($days as $key => $day){
+            $dayMonth = date('m', $day->getDate()->getTimestamp());
+            if (isset($prevDayMonth) && $dayMonth > $prevDayMonth){
+                $i++;
+            }
+            array_push($monthsDays[$i], $day); 
+            $prevDayMonth = $dayMonth;
+        }
+        return $monthsDays;
+        
     }
 
     /**
@@ -34,9 +54,10 @@ class SessionController extends AbstractController
      */
     public function index(Request $req): Response
     {        
-        if ($this->repo->findAll()){
-            $latestSession = $this->repo->findOneBy([], ['id' => 'DESC']);
+        if ($this->sessionRepo->findAll()){
+            $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
             $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
+            $monthsDays = $this->getMonthsDays($days);
             $events = [
                 'Cours',
                 'Vacances',
@@ -50,10 +71,10 @@ class SessionController extends AbstractController
                 'Conseil Départamental',
                 'Jurys semestre'
             ];
-    
+            
             return $this->render('session/index.html.twig', [
                 'session' => $latestSession,
-                'days' => $days,
+                'monthsDays' => $monthsDays,
                 'events' => $events
             ]);
         }
@@ -83,11 +104,15 @@ class SessionController extends AbstractController
                 $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
                 return $this->redirectToRoute('app_session_create');
             }
-            //dd(date('w', $startDateTimestamp));
+            if ($dateDiff > 365){
+                $this->addFlash('danger', 'Une session ne peut pas avoir une durée supérieure à un (1) an.');
+                return $this->redirectToRoute('app_session_create');
+            }
             if (date('w', $startDateTimestamp) != 0){
                 $this->addFlash('warning', 'La date de début doit être un dimanche.');
                 return $this->redirectToRoute('app_session_create');
             }
+            
 
             $this->em->persist($session);
             $this->em->flush();

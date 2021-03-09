@@ -7,38 +7,40 @@
             <div class="mx-1 p-3 col-md-6 bg-light rounded">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        {% for month in days | batch(35) %}
-                            <form class="swiper-slide px-5 pt-4" action="" method="post">
-                                <table class="calendar w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="px-3 py-1">DIM</th>
-                                            <th class="px-3 py-1">LUN</th>
-                                            <th class="px-3 py-1">MAR</th>
-                                            <th class="px-3 py-1">MER</th>
-                                            <th class="px-3 py-1">JEU</th>
-                                            <th class="px-3 py-1">VEN</th>
-                                            <th class="px-3 py-1">SAM</th>
-                                        </tr>
-                                    </thead> 
-                                    <tbody>
-                                        {% for week in month | batch(7) %} 
+                        {% for monthDays in monthsDays %}
+                            {% if monthDays is empty == false %}
+                                <form class="swiper-slide px-5 pt-4" action="" method="post">
+                                    <table class="calendar w-100">
+                                        <thead>
                                             <tr>
-                                                {% for day in week %}
-                                                    <td class="p-3 day">
-                                                        <div>
-                                                            {{ day.date | date('d M') }}
-                                                        </div>
-                                                        <input type="checkbox">
-                                                        <input type="checkbox">
-                                                        <input type="checkbox">
-                                                    </td>
-                                                {% endfor %}
+                                                <th class="px-3 py-1">DIM</th>
+                                                <th class="px-3 py-1">LUN</th>
+                                                <th class="px-3 py-1">MAR</th>
+                                                <th class="px-3 py-1">MER</th>
+                                                <th class="px-3 py-1">JEU</th>
+                                                <th class="px-3 py-1">VEN</th>
+                                                <th class="px-3 py-1">SAM</th>
                                             </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </form>
+                                        </thead> 
+                                        <tbody>
+                                            {% for week in monthDays | batch(7) %} 
+                                                <tr>
+                                                    {% for day in week %}
+                                                        <td class="p-3 day">
+                                                            <div>
+                                                                {{ day.date | date('d M') }}
+                                                            </div>
+                                                            <input type="checkbox">
+                                                            <input type="checkbox">
+                                                            <input type="checkbox">
+                                                        </td>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </form>
+                            {% endif %}
                         {% endfor %}
                     </div>
                     <div class="swiper-button-prev"></div>

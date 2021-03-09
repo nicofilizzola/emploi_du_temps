@@ -56,4 +56,5 @@ class Day
 
         return $this;
     }
+    
 }
