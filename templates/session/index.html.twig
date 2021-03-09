@@ -9,7 +9,9 @@
                     <div class="swiper-wrapper">
                         {% for monthDays in monthsDays %}
                             {% if monthDays is empty == false %}
+                                
                                 <form class="swiper-slide px-5 pt-4" action="" method="post">
+                                    <h2>{{ monthDays[0].date | date('M') }}</h2>
                                     <table class="calendar w-100">
                                         <thead>
                                             <tr>
@@ -28,7 +30,7 @@
                                                     {% for day in week %}
                                                         <td class="p-3 day">
                                                             <div>
-                                                                {{ day.date | date('d M') }}
+                                                                {{ day.date | date('d') }}
                                                             </div>
                                                             <input type="checkbox">
                                                             <input type="checkbox">
