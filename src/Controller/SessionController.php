@@ -64,7 +64,7 @@ class SessionController extends AbstractController
                 'Cours',
                 'Vacances',
                 'Vacances (Zone C)',
-                'PTUT',
+                'Projet tuteuré (PTUT)',
                 'Stage 1A',
                 'Stage 2A',
                 'Stage 3A',
