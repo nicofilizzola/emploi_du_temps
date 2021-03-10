@@ -2,64 +2,120 @@
 
 {% block body %}
     {% if session is defined and events is defined %}
-        <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
-        <div class="row mt-4 justify-content-center">  
-            <div class="mx-1 p-3 col-md-6 bg-light rounded">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        {% set loopCounter = 0 %}
-                        {% for monthDays in monthsDays %}
-                            {% if monthDays is empty == false %}
-                                
-                                <form class="swiper-slide px-5 py-4" action="" method="get">
-                                    <h2 class="mb-3">{{ monthDays[0].date | date('F') }}</h2>
-                                    <table class="calendar w-100">
-                                        <thead>
-                                            <tr>
-                                                <th class="px-3 py-1">DIM</th>
-                                                <th class="px-3 py-1">LUN</th>
-                                                <th class="px-3 py-1">MAR</th>
-                                                <th class="px-3 py-1">MER</th>
-                                                <th class="px-3 py-1">JEU</th>
-                                                <th class="px-3 py-1">VEN</th>
-                                                <th class="px-3 py-1">SAM</th>
-                                            </tr>
-                                        </thead> 
-                                        <tbody>
-                                            {% for week in monthDays | batch(7) %} 
-                                                <tr>
-                                                    {% for day in week %}
-                                                        {# separate week and weekend (MAYBE DONT SAVE WEEKEND IN DB) #}
-                                                        {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
-                                                            <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
-                                                                <div>
-                                                                    {{ day.date | date('d') }}
-                                                                </div>
-                                                            </td>
-                                                        {% else %}
-                                                            {% set loopCounter = loopCounter + 1 %}
-                                                            <td class="p-3 day" id="js-day-{{ loopCounter }}">
-                                                                <div>
-                                                                    {{ day.date | date('d') }}
-                                                                </div>
-                                                                {% for event in events %}
-                                                                    <input type="checkbox" value="{{ loop.index }}" />
-                                                                {% endfor %}
-                                                            </td>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </form>
+    <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
+    <div class="row mt-4 justify-content-center">  
+        <div class="mx-1 p-3 col-md-6 bg-light rounded">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+        {% set loopCounter = 0 %}
+        {% set firstBatchLastDay = 0 %}
+        {% for monthDays in monthsDays %}
+            {% if monthDays is empty == false %}  
+                    <div class="swiper-slide px-5 py-4">
+                        <h2 class="mb-3">{{ monthDays[0].date | date('F') }}</h2>
+                            <table class="calendar w-100">
+                            <thead>
+                                <tr>
+                                    <th class="px-3 py-1">Dim</th>
+                                    <th class="px-3 py-1">Lun</th>
+                                    <th class="px-3 py-1">Mar</th>
+                                    <th class="px-3 py-1">Mer</th>
+                                    <th class="px-3 py-1">Jeu</th>
+                                    <th class="px-3 py-1">Ven</th>
+                                    <th class="px-3 py-1">Sam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                {# FIRST BATCH #}
+                {% for weekDayIndex in 0..6 %}
+                    {% set iterationAmount = 0 %}
+                    {% if monthDays[0].date | date('w') == weekDayIndex %}
+                        {% set firstBatchSize = 7 - weekDayIndex %}
+                        
+                        {% for week in monthDays | batch (firstBatchSize) %}
+                            {% if loop.first %}
+                                {% for day in week %}
+
+                                    {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
+                                    <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                        <div>
+                                            {{ day.date | date('d') }}
+                                        </div>
+                                    </td>
+                                    {% else %}
+                                        {% set loopCounter = loopCounter + 1 %}
+                                    <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                        <div>{{ day.date | date('d') }}</div>
+                                        {% for event in events %}
+                                        <input type="checkbox" name="event-{{ loop.index }}" hidden="hidden"/>
+                                        {% endfor %}
+                                    </td>
+                                    {% endif %}
+                                    {% set iterationAmount = iterationAmount + 1 %}
+                                    {% set firstBatchLastDay = day.date.timestamp %}
+                                {% endfor %}
                             {% endif %}
                         {% endfor %}
-                    </div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
+                
+                    {% else %} 
+                        {% if firstBatchSize is defined %}  
+                            {% if iterationAmount == firstBatchSize %}  
+                                    <td></td>
+                            {% endif %}
+                        {% else %}
+                                   <td></td> 
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            
+
+
+                {# FROM SECOND BATCH ON #}
+                {% set sliceStart = 1 %}
+                {% for day in monthDays %} 
+                    {% if firstBatchLastDay is defined and day.date.timestamp < firstBatchLastDay %}
+                        {% set sliceStart = sliceStart + 1 %}
+                    {% endif %}
+                {% endfor %}
+               
+                {% set monthDaysLength = monthDays | length %}
+                {% set monthDaysSliced = monthDays | slice(sliceStart, monthDaysLength) %}
+                
+                {% for week in monthDaysSliced | batch(7) %} 
+                                <tr>
+                    {% for day in week %}
+                        {# separate week and weekend (MAYBE DONT SAVE WEEKEND IN DB) #}
+                        {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
+                                    <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                        <div>
+                                            {{ day.date | date('d') }}
+                                        </div>
+                                    </td>
+                        {% else %}
+                            {% set loopCounter = loopCounter + 1 %}
+                                    <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                        <div>{{ day.date | date('d') }}</div>
+                            {% for event in events %}
+                                        <input type="checkbox" name="event-{{ loop.index }}" hidden="hidden"/>
+                            {% endfor %}
+                                    </td>
+                        {% endif %}
+                    {% endfor %}
+                                </tr>
+                {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-            </div>    
+                                
+            {% endif %}
+        {% endfor %}
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>  
+          
             
             
             <div class="mx-1 p-3 col-md-3 bg-dark rounded">
@@ -117,6 +173,12 @@
             var assignEventModeCounter = 0;
             var eventSelected = false;
             var eventStartDate, eventEndDate;
+            function checkBetweenLoop(startCheck, endCheck){
+                while (startCheck + 1 <= endCheck){
+                    document.getElementById('js-day-' + startCheck).children[eventSelected].checked = true;
+                    startCheck++;
+                }
+            }
             // Activate assignEventMode on EventBtn click
             eventBtns.forEach(element => {
                 element.addEventListener('click', function(){
@@ -136,10 +198,7 @@
                         } else if (assignEventModeCounter == 2) {
                             eventEndDate = element.id.replace( /^\D+/g, '');
                             // Check everything between start and end
-                            while (eventStartDate + 1 <= eventEndDate){
-                                document.getElementById('js-day-' + eventStartDate).children[eventSelected].checked = true;
-                                eventStartDate++;
-                            }
+                            eventStartDate < eventEndDate ? checkBetweenLoop(eventStartDate, eventEndDate) : checkBetweenLoop(eventEndDate, eventStartDate);
                             assignEventModeCounter = 0;
                         }
                     }
@@ -153,7 +212,6 @@
                 });
             });*/
         </script>
-
 
     {% else %}
         <div class="row mt-5">  

@@ -68,7 +68,7 @@ class SessionController extends AbstractController
                 'Stage 3A',
                 'Conseil de l\'IUT',
                 'Conseil de direction de l\'IUT',
-                'Conseil Départamental',
+                'Conseil de département',
                 'Jurys semestre'
             ];
             
