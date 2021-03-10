@@ -4,6 +4,8 @@
     {% if session is defined and events is defined %}
     <h1 class="mt-5 text-center">Session {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
     <div class="row mt-4 justify-content-center">  
+
+        {# CALENDAR #}
         <div class="mx-1 p-3 col-md-6 bg-light rounded">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
@@ -68,8 +70,6 @@
                         {% endif %}
                     {% endif %}
                 {% endfor %}
-            
-
 
                 {# FROM SECOND BATCH ON #}
                 {% set sliceStart = 1 %}
@@ -115,23 +115,28 @@
                 <div class="swiper-button-next"></div>
             </div>
         </div>  
-          
+
+        {# EVENT BAR #}
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
-            <input type="text" placeholder="Chercher un événement..." class="form-control my-4" id="js-session-searchbar">
+            <button class="btn btn-success btn-block d-flex justify-content-between p-3">
+                <span>Créer manuellement</span>   
+                <img class="btn-icon" src="{{ asset('img/pen-solid.svg') }}" alt="Créer manuellement"> 
+            </button>
+            <input type="text" placeholder="Chercher un événement..." class=" mt-2 mb-4 form-control" id="js-session-searchbar">
             <div id="#js-session-events">
-            {% for event in events %}
+        {% for event in events %}
                 <button class="btn btn-secondary btn-block js-event-button d-flex align-items-center justify-content-between" id="js-event-{{ loop.index }}">
                     <span>{{ event }}</span>
-                    <div style="width: 20px; height: 20px" class="event-{{ loop.index }} rounded-circle"></div>
+                    <div class="event-{{ loop.index }} btn-icon rounded-circle"></div>
                 </button>
-            {% endfor %}
+        {% endfor %}
             </div>
         </div>
     </div>
 
     <div class="my-5 row">
         <div class="col-md-9 mx-auto">
-            <button class="btn btn-primary btn-block" id="js-events-submit">Sauvegarder les changements</button>
+            <button class="btn btn-primary btn-block p-5" id="js-events-submit">Sauvegarder les changements</button>
         </div>
     </div>
 
