@@ -17,7 +17,7 @@
                 <button type="submit" class="btn btn-primary btn-block mt-4" id="js-session-submit-button">Envoyer</button>
                 <script>
                     document.querySelector('#js-session-submit-button').addEventListener('click', function(event){
-                        if (!window.confirm('Vous en êtes sûr ?')){
+                        if (!window.confirm('Vous en êtes sûr ? Une fois créée, la session ne pourra pas être supprimmée.')){
                             event.preventDefault();
                         }
                     })

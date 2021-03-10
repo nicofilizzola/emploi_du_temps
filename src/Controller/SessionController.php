@@ -34,17 +34,19 @@ class SessionController extends AbstractController
     public function getMonthsDays($days){
         $monthsDays = [
             // 12 months max
-            [],[],[],[],[],[],[],[],[],[],[],[], 
+            [],[],[],[],[],[],[],[],[],[],[],[],[]
         ];
         $i = 0;
         foreach ($days as $key => $day){
-            $dayMonth = date('m', $day->getDate()->getTimestamp());
+            $dayMonth = date('Ym', $day->getDate()->getTimestamp());
+            
             if (isset($prevDayMonth) && $dayMonth > $prevDayMonth){
                 $i++;
             }
+            
             array_push($monthsDays[$i], $day); 
             $prevDayMonth = $dayMonth;
-        }
+        };
         return $monthsDays;
         
     }
@@ -108,10 +110,10 @@ class SessionController extends AbstractController
                 $this->addFlash('danger', 'Une session ne peut pas avoir une durée supérieure à un (1) an.');
                 return $this->redirectToRoute('app_session_create');
             }
-            if (date('w', $startDateTimestamp) != 0){
+            /*if (date('w', $startDateTimestamp) != 0){
                 $this->addFlash('warning', 'La date de début doit être un dimanche.');
                 return $this->redirectToRoute('app_session_create');
-            }
+            }*/
             
 
             $this->em->persist($session);
