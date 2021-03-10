@@ -153,12 +153,16 @@
             var eventBtns = document.querySelectorAll('.js-event-button');
             var searchbar = document.querySelector('#js-session-searchbar');
             searchbar.addEventListener('keyup', function(e){
-                eventBtns.forEach(event => {
-                    if (event.textContent.toLowerCase().indexOf(searchbar.value.toLowerCase()) == -1){
-                        event.classList.add('d-none');
+                eventBtns.forEach(element => {
+                    if (element.textContent.toLowerCase().indexOf(searchbar.value.toLowerCase()) == -1){
+                        element.classList.remove('d-flex');
+                        element.classList.add('d-none');
+                        console.log(element);
                     } else {
-                        if (event.className.indexOf('d-none') !== -1){
-                            event.classList.remove('d-none');
+                        
+                        if (element.className.indexOf('d-none') !== -1){
+                            element.classList.remove('d-none');
+                            element.classList.add('d-flex');
                         }
                     }
                 });
