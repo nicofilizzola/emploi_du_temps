@@ -1,36 +1,40 @@
-div.event-{
+div.event{
     transition: 0.3s;
-    &1{ background-color: $red;
+    &-1{ background-color: $red;
         &:hover, &:active, &:focus{ background-color: darken($color: $red, $amount: 10); }    
     }
-    &2{ background-color: $orange;
+    &-2{ background-color: $orange;
         &:hover, &:active, &:focus{ background-color: darken($color: $orange, $amount: 10); }    
     }
-    &3{ background-color: $yellow;
+    &-3{ background-color: $yellow;
         &:hover, &:active, &:focus{ background-color: darken($color: $yellow, $amount: 10); }    
     }
-    &4{ background-color: $green;
+    &-4{ background-color: $green;
         &:hover, &:active, &:focus{ background-color: darken($color: $green, $amount: 10); }    
     }
-    &5{ background-color: $greenish;
+    &-5{ background-color: $greenish;
         &:hover, &:active, &:focus{ background-color: darken($color: $greenish, $amount: 10); }    
     }
-    &6{ background-color: $blue;
+    &-6{ background-color: $blue;
         &:hover, &:active, &:focus{ background-color: darken($color: $blue, $amount: 10); }    
     }
-    &7{ background-color: $darkBlue;
+    &-7{ background-color: $darkBlue;
         &:hover, &:active, &:focus{ background-color: darken($color: $darkBlue, $amount: 10); }    
     }
-    &8{ background-color: $violet;
+    &-8{ background-color: $violet;
         &:hover, &:active, &:focus{ background-color: darken($color: $violet, $amount: 10); }    
     }
-    &9{ background-color: $magenta;
+    &-9{ background-color: $magenta;
         &:hover, &:active, &:focus{ background-color: darken($color: $magenta, $amount: 10); }    
     }
-    &10{ background-color: $dark;
+    &-10{ background-color: $dark;
         &:hover, &:active, &:focus{ background-color: darken($color: $dark, $amount: 10); }    
     }
-    &11{ background-color: $darkGreen;
+    &-11{ background-color: $darkGreen;
         &:hover, &:active, &:focus{ background-color: darken($color: $darkGreen, $amount: 10); }    
+    }
+
+    &-indicator{
+        height: 10px;
     }
 }

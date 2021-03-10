@@ -29,7 +29,28 @@
                             {% if loop.first %}
                                 {% for day in week %}
 
-                                    {% include 'partials/calendar/_calendarDay.html.twig' %}
+                                    {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
+                                <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                    <div>
+                                        {{ day.date | date('d') }}
+                                    </div>
+                                </td>
+
+                                    {% else %}
+
+                                        {% set loopCounter = loopCounter + 1 %}
+                                <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                    <div class="mb-2">{{ day.date | date('d') }}</div>
+
+                                        {% for event in events %}
+
+                                    <input type="checkbox" name="event-{{ loop.index }}" class="js-event-input" id="js-event-input-{{ loop.index }}" />
+
+                                    <div class="w-100 event event-indicator event-{{ loop.index }}" id="js-event-indicator-{{ loop.index }}"></div>
+
+                                        {% endfor %}
+                                </td>
+                                    {% endif %}
 
                                     {% set iterationAmount = iterationAmount + 1 %}
                                     {% set firstBatchLastDay = day.date.timestamp %}
@@ -63,7 +84,28 @@
                                 <tr>
                     {% for day in week %}
 
-                        {% include 'partials/calendar/_calendarDay.html.twig' %}
+                        {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
+                                    <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                        <div>
+                                            {{ day.date | date('d') }}
+                                        </div>
+                                    </td>
+
+                        {% else %}
+
+                            {% set loopCounter = loopCounter + 1 %}
+                                    <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                        <div class="mb-2">{{ day.date | date('d') }}</div>
+
+                            {% for event in events %}
+
+                                        <input type="checkbox" name="event-{{ loop.index }}" class="js-event-input" id="js-event-input-{{ loop.index }}" />
+
+                                        <div class="w-100 event event-indicator event-{{ loop.index }}" id="js-event-indicator-{{ loop.index }}"></div>
+
+                            {% endfor %}
+                                    </td>
+                        {% endif %}
 
                     {% endfor %}
                                 </tr>
@@ -91,7 +133,7 @@
         {% for event in events %}
                 <button class="btn btn-secondary btn-block js-event-button d-flex align-items-center justify-content-between" id="js-event-{{ loop.index }}">
                     <span>{{ event }}</span>
-                    <div class="event-{{ loop.index }} btn-icon rounded-circle"></div>
+                    <div class="event event-{{ loop.index }} btn-icon rounded-circle"></div>
                 </button>
         {% endfor %}
             </div>
@@ -146,6 +188,7 @@
             var eventStartDate, eventEndDate;
             function checkBetweenLoop(startCheck, endCheck){
                 while (startCheck + 1 <= endCheck){
+                    
                     document.getElementById('js-day-' + startCheck).children[eventSelected].checked = true;
                     startCheck++;
                 }
@@ -173,8 +216,20 @@
                             assignEventModeCounter = 0;
                         }
                     }
-                 });
+                });
             });
+
+            var hiddenEventInputs = document.querySelectorAll('.js-event-input');
+            hiddenEventInputs.forEach(element => {
+                element.addEventListener('change', function(){
+                    element.id.slice(-1);
+                    console.log('checkbox state change ' + element.id.slice(-1));
+                    //document.getElementById('js-event-indicator-' + eventInputIndicatorCounter).classList.toggle('d-none');
+                });
+            });
+
+
+
             // submit button
             /*var eventSubmitBtn = document.querySelector('#js-events-submit');
             eventSubmitBtn.addEventListener('click', function(){
