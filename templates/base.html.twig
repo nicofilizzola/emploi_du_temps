@@ -16,6 +16,11 @@
             </style>
             {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
+            
+        {% block libraries %}
+            <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
+        {% endblock %}
          
     </head>
 
@@ -26,11 +31,5 @@
 
     </body>
 
-    {% block javascripts %}
-        <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
-        
-        
-        {#{{ encore_entry_script_tags('app') }}#}
-    {% endblock %}
+    {% block javascripts %}{% endblock %}
 </html>

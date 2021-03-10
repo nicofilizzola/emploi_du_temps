@@ -44,9 +44,9 @@
 
                                         {% for event in events %}
 
-                                    <input type="checkbox" name="event-{{ loop.index }}" class="js-event-input" id="js-event-input-{{ loop.index }}" />
+                                    <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" />
 
-                                    <div class="w-100 event event-indicator event-{{ loop.index }}" id="js-event-indicator-{{ loop.index }}"></div>
+                                    <div class="w-100 event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
 
                                         {% endfor %}
                                 </td>
@@ -99,9 +99,9 @@
 
                             {% for event in events %}
 
-                                        <input type="checkbox" name="event-{{ loop.index }}" class="js-event-input" id="js-event-input-{{ loop.index }}" />
+                                        <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" />
 
-                                        <div class="w-100 event event-indicator event-{{ loop.index }}" id="js-event-indicator-{{ loop.index }}"></div>
+                                        <div class="w-100 event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
 
                             {% endfor %}
                                     </td>
@@ -163,6 +163,7 @@
         // searchbar
             var eventBtns = document.querySelectorAll('.js-event-button');
             var searchbar = document.querySelector('#js-session-searchbar');
+
             searchbar.addEventListener('keyup', function(e){
                 eventBtns.forEach(element => {
                     if (element.textContent.toLowerCase().indexOf(searchbar.value.toLowerCase()) == -1){
@@ -184,13 +185,30 @@
         // Assign event
             var assignEventMode = false;
             var assignEventModeCounter = 0;
+            // hey wtf
             var eventSelected = false;
             var eventStartDate, eventEndDate;
-            function checkBetweenLoop(startCheck, endCheck){
-                while (startCheck + 1 <= endCheck){
-                    
-                    document.getElementById('js-day-' + startCheck).children[eventSelected].checked = true;
+
+            function checkBetweenLoop(startCheck, endCheck, eventSelected){
+                var eventSelectedInt = parseInt(eventSelected);
+                var increaseCoef = 0;
+                var checkboxIndex;
+
+                for (i = 1; i <= eventSelectedInt; i++){
+                    checkboxIndex = i + increaseCoef;
+                    increaseCoef++;
+                }
+
+                while (startCheck <= endCheck){
+                    var day = document.getElementById('js-day-' + startCheck)
+                    var c = day.children[checkboxIndex];
+                    c.checked = true;
+
+                    console.log(checkboxIndex);
+                    //console.log(c);
+
                     startCheck++;
+                    //day.children[]
                 }
             }
             // Activate assignEventMode on EventBtn click
@@ -204,30 +222,29 @@
             var days = document.querySelectorAll('.day');
             days.forEach(element => {
                 element.addEventListener('click', function(){
-                    if (assignEventMode) {
-                        element.children[eventSelected].checked = true;
+                    if (assignEventMode) {            
                         assignEventModeCounter++;
                         if (assignEventModeCounter == 1){
                             eventStartDate = element.id.replace( /^\D+/g, '');
                         } else if (assignEventModeCounter == 2) {
                             eventEndDate = element.id.replace( /^\D+/g, '');
                             // Check everything between start and end
-                            eventStartDate < eventEndDate ? checkBetweenLoop(eventStartDate, eventEndDate) : checkBetweenLoop(eventEndDate, eventStartDate);
+                            eventStartDate < eventEndDate ? checkBetweenLoop(eventStartDate, eventEndDate, eventSelected) : checkBetweenLoop(eventEndDate, eventStartDate, eventSelected);
                             assignEventModeCounter = 0;
                         }
                     }
                 });
             });
 
+            //var hiddenEventInputs = document.querySelectorAll('.js-event-input');
             var hiddenEventInputs = document.querySelectorAll('.js-event-input');
+
             hiddenEventInputs.forEach(element => {
                 element.addEventListener('change', function(){
-                    element.id.slice(-1);
-                    console.log('checkbox state change ' + element.id.slice(-1));
-                    //document.getElementById('js-event-indicator-' + eventInputIndicatorCounter).classList.toggle('d-none');
+                    // DOES NOT LISTEN TO CHANGE UNLESS CLICK ON CHECKBOX
+                    
                 });
             });
-
 
 
             // submit button
