@@ -16,17 +16,7 @@
                     <div class="swiper-slide px-5 py-4">
                         <h2 class="mb-3">{{ monthDays[0].date | date('F Y') }}</h2>
                             <table class="calendar w-100">
-                            <thead>
-                                <tr>
-                                    <th class="px-3 py-1">Dim</th>
-                                    <th class="px-3 py-1">Lun</th>
-                                    <th class="px-3 py-1">Mar</th>
-                                    <th class="px-3 py-1">Mer</th>
-                                    <th class="px-3 py-1">Jeu</th>
-                                    <th class="px-3 py-1">Ven</th>
-                                    <th class="px-3 py-1">Sam</th>
-                                </tr>
-                            </thead>
+                {% include 'partials/calendar/_calendarHead.html.twig' %}
                             <tbody>
 
                 {# FIRST BATCH #}
