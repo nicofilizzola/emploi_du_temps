@@ -7,28 +7,31 @@ use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\SessionRepository;
 use App\Repository\DayRepository;
+use App\Repository\EventRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Component\Validator\Constraints\Date;
+// use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+// use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+// use Symfony\Component\Validator\Constraints\Date;
 
 class SessionController extends AbstractController
 {
     private $em;
     private $sessionRepo;
     private $dayRepo;
+    private $eventRepo;
 
     const MIN_CLASS_DAYS = 200;
 
-    public function __construct(EntityManagerInterface $em, SessionRepository $sessionRepo, DayRepository $dayRepo){
+    public function __construct(EntityManagerInterface $em, SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo){
         $this->em = $em;
         $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
+        $this->eventRepo = $eventRepo;
     }
 
     public function getMonthsDays($days){
@@ -48,7 +51,6 @@ class SessionController extends AbstractController
             $prevDayMonth = $dayMonth;
         };
         return $monthsDays;
-        
     }
 
     /**
@@ -56,23 +58,37 @@ class SessionController extends AbstractController
      */
     public function index(Request $req): Response
     {        
+        if ($req->isMethod('POST')){
+            foreach ($req->request as $key => $value){
+                //dd($key . " => " . $value);
+                $dayEventCharacters = explode('-', $key);
+                $dayInput = intval($dayEventCharacters[1]);
+                $eventInput = intval($dayEventCharacters[3]);
+                
+                $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+                $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
+                $dayIndex = 1;
+                foreach ($days as $day){
+                    if (date('w', $day->getDate()->getTimestamp()) != 6 && date('w', $day->getDate()->getTimestamp()) != 0) {
+                        if ($dayIndex == $dayInput) {
+                            $event = $this->eventRepo->findOneBy(['id' => $eventInput]);
+                            if ($event){
+                                $day->addEvent($event);
+                                $this->em->persist($event);
+                            }
+                        }
+                        $dayIndex++;
+                    }
+                }
+            }
+            $this->em->flush();
+        }
+        
         if ($this->sessionRepo->findAll()){
             $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
             $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
             $monthsDays = $this->getMonthsDays($days);
-            $events = [
-                'Cours',
-                'Vacances',
-                'Vacances (Zone C)',
-                'Projet tuteuré (PTUT)',
-                'Stage 1A',
-                'Stage 2A',
-                'Stage 3A',
-                'Conseil de l\'IUT',
-                'Conseil de direction de l\'IUT',
-                'Conseil de département',
-                'Jurys semestre'
-            ];
+            $events = $this->eventRepo->findAll();
             
             return $this->render('session/index.html.twig', [
                 'session' => $latestSession,
@@ -80,7 +96,6 @@ class SessionController extends AbstractController
                 'events' => $events
             ]);
         }
-
         return $this->render('session/index.html.twig');
     }
 
