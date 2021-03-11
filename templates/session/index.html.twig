@@ -7,17 +7,18 @@
 
         {# CALENDAR #}
         <div class="mx-1 p-3 col-md-6 bg-light rounded">
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
+            <form method="get" id="js-session-form">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
         {% set loopCounter = 0 %}
         {% set firstBatchLastDay = 0 %}
         {% for monthDays in monthsDays %}
             {% if monthDays is empty == false %}  
-                    <div class="swiper-slide px-5 py-4">
-                        <h2 class="mb-3">{{ monthDays[0].date | date('F Y') }}</h2>
-                            <table class="calendar w-100">
+                        <div class="swiper-slide px-5 py-4">
+                            <h2 class="mb-3">{{ monthDays[0].date | date('F Y') }}</h2>
+                                <table class="calendar w-100">
                 {% include 'partials/calendar/_calendarHead.html.twig' %}
-                            <tbody>
+                                    <tbody>
 
                 {# FIRST BATCH #}
                 {% for weekDayIndex in 0..6 %}
@@ -30,26 +31,26 @@
                                 {% for day in week %}
 
                                     {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
-                                <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
-                                    <div>
+                                        <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                            <div>
                                         {{ day.date | date('d') }}
-                                    </div>
-                                </td>
+                                            </div>
+                                        </td>
 
                                     {% else %}
 
                                         {% set loopCounter = loopCounter + 1 %}
-                                <td class="p-3 day" id="js-day-{{ loopCounter }}">
-                                    <div class="mb-2">{{ day.date | date('d') }}</div>
+                                        <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                            <div class="mb-2">{{ day.date | date('d') }}</div>
 
                                         {% for event in events %}
 
-                                    <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" hidden/>
+                                            <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" hidden/>
 
-                                    <div class="w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
+                                            <div class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
 
                                         {% endfor %}
-                                </td>
+                                        </td>
                                     {% endif %}
 
                                     {% set iterationAmount = iterationAmount + 1 %}
@@ -61,10 +62,10 @@
                     {% else %} 
                         {% if firstBatchSize is defined %}  
                             {% if iterationAmount == firstBatchSize %}  
-                                    <td class="day custom-bg-light"></td>
+                                        <td class="day custom-bg-light"></td>
                             {% endif %}
                         {% else %}
-                                   <td class="day custom-bg-light"></td> 
+                                        <td class="day custom-bg-light"></td> 
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -81,46 +82,47 @@
                 {% set monthDaysSliced = monthDays | slice(sliceStart, monthDaysLength) %}
                 
                 {% for week in monthDaysSliced | batch(7) %} 
-                                <tr>
+                                    <tr>
                     {% for day in week %}
 
                         {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
-                                    <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
-                                        <div>
-                                            {{ day.date | date('d') }}
-                                        </div>
-                                    </td>
+                                        <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
+                                            <div>
+                                                {{ day.date | date('d') }}
+                                            </div>
+                                        </td>
 
                         {% else %}
 
                             {% set loopCounter = loopCounter + 1 %}
-                                    <td class="p-3 day" id="js-day-{{ loopCounter }}">
-                                        <div class="mb-2">{{ day.date | date('d') }}</div>
+                                        <td class="p-3 day" id="js-day-{{ loopCounter }}">
+                                            <div class="mb-2">{{ day.date | date('d') }}</div>
 
                             {% for event in events %}
 
-                                        <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" hidden/>
+                                            <input type="checkbox" name="day-{{ loopCounter }}-event-{{ loop.index }}" class="js-event-input js-event-input-{{ loop.index }}" hidden/>
 
-                                        <div class="w-100 d-none event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
+                                            <div class="my-1 rounded w-100 d-none event event-indicator event-{{ loop.index }} js-event-indicator-{{ loop.index }}"></div>
 
                             {% endfor %}
-                                    </td>
+                                        </td>
                         {% endif %}
 
                     {% endfor %}
-                                </tr>
+                                    </tr>
                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
                                 
             {% endif %}
         {% endfor %}
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
             </div>
-        </div>  
+        </form> 
 
         {# EVENT BAR #}
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
