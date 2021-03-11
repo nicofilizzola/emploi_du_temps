@@ -82,6 +82,7 @@ class SessionController extends AbstractController
                 }
             }
             $this->em->flush();
+            $this->redirectToRoute('app_session');
         }
         
         if ($this->sessionRepo->findAll()){

@@ -12,6 +12,7 @@
                     <div class="swiper-wrapper">
         {% set loopCounter = 0 %}
         {% set firstBatchLastDay = 0 %}
+        {% set weekIndex = 0 %}
         {% for monthDays in monthsDays %}
             {% if monthDays is empty == false %}  
                         <div class="swiper-slide px-5 py-4">
@@ -23,6 +24,15 @@
                 {# FIRST BATCH #}
                 {% for weekDayIndex in 0..6 %}
                     {% set iterationAmount = 0 %}
+                    {% if loop.first %}
+                        {% if monthDays[0].date | date('w') == 0 %}
+                            {% set weekIndex = weekIndex + 1 %}
+                        {% endif %}
+                                        <td class="p-3 day bg-dark text-light">
+                                            <span>{{ weekIndex }}</span>
+                                        </td>
+                    {% endif %}
+                    
                     {% if monthDays[0].date | date('w') == weekDayIndex %}
                         {% set firstBatchSize = 7 - weekDayIndex %}
                         
@@ -124,15 +134,23 @@
                                     <tr>
                     {% for day in week %}
 
+                        {% if loop.first %}
+                        {# Week block at first iteration #}
+                            {% set weekIndex = weekIndex + 1 %}
+                                        <td class="p-3 day bg-dark text-light">
+                                            <span>{{ weekIndex }}</span>
+                                        </td>
+                        {% endif %}
+
                         {% if day.date | date('w') == 0 or day.date | date('w') == 6 %}
+                        {# Display if weekend #}
                                         <td class="p-3 day custom-bg-light" id="js-day-{{ loopCounter }}">
                                             <div>
                                                 {{ day.date | date('d') }}
                                             </div>
                                         </td>
-
                         {% else %}
-
+                        {# Display if not weekend #}
                             {% set loopCounter = loopCounter + 1 %}
                                         <td class="p-3 day" id="js-day-{{ loopCounter }}">
                                             <div class="mb-2">{{ day.date | date('d') }}</div>
