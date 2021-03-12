@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\AttributionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=AttributionRepository::class)
@@ -19,16 +21,19 @@ class Attribution
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Positive(message="Le nombre de cours ne peut pas être négatif")
      */
     private $cmAmount;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Positive(message="Le nombre de cours ne peut pas être négatif")
      */
     private $tdAmount;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Positive(message="Le nombre de cours ne peut pas être négatif")
      */
     private $tpAmount;
 

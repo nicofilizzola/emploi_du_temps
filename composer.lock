@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e2ccedac46d631f68033b68e350d7f6",
+    "content-hash": "94d6b649e88d29d7de52724e75224c7a",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -6832,16 +6832,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v5.2.3",
+            "version": "v5.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "d83d2a9f060ce42636feef6af6facc39793354cf"
+                "reference": "456a3d95947e99c4c70e64c09833eed56095086c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/d83d2a9f060ce42636feef6af6facc39793354cf",
-                "reference": "d83d2a9f060ce42636feef6af6facc39793354cf",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/456a3d95947e99c4c70e64c09833eed56095086c",
+                "reference": "456a3d95947e99c4c70e64c09833eed56095086c",
                 "shasum": ""
             },
             "require": {
@@ -6866,7 +6866,7 @@
             "require-dev": {
                 "doctrine/annotations": "^1.10.4",
                 "doctrine/cache": "~1.0",
-                "egulias/email-validator": "^2.1.10",
+                "egulias/email-validator": "^2.1.10|^3",
                 "symfony/cache": "^4.4|^5.0",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/console": "^4.4|^5.0",
@@ -6923,7 +6923,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/validator/tree/v5.2.3"
+                "source": "https://github.com/symfony/validator/tree/v5.2.5"
             },
             "funding": [
                 {
@@ -6939,7 +6939,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-28T22:06:19+00:00"
+            "time": "2021-03-08T13:20:18+00:00"
         },
         {
             "name": "symfony/var-dumper",

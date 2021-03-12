@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
         /*
         EVENTS
         */
-        /*$events = [
+        $events = [
             ['name' => 'Cours', 'abbreviation' => 'COU'],
             ['name' => 'Vacances', 'abbreviation' => 'VAC'],
             ['name' => 'Vacances Zone C', 'abbreviation' => 'VZC'],
@@ -34,7 +34,7 @@ class AppFixtures extends Fixture
             $event->setName($element['name']);
             $event->setAbbreviation($element['abbreviation']);
             $om->persist($event);
-        }*/
+        }
 
 
         /*
