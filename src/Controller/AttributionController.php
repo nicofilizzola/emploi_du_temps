@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AttributionController extends AbstractController
 {
     /**
-     * @Route("/attribution", name="attribution")
+     * @Route("/attribution", name="app_attribution")
      */
     public function index(): Response
     {
