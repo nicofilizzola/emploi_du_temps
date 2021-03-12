@@ -2,7 +2,7 @@
 
 {% block body %}
     {% if session is defined and events is defined %}
-    <h1 class="mt-5 text-center">Année {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
+    <h1 class=" text-center">Année {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
     <div class="row mt-4 justify-content-center">  
 
         {# CALENDAR #}
@@ -263,7 +263,8 @@
     {% else %}
         <div class="row mt-5">  
         <div class="col-md-6 mx-auto bg-light rounded p-5"> 
-            <h1 class="text-center">Il n'y a pas de session disponible. <a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
+            <h1 class="text-center">Il n'y a pas d'année scolaire disponible....</h1>
+            <h1 class="text-center"><a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
             </div>
         </div>  
     {% endif %}       

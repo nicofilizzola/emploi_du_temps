@@ -35,9 +35,11 @@ class Session
     private $days;
 
     /**
-     * @ORM\OneToMany(targetEntity=Attribution::class, mappedBy="session")
+     * @ORM\OneToMany(targetEntity=Attribution::class, mappedBy="session", orphanRemoval=true)
      */
     private $attributions;
+
+
 
     public function __construct()
     {

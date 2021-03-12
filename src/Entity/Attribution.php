@@ -34,8 +34,15 @@ class Attribution
 
     /**
      * @ORM\ManyToOne(targetEntity=Session::class, inversedBy="attributions")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $session;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Subject::class, inversedBy="attributions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $subject;
 
     public function getId(): ?int
     {
@@ -86,6 +93,18 @@ class Attribution
     public function setSession(?Session $session): self
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    public function getSubject(): ?Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?Subject $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }
