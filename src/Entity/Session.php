@@ -34,9 +34,15 @@ class Session
      */
     private $days;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Attribution::class, mappedBy="session")
+     */
+    private $attributions;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
+        $this->attributions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +98,36 @@ class Session
             // set the owning side to null (unless already changed)
             if ($day->getSession() === $this) {
                 $day->setSession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Attribution[]
+     */
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
+    }
+
+    public function addAttribution(Attribution $attribution): self
+    {
+        if (!$this->attributions->contains($attribution)) {
+            $this->attributions[] = $attribution;
+            $attribution->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribution(Attribution $attribution): self
+    {
+        if ($this->attributions->removeElement($attribution)) {
+            // set the owning side to null (unless already changed)
+            if ($attribution->getSession() === $this) {
+                $attribution->setSession(null);
             }
         }
 
