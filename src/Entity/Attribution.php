@@ -33,11 +33,6 @@ class Attribution
     private $tpAmount;
 
     /**
-     * @ORM\Column(type="smallint")
-     */
-    private $semester;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Session::class, inversedBy="attributions")
      */
     private $session;
@@ -79,18 +74,6 @@ class Attribution
     public function setTpAmount(?int $tpAmount): self
     {
         $this->tpAmount = $tpAmount;
-
-        return $this;
-    }
-
-    public function getSemester(): ?int
-    {
-        return $this->semester;
-    }
-
-    public function setSemester(int $semester): self
-    {
-        $this->semester = $semester;
 
         return $this;
     }
