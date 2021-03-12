@@ -48,6 +48,13 @@ class Subject
     public function __construct()
     {
         $this->attributions = new ArrayCollection();
+        //$this->setCode();
+    }
+
+    public function __toString()
+    {
+        $this->setCode();
+        return $this->getCode();
     }
 
     public function getId(): ?int
@@ -131,5 +138,16 @@ class Subject
         }
 
         return $this;
+    }
+
+    // Attribute not in database, only used for display
+    private $code;
+
+    public function getCode(){
+        return $this->code;
+    }
+
+    public function setCode(){
+        $this->code = $this->PPN . '_' . $this->semester;
     }
 }

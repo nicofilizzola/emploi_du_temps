@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Attribution;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,7 @@ class AttributionType extends AbstractType
     {
         $builder
             ->add('cmAmount', null, [
-                'label' => 'Cours magistraux (CM)'
+                'label' => 'Cours magistraux'
             ])
             ->add('tdAmount', null, [
                 'label' => 'Cours de TD'
@@ -21,7 +22,10 @@ class AttributionType extends AbstractType
             ->add('tpAmount', null, [
                 'label' => 'Cours de TP'
             ])
-            ->add('subject')
+            ->add('subject', EntityType::class, [
+                'label' => 'Matière',
+                'class' => 'App\Entity\Subject'
+            ]);
         ;
     }
 

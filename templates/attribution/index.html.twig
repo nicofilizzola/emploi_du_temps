@@ -4,13 +4,35 @@
     <h1 class="text-center">Maquette /* session date here */</h1>
     <div class="row mt-4">  
        
-        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+        <div class="col-md-9 mx-auto bg-light rounded p-5"> 
         {{ form_start(attributionForm) }}
-        
-            {{ form_row(attributionForm) }}
-            <button class="btn btn-primary" type="submit">Nouvelle attribution</button>
+
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_row(attributionForm.cmAmount) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(attributionForm.tdAmount) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(attributionForm.tpAmount) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(attributionForm.subject) }}
+                </div>
+            </div>
+            
+            <button class="mt-4 btn btn-primary btn-block" type="submit">Nouvelle attribution</button>
         {{ form_end(attributionForm) }}
-            <h1 class="text-center">form here, then list</h1>
+
+        {% if attributionList is empty %}
+            <h1 class="text-center">No attributions nigga</h1>
+        {% else %}
+            {% for attribution in attributionList %}
+                
+            {% endfor %}
+        {% endif %}
+            
         </div>
     </div>
 {% endblock %}

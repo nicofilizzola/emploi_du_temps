@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Attribution;
 use App\Form\AttributionType;
+use App\Repository\AttributionRepository;
+use App\Repository\SessionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,6 +14,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AttributionController extends AbstractController
 {
+    private $em;
+    private $attributionRepo;
+    private $sessionRepo;
+
+    public function __construct(EntityManagerInterface $em, AttributionRepository $attributionRepo, SessionRepository $sessionRepo) 
+    {
+        $this->em = $em;
+        $this->attributionRepo = $attributionRepo;
+        $this->sessionRepo = $sessionRepo;
+    }
+
     /**
      * @Route("/attribution", name="app_attribution")
      */
@@ -21,8 +35,13 @@ class AttributionController extends AbstractController
         $formView = $form->createView();
         $form->handleRequest($req);
 
+        $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+        $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
+
+
         return $this->render('attribution/index.html.twig', [
             'attributionForm' => $formView,
+            'attributionList' => $attributionList
         ]);
     }
 
