@@ -27,27 +27,29 @@ class SessionController extends AbstractController
 
     const MIN_CLASS_DAYS = 200;
 
-    public function __construct(EntityManagerInterface $em, SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo){
+    public function __construct(EntityManagerInterface $em, SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo)
+    {
         $this->em = $em;
         $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
         $this->eventRepo = $eventRepo;
     }
 
-    public function getMonthsDays($days){
+    public function getMonthsDays($days)
+    {
         $monthsDays = [
             // 12 months max
-            [],[],[],[],[],[],[],[],[],[],[],[],[]
+            [], [], [], [], [], [], [], [], [], [], [], [], []
         ];
         $i = 0;
-        foreach ($days as $key => $day){
+        foreach ($days as $key => $day) {
             $dayMonth = date('Ym', $day->getDate()->getTimestamp());
-            
-            if (isset($prevDayMonth) && $dayMonth > $prevDayMonth){
+
+            if (isset($prevDayMonth) && $dayMonth > $prevDayMonth) {
                 $i++;
             }
-            
-            array_push($monthsDays[$i], $day); 
+
+            array_push($monthsDays[$i], $day);
             $prevDayMonth = $dayMonth;
         };
         return $monthsDays;
@@ -57,24 +59,31 @@ class SessionController extends AbstractController
      * @Route("/session", name="app_session", methods="GET|POST")
      */
     public function index(Request $req): Response
-    {        
-        if ($req->isMethod('POST')){
-            foreach ($req->request as $key => $value){
-                //dd($key . " => " . $value);
+    {
+        if ($req->isMethod('POST')) {
+            foreach ($req->request as $key => $value) {
+                // watch each value sent
                 $dayEventCharacters = explode('-', $key);
                 $dayInput = intval($dayEventCharacters[1]);
                 $eventInput = intval($dayEventCharacters[3]);
-                
+                // get day and event indexes
                 $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
                 $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
+                // find days in current session
                 $dayIndex = 1;
-                foreach ($days as $day){
+                foreach ($days as $day) {
                     if (date('w', $day->getDate()->getTimestamp()) != 6 && date('w', $day->getDate()->getTimestamp()) != 0) {
                         if ($dayIndex == $dayInput) {
                             $event = $this->eventRepo->findOneBy(['id' => $eventInput]);
-                            if ($event){
-                                $day->addEvent($event);
-                                $this->em->persist($event);
+                            if ($event) {
+                                if (str_contains($key, 'delete')){
+                                    // if delete box checked using eraserMode
+                                    $day->removeEvent($event);
+                                } else {
+                                    // if event assigned using assignEventMode
+                                    $day->addEvent($event);
+                                }
+                                $this->em->persist($day);
                             }
                         }
                         $dayIndex++;
@@ -82,15 +91,17 @@ class SessionController extends AbstractController
                 }
             }
             $this->em->flush();
-            $this->redirectToRoute('app_session');
+
+            $this->addFlash('success', 'Les modifications ont été enregistrées');
+            return $this->redirectToRoute('app_session');
         }
-        
-        if ($this->sessionRepo->findAll()){
+
+        if ($this->sessionRepo->findAll()) {
             $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
             $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
             $monthsDays = $this->getMonthsDays($days);
             $events = $this->eventRepo->findAll();
-            
+
             return $this->render('session/index.html.twig', [
                 'session' => $latestSession,
                 'monthsDays' => $monthsDays,
@@ -110,19 +121,19 @@ class SessionController extends AbstractController
         $formView = $form->createView();
         $form->handleRequest($req);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $startDate = $session->getStart();
             $untilDate = $session->getUntil();
             $dateDiff = date_diff($startDate, $untilDate)->days;
             $startDateTimestamp = $startDate->getTimestamp();
             $untilDateTimestamp = $untilDate->getTimestamp();
 
-            if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp){
+            if ($dateDiff < $this::MIN_CLASS_DAYS || $startDateTimestamp >= $untilDateTimestamp) {
                 // add exception if selected year is not a precedent year (if untildate('y') is repeated)
                 $this->addFlash('danger', 'La période que vous avez choisie est invalide.');
                 return $this->redirectToRoute('app_session_create');
             }
-            if ($dateDiff > 365){
+            if ($dateDiff > 365) {
                 $this->addFlash('danger', 'Une session ne peut pas avoir une durée supérieure à un (1) an.');
                 return $this->redirectToRoute('app_session_create');
             }
@@ -130,7 +141,7 @@ class SessionController extends AbstractController
                 $this->addFlash('warning', 'La date de début doit être un dimanche.');
                 return $this->redirectToRoute('app_session_create');
             }*/
-            
+
 
             $this->em->persist($session);
             $this->em->flush();

@@ -54,48 +54,56 @@
                                             <div class="mb-2">{{ day.date | date('d') }}</div>
 
                                         {% for event in events %}
+                                
+                                            {% if event in day.events %}  
+                                            {# if current day's events contain this event #}
 
-                                            {% if event.day is empty %}
-                                            {# if no relation #}
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}"
-                                                    hidden="hidden"
-                                                />
-                                                <div 
-                                                    class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div>
-                                            {% else %}
-                                            {# if relation #}
                                                 {% for eventDay in event.day %} 
-                                                {# check all days of the event #}
+                                                    {# check all days of the event #}
+
                                                     {% if eventDay.id == day.id %}
-                                                    {# if this event's day matches this day's id #}
+                                                        {# if this event's day matches this day's id #}
                                                 <input 
                                                     type="checkbox" 
                                                     name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}" 
+                                                    class="js-event-input js-event-input-{{ event.id }} d-none" 
                                                     checked="checked"
-                                                    hidden="hidden"
+                                                />
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    class="js-event-input-delete js-event-input-{{ event.id }}-delete d-none"
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 text-small event event-indicator event-{{ loop.parent.loop.index }} js-event-indicator-{{ event.id }}"
                                                 ></div>
-                                                    {% else %}
-                                                        {# if they don't match #}
+
+                                                    {% endif %}
+
+                                                {% endfor %}
+
+                                            {% else  %}
+                                            {# if current day's event don't contain this event #}
                                                 <input 
                                                     type="checkbox" 
                                                     name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}"
-                                                    hidden="hidden"
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}" 
+                                                    class="js-event-input js-event-input-{{ event.id }} d-none"
+                                                />
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    class="js-event-input-delete js-event-input-{{ event.id }}-delete d-none"
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
+                                                ></div> 
+
+                                            {% endif %} 
+
                                         {% endfor %}
 
 
@@ -156,49 +164,53 @@
                                             <div class="mb-2">{{ day.date | date('d') }}</div>
 
                             {% for event in events %}
+                                
+                                {% if event in day.events %}  
+                                {# if current day's events contain this event #}
 
-                                {% if event.day is empty %}
-                                    {# if no relation #}
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}"
-                                                    hidden="hidden"
-                                                />
-                                                <div 
-                                                    class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div>
-                                {% else %}
-                                    {# if relation #}
                                     {% for eventDay in event.day %} 
-                                        {# check all days of the event #}
+                                    {# check all days of the event #}
+
                                         {% if eventDay.id == day.id %}
-                                            
-                                            {# if this event's day matches this day's id #}
+                                        {# if this event's day matches this day's id #}
                                                 <input 
                                                     type="checkbox" 
                                                     name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}" 
+                                                    class="js-event-input js-event-input-{{ event.id }} d-none" 
                                                     checked="checked"
-                                                    hidden="hidden"
+                                                />
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    class="js-event-input-delete js-event-input-{{ event.id }}-delete d-none"
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 text-small event event-indicator event-{{ loop.parent.loop.index }} js-event-indicator-{{ event.id }}"
                                                 ></div>
-                                        {% else %}
-                                            {# if they don't match #}
+
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else  %}
+                                {# if current day's event don't contain this event #}
                                                 <input 
                                                     type="checkbox" 
                                                     name="day-{{ loopCounter }}-event-{{ event.id }}" 
-                                                    class="js-event-input js-event-input-{{ event.id }}"
-                                                    hidden="hidden"
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}" 
+                                                    class="js-event-input js-event-input-{{ event.id }} d-none"
+                                                />
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    id="day-{{ loopCounter }}-event-{{ event.id }}-delete" 
+                                                    class="js-event-input-delete js-event-input-{{ event.id }}-delete d-none"
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
+                                                ></div> 
+
+                                {% endif %} 
 
                             {% endfor %}
                                         </td>
@@ -226,7 +238,7 @@
                 <span>Assigner</span>   
                 <img class="btn-icon" src="{{ asset('img/pen-solid.svg') }}" alt="Créer manuellement"> 
             </button>
-            <button class="btn btn-dark border-light btn-block d-flex justify-content-between px-3 py-2">
+            <button class="btn btn-dark border-light btn-block d-flex justify-content-between px-3 py-2" id="js-eraser-mode-btn">
                 <span>Mode gomme</span>   
                 <img class="btn-icon" src="{{ asset('img/eraser-solid.svg') }}" alt="Créer manuellement"> 
             </button>
