@@ -2,7 +2,7 @@
 
 {% block body %}
     {% if session is defined and events is defined %}
-    <h1 class=" text-center">Année {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
+    <h1 class="text-center">Calendrier {{ session.start | date('Y') }} - {{ session.until | date('Y') }}</h1>
     <div class="row mt-4 justify-content-center">  
 
         {# CALENDAR #}

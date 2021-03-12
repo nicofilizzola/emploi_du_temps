@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AttributionController!{% endblock %}
-
 {% block body %}
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Documents/MMI/emploi_du_temps/src/Controller/AttributionController.php'|file_link(0) }}">src/Controller/AttributionController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Documents/MMI/emploi_du_temps/templates/attribution/index.html.twig'|file_link(0) }}">templates/attribution/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <h1 class="text-center">Maquette /* session date here */</h1>
+    <div class="row mt-4">  
+       
+        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+        {{ form_start(attributionForm) }}
+        
+            {{ form_row(attributionForm) }}
+            <button class="btn btn-primary" type="submit">Nouvelle attribution</button>
+        {{ form_end(attributionForm) }}
+            <h1 class="text-center">form here, then list</h1>
+        </div>
+    </div>
 {% endblock %}
