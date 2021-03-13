@@ -242,7 +242,11 @@
                 <span>Mode gomme</span>   
                 <img class="btn-icon" src="{{ asset('img/eraser-solid.svg') }}" alt="Créer manuellement"> 
             </button>
-            <input type="text" placeholder="Chercher un événement..." class=" mt-2 mb-4 form-control" id="js-session-searchbar">
+            <div class="mt-2 mb-4 form-control d-flex align-items-center justify-content-between">
+                <input type="text" placeholder="Chercher un événement..." id="js-session-searchbar">
+                <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
+            </div>
+            
             <div id="#js-session-events">
         {% for event in events %}
                 <button class="btn btn-secondary btn-block js-event-button d-flex align-items-center justify-content-between" id="js-event-{{ loop.index }}">
