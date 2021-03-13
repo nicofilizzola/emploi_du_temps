@@ -39,12 +39,18 @@ class Session
      */
     private $attributions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Preference::class, mappedBy="session", orphanRemoval=true)
+     */
+    private $preferences;
+
 
 
     public function __construct()
     {
         $this->days = new ArrayCollection();
         $this->attributions = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +136,36 @@ class Session
             // set the owning side to null (unless already changed)
             if ($attribution->getSession() === $this) {
                 $attribution->setSession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Preference[]
+     */
+    public function getPreferences(): Collection
+    {
+        return $this->preferences;
+    }
+
+    public function addPreference(Preference $preference): self
+    {
+        if (!$this->preferences->contains($preference)) {
+            $this->preferences[] = $preference;
+            $preference->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreference(Preference $preference): self
+    {
+        if ($this->preferences->removeElement($preference)) {
+            // set the owning side to null (unless already changed)
+            if ($preference->getSession() === $this) {
+                $preference->setSession(null);
             }
         }
 

@@ -49,6 +49,7 @@ class Subject
     {
         $this->attributions = new ArrayCollection();
         //$this->setCode();
+        $this->preferences = new ArrayCollection();
     }
 
     public function __toString()
@@ -143,11 +144,43 @@ class Subject
     // Attribute not in database, only used for display
     private $code;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Preference::class, mappedBy="subject")
+     */
+    private $preferences;
+
     public function getCode(){
         return $this->code;
     }
 
     public function setCode(){
         $this->code = $this->PPN . '_' . $this->semester;
+    }
+
+    /**
+     * @return Collection|Preference[]
+     */
+    public function getPreferences(): Collection
+    {
+        return $this->preferences;
+    }
+
+    public function addPreference(Preference $preference): self
+    {
+        if (!$this->preferences->contains($preference)) {
+            $this->preferences[] = $preference;
+            $preference->addSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreference(Preference $preference): self
+    {
+        if ($this->preferences->removeElement($preference)) {
+            $preference->removeSubject($this);
+        }
+
+        return $this;
     }
 }
