@@ -1,8 +1,10 @@
-/*
-
-SESSION
-
-*/
+// Calendar swiper
+const swiper = new Swiper('.swiper-container', {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    }
+});
 
 // Submit form
 var sessionForm = document.getElementById('js-session-form');
@@ -14,24 +16,8 @@ sessionFormSubmit.addEventListener('click', function(){
 
 // Event searchbar
 var sessionSearchbar = document.getElementById('js-session-searchbar');
-var sessionEvents = document.getElementById('js-session-events');
 var eventButtons = document.querySelectorAll('.js-event-button');
-
-sessionSearchbar.addEventListener('input', function(){
-    eventButtons.forEach(element => {
-        if (element.textContent.toLowerCase().includes(sessionSearchbar.value.toLowerCase())) {
-            if (element.classList.contains('d-none')){
-                element.classList.remove('d-none');
-                element.classList.add('d-flex');
-            }
-        } else {
-            if (element.classList.contains('d-flex')){
-                element.classList.remove('d-flex');
-                element.classList.add('d-none');
-            }
-        }
-    });
-});
+searchbar(sessionSearchbar, eventButtons);
 
 // eventMode
 var eraserModeBtn = document.getElementById('js-eraser-mode-btn');

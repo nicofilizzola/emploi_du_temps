@@ -39,13 +39,12 @@ class AttributionController extends AbstractController
         $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
         // sort by professor name
 
-
         if ($form->isSubmitted() && $form->isValid()){
+        // Create new attribution with form
             if (is_null($attribution->getCmAmount()) && is_null($attribution->getTdAmount()) && is_null($attribution->getTpAmount())){
                 $this->addFlash('danger', 'Vous n\'avez attribué aucun cours.');
                 return $this->redirectToRoute('app_attribution');
             }
-
 
             $attribution->setSession($latestSession);
             $this->em->persist($attribution);
@@ -55,26 +54,10 @@ class AttributionController extends AbstractController
             return $this->redirectToRoute('app_attribution');
         }
 
-
         return $this->render('attribution/index.html.twig', [
             'attributionForm' => $formView,
             'attributionList' => $attributionList,
             'session' => $latestSession
         ]);
     }
-
-    /**
-     * @Route("/attribution/create", name="app_attribution_create" methods="POST")
-     */
-    /*public function create(Request $req): Response
-    {
-        $attribution = new Attribution;
-        $form = $this->createForm(AttributionType::class, $attribution);
-        $formView = $form->createView();
-        $form->handleRequest($req);
-
-        return $this->render('attribution/index.html.twig', [
-            'attributionForm' => $formView,
-        ]);
-    }*/
 }

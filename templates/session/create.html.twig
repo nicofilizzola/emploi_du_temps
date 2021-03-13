@@ -4,7 +4,7 @@
     <div class="row mt-4">  
         <div class="col-md-6 mx-auto bg-light rounded p-5"> 
             <h1 class="text-center">Créer une nouvelle année scolaire</h1>
-            {{ form_start(sessionForm)}}
+            {{ form_start(sessionForm, {'attr': {'id': 'js-session-form'}}) }}
                 <div class="row mt-5">
                     <div class="col-md-6">
                         {{ form_row(sessionForm.start) }}
@@ -14,11 +14,12 @@
                     </div>
                 </div>
                 <p class="mt-4 text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem, porro reprehenderit architecto, repudiandae esse totam omnis, incidunt consequatur temporibus possimus ex nobis magni hic? Earum, ipsa sed. Libero, possimus commodi.</p>
-                <button type="submit" class="btn btn-primary btn-block mt-4" id="js-session-submit-button">Envoyer</button>
+                <button type="submit" class="btn btn-primary btn-block mt-4" id="js-session-submit-btn">Envoyer</button>
             {{ form_end(sessionForm) }}
         </div>
     </div>
             
+    <script src="{{ asset('js/routes/session/create.js') }}" type="text/javascript"></script>
 {% endblock %}
 
 

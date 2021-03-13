@@ -260,14 +260,18 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/routes/session/index.js') }}" type="text/javascript"></script>
+
     {% else %}
-        <div class="row mt-5">  
-        <div class="col-md-6 mx-auto bg-light rounded p-5"> 
-            <h1 class="text-center">Il n'y a pas d'année scolaire disponible....</h1>
-            <h1 class="text-center"><a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
-            </div>
-        </div>  
-    {% endif %}       
+    {# If no sessions #}
+    <div class="row mt-5">  
+    <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+        <h1 class="text-center">Il n'y a pas d'année scolaire disponible....</h1>
+        <h1 class="text-center"><a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
+        </div>
+    </div>  
+    {% endif %} 
 
 {% endblock %}
 
