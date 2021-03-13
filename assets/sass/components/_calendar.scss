@@ -1,8 +1,4 @@
 .calendar{
-    border-collapse: collapse;
-    &, & td, & th{
-        border: 1px solid black;
-    }
     .day{
         height: 100px;
         -webkit-user-select: none; /* Safari */        

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="text-center">Maquette /* session date here */</h1>
+    <h1 class="text-center">Maquette {{ session.start  | date('Y') }} - {{ session.until | date('Y') }}</h1>
     <div class="row mt-4">  
        
         <div class="col-md-9 mx-auto bg-light rounded p-5"> 
@@ -10,6 +10,7 @@
             <div class="row">
                 <div class="col-md-3">
                     {{ form_row(attributionForm.cmAmount) }}
+                    {{ form_errors(attributionForm.cmAmount) }}
                 </div>
                 <div class="col-md-3">
                     {{ form_row(attributionForm.tdAmount) }}
@@ -22,15 +23,40 @@
                 </div>
             </div>
             
-            <button class="mt-4 btn btn-primary btn-block" type="submit">Nouvelle attribution</button>
+            <button class="mt-2 mb-4 btn btn-primary btn-block" type="submit">Nouvelle attribution</button>
         {{ form_end(attributionForm) }}
 
         {% if attributionList is empty %}
-            <h1 class="text-center">No attributions nigga</h1>
+        {# If no attributions available for this session #}
+
+            <p class="text-muted">Aucune attribution n'a été enregistrée pour le moment. Pour commencer, sélectionnez un enseignant, assignez-lui la quantité de cours souhaitée, définissez la matière concernée, et cliquez dans 'Nouvelle attribution'.</p>
+
         {% else %}
+            <h1 class="text-center">Attributions</h1>
+            <div class="p-3 row">    
+                <table class="w-100">
+                    <thead>
+                        <tr class="bg-dark text-light">
+                            <th class="px-2 py-3">Enseignant</th>
+                            <th class="px-2 py-3">Cours magistraux</th>
+                            <th class="px-2 py-3">Cours de TD</th>
+                            <th class="px-2 py-3">Cours de TP</th>
+                            <th class="px-2 py-3">Matière</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             {% for attribution in attributionList %}
-                
+                        <tr class="hoverable">
+                            <td class="p-2">Enseignant</td>
+                            <td class="p-2">{{ attribution.cmAmount }}</td>
+                            <td class="p-2">{{ attribution.tdAmount }}</td>
+                            <td class="p-2">{{ attribution.tpAmount }}</td>
+                            <td class="p-2">{{ attribution.subject }}</td>
+                        </tr>
             {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
             
         </div>

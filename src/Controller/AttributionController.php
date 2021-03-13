@@ -26,7 +26,7 @@ class AttributionController extends AbstractController
     }
 
     /**
-     * @Route("/attribution", name="app_attribution")
+     * @Route("/attribution", name="app_attribution", methods="GET|POST")
      */
     public function index(Request $req): Response
     {
@@ -37,11 +37,29 @@ class AttributionController extends AbstractController
 
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
         $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
+        // sort by professor name
+
+
+        if ($form->isSubmitted() && $form->isValid()){
+            if (is_null($attribution->getCmAmount()) && is_null($attribution->getTdAmount()) && is_null($attribution->getTpAmount())){
+                $this->addFlash('danger', 'Vous n\'avez attribué aucun cours.');
+                return $this->redirectToRoute('app_attribution');
+            }
+
+
+            $attribution->setSession($latestSession);
+            $this->em->persist($attribution);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Votre attribution a été ajoutée.');
+            return $this->redirectToRoute('app_attribution');
+        }
 
 
         return $this->render('attribution/index.html.twig', [
             'attributionForm' => $formView,
-            'attributionList' => $attributionList
+            'attributionList' => $attributionList,
+            'session' => $latestSession
         ]);
     }
 

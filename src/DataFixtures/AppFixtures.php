@@ -109,8 +109,6 @@ class AppFixtures extends Fixture
             $om->persist($subject);
         }
 
-
-
         $om->flush();
     }
 }
