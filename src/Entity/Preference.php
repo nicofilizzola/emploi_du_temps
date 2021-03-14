@@ -20,12 +20,7 @@ class Preference
     /**
      * @ORM\Column(type="datetime")
      */
-    private $start;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $until;
+    private $datetime;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -54,26 +49,14 @@ class Preference
         return $this->id;
     }
 
-    public function getStart(): ?\DateTimeInterface
+    public function getDatetime(): ?\DateTimeInterface
     {
-        return $this->start;
+        return $this->datetime;
     }
 
-    public function setStart(\DateTimeInterface $start): self
+    public function setDatetime(\DateTimeInterface $datetime): self
     {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    public function getUntil(): ?\DateTimeInterface
-    {
-        return $this->until;
-    }
-
-    public function setUntil(\DateTimeInterface $until): self
-    {
-        $this->until = $until;
+        $this->datetime = $datetime;
 
         return $this;
     }
