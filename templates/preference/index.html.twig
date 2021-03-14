@@ -14,14 +14,22 @@
                 <div class="mx-auto col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <div type="button" class="btn btn-success btn-block">
-                                <input type="radio" name="preference_state" value="preference">
+                            <div class="js-preference-btn btn btn-success btn-block" id="js-preference-btn">
+                                <input type="radio" 
+                                    name="preference_state" 
+                                    value="preference" 
+                                    hidden="hidden"
+                                >
                                 <span>Préférence</span>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div type="button" class="btn btn-danger btn-block">
-                                <input type="radio" name="preference_state" value="unavailability">
+                            <div class="js-preference-btn btn btn-danger btn-block" id="js-unavailability-btn">
+                                <input type="radio" 
+                                    name="preference_state" 
+                                    value="unavailability" 
+                                    hidden="hidden"
+                                >
                                 <span>Indisponibilité</span>
                             </div>
                         </div>
@@ -37,39 +45,69 @@
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">
-                        <input type="checkbox" name="preference_weekday" value="monday">
+                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-1">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="monday" 
+                            hidden="hidden"
+                        >
                         <span>Lun</span>
                     </div>
-                    <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">
-                        <input type="checkbox" name="preference_weekday" value="tuesday">
+                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-2">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="tuesday" 
+                            hidden="hidden"
+                        >
                         <span>Mar</span>
                     </div>
-                    <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">
-                        <input type="checkbox" name="preference_weekday" value="wednesday">
+                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-3">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="wednesday" 
+                            hidden="hidden"
+                        >
                         <span>Mer</span>
                     </div>
-                    <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">
-                        <input type="checkbox" name="preference_weekday" value="thursday">
+                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-4">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="thursday" 
+                            hidden="hidden"
+                        >
                         <span>Jeu</span>
                     </div>
-                    <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">
-                        <input type="checkbox" name="preference_weekday" value="friday">
+                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-5">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="friday" 
+                            hidden="hidden"
+                        >
                         <span>Ven</span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div class="mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark">
+                    <div class="js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" id="js-preference-weekday-btn-all">
                         <span>Tous les jours</span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div class="mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark">
-                        <input type="checkbox" name="preference_weekday" value="specific">
+                    <div class="js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" id="js-preference-weekday-btn-specific">
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday" 
+                            value="specific" 
+                            hidden="hidden"
+                        >
                         <!-- if checkbox specific check uncheck everything else -->
                         <span>Un jour spécifique</span>
                     </div>
@@ -206,9 +244,11 @@
     </div>
 </div>
 
-    <div class="row">
-        <div class="mx-auto col-md-6">
-            {{ form(preferenceForm) }}
-        </div>
+<div class="row">
+    <div class="mx-auto col-md-6">
+        {{ form(preferenceForm) }}
     </div>
+</div>
+
+<script src="{{ asset('js/routes/preference/index.js') }}" type="text/javascript"></script>
 {% endblock %}
