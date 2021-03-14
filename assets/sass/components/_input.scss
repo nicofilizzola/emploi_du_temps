@@ -1,6 +1,7 @@
 div.form-control{
-    input{
+    input, select{
         border: none;
+        outline: none;
         &:focus{
             outline: 0px !important;
             -webkit-appearance: none;

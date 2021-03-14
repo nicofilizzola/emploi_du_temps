@@ -145,7 +145,7 @@ class Subject
     private $code;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Preference::class, mappedBy="subject")
+     * @ORM\OneToMany(targetEntity=Preference::class, mappedBy="subject")
      */
     private $preferences;
 
@@ -169,7 +169,7 @@ class Subject
     {
         if (!$this->preferences->contains($preference)) {
             $this->preferences[] = $preference;
-            $preference->addSubject($this);
+            $preference->setSubject($this);
         }
 
         return $this;
@@ -178,7 +178,10 @@ class Subject
     public function removePreference(Preference $preference): self
     {
         if ($this->preferences->removeElement($preference)) {
-            $preference->removeSubject($this);
+            // set the owning side to null (unless already changed)
+            if ($preference->getSubject() === $this) {
+                $preference->setSubject(null);
+            }
         }
 
         return $this;

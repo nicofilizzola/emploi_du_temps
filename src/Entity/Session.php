@@ -45,7 +45,6 @@ class Session
     private $preferences;
 
 
-
     public function __construct()
     {
         $this->days = new ArrayCollection();

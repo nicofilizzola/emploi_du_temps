@@ -3,12 +3,6 @@ table{
     &, & td, & th{
         border: 1px solid black;
     }
-    tr.hoverable{
-        transition: 0.3s;
-        &:hover{
-            background-color: $light
-        }
-    }
     .input-row{
         border: none;
     }

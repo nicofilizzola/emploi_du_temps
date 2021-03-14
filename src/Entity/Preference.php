@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\PreferenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +28,7 @@ class Preference
     private $until;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $state;
 
@@ -41,14 +39,15 @@ class Preference
     private $session;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Subject::class, inversedBy="preferences")
+     * @ORM\ManyToOne(targetEntity=Subject::class, inversedBy="preferences")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $subject;
 
-    public function __construct()
-    {
-        $this->subject = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $note;
 
     public function getId(): ?int
     {
@@ -84,7 +83,7 @@ class Preference
         return $this->state;
     }
 
-    public function setState(bool $state): self
+    public function setState(?bool $state): self
     {
         $this->state = $state;
 
@@ -103,26 +102,26 @@ class Preference
         return $this;
     }
 
-    /**
-     * @return Collection|Subject[]
-     */
-    public function getSubject(): Collection
+    public function getSubject(): ?Subject
     {
         return $this->subject;
     }
 
-    public function addSubject(Subject $subject): self
+    public function setSubject(?Subject $subject): self
     {
-        if (!$this->subject->contains($subject)) {
-            $this->subject[] = $subject;
-        }
+        $this->subject = $subject;
 
         return $this;
     }
 
-    public function removeSubject(Subject $subject): self
+    public function getNote(): ?string
     {
-        $this->subject->removeElement($subject);
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }

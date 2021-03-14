@@ -1,0 +1,10 @@
+.hoverable{
+    transition: 0.3s;
+    &:hover{
+        background-color: $light !important
+    }
+}
+
+.pointer{
+    cursor:pointer;
+}

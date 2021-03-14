@@ -34,7 +34,6 @@ function searchbar(input, results){
                 }
                 // optional (if using bootstrap's d-flex for the result)
                 displayFlexClassManager(displayFlexClass, element, false);
-                
             }
         });
     });

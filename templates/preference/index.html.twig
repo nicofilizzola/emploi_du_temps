@@ -1,10 +1,134 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<h1 class="text-center">Préferences et indisponibilités</h1>
+<div class="mt-4 row justify-content-center">
+    <div class="mx-1 p-5 col-md-6 bg-light rounded">
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                <p class="text-muted">Je veux renseigner une...</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-success btn-block">Préférence</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-danger btn-block">Indisponibilité</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-9">
+
+        <div class="mt-4 row">
+            <div class="mx-auto col-md-12">
+                <p class="text-muted">Pour tous les...</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12 d-flex">
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">Lun</div>
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">Mar</div>
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">Mer</div>
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">Jeu</div>
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase">Ven</div>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12 d-flex">
+                <div style="height: 75px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark">Tous les jours</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12 d-flex">
+                <div style="height: 50px" class="m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark">Un jour spécifique</div>
+            </div>
+        </div>
+
+        <div class="mt-4 row">
+            <div class="mx-auto col-md-12">
+                <p class="text-muted">À ces heures là :</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-dark btn-block">8h00 - 9h30</button>
+                        <button class="btn btn-dark btn-block">9h30 - 11h00</button>
+                        <button class="btn btn-dark btn-block">11h00 - 12:30</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-dark btn-block">13h30 - 15h00</button>
+                        <button class="btn btn-dark btn-block">15h00 - 16:30</button>
+                        <button class="btn btn-dark btn-block">16h30 - 18h00</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--s
+        <div class="mt-4 row">
+            <div class="mx-auto col-md-12">
+                <p class="text-muted">Si vous intervenez dans plusieurs matières et que vous avez besoin de matériel ou d'un logiciel particulier dans vos cours, vous devez obligatoirement préciser la matière en question.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                <div class="form-group">
+                    <select id="attribution_subject" name="attribution[subject]" class="form-control">
+                        <option value="1">Séléctionnez la matière</option>
+                        <option value="2">DEV_1</option>
+                        <option value="3">PRG_1</option>
+                        <option value="4">Toutes les matières</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select id="attribution_subject" name="attribution[subject]" class="form-control">
+                        <option value="1">Séléctionnez le matériel nécessaire</option>
+                        <option value="2">DEV_1</option>
+                        <option value="3">PRG_1</option>
+                        <option value="4">Toutes les matières</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="mt-4 row">
+            <div class="mx-auto col-md-12">
+                <p class="text-muted">Si vous avez des circonstances spécifiques, vous pouvez laisser une petite note :</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                 <textarea class="form-control" rows="2" placeholder=""></textarea>
+            </div>
+        </div>
         
+        <button class="mt-4 btn btn-block btn-primary">Enregistrer</button>
+    </div>
+
+
+
+
+    <div class="mx-1 col-md-3">
+        <div class="my-1 row bg-dark text-light rounded">
+            <div class="col-12 p-4">
+                <h4>Vos préferences</h4> 
+            </div>
+        </div>
+        <div class="my-1 row bg-dark text-light rounded">
+            <div class="col-12 p-4">
+                <h4>Vos indisponibilités</4> 
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

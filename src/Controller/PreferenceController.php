@@ -9,12 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class PreferenceController extends AbstractController
 {
     /**
-     * @Route("/preference", name="preference")
+     * @Route("/preference", name="app_preference")
      */
     public function index(): Response
     {
         return $this->render('preference/index.html.twig', [
-            'controller_name' => 'PreferenceController',
+            
         ]);
     }
 }
