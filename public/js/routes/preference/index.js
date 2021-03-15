@@ -124,3 +124,14 @@ var timeBtns = document.querySelectorAll('.js-preference-time-btn');
 checkBtnManager(timeBtns, 'js-preference-time-btn-');
 
 
+
+// Note character counter
+var noteTextbox = document.getElementById('js-preference-note');
+var characterCounter = document.getElementById('js-preference-note-counter');
+var characterCounterLimit = 150;
+
+noteTextbox.addEventListener('input', function(){
+    characterCounter.textContent = noteTextbox.value.length + '/' + characterCounterLimit;
+})
+
+

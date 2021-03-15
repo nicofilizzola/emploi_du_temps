@@ -4,7 +4,7 @@
 <h1 class="text-center">Préferences et indisponibilités</h1>
 <div class="mt-4 row justify-content-center">
     <div class="mx-1 p-5 col-md-6 bg-light rounded">
-        <form>
+        <form action="{{ path('app_preference_create') }}" method="post">
             <div class="row">
                 <div class="mx-auto col-md-12">
                     <p class="text-muted">Je veux renseigner une...</p>
@@ -48,46 +48,46 @@
                     <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-1">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="monday" 
-                            {# hidden="hidden" #}
-                        >
+                            name="preference_weekday_monday" 
+                            value="true" 
+                            hidden="hidden"
+                        />
                         <span>Lun</span>
                     </div>
                     <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-2">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="tuesday" 
-                            {# hidden="hidden" #}
-                        >
+                            name="preference_weekday_tuesday" 
+                            value="true" 
+                            hidden="hidden"
+                        />
                         <span>Mar</span>
                     </div>
                     <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-3">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="wednesday" 
-                            {# hidden="hidden" #}
-                        >
+                            name="preference_weekday_wednesday" 
+                            value="true" 
+                            hidden="hidden"
+                        />
                         <span>Mer</span>
                     </div>
                     <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-4">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="thursday" 
-                            {# hidden="hidden" #}
-                        >
+                            name="preference_weekday_thursday" 
+                            value="true" 
+                            hidden="hidden"
+                        />
                         <span>Jeu</span>
                     </div>
                     <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-5">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="friday" 
-                            {# hidden="hidden" #}
-                        >
+                            name="preference_weekday_friday" 
+                            value="true" 
+                            hidden="hidden"
+                        />
                         <span>Ven</span>
                     </div>
                 </div>
@@ -104,9 +104,9 @@
                     <div class="js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" id="js-preference-weekday-btn-specific">
                         <input 
                             type="checkbox" 
-                            name="preference_weekday" 
-                            value="specific" 
-                            {# hidden="hidden" #}
+                            name="preference_weekday_specific" 
+                            value="true" 
+                            hidden="hidden"
                         >
                         <!-- if checkbox specific check uncheck everything else -->
                         <span>Un jour ou un période spécifique</span>
@@ -126,25 +126,28 @@
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-1">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="1"
-                                >
+                                    name="preference_time_1" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>8h00 - 9h30</span>
                             </div>
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-2">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="2"
-                                >
+                                    name="preference_time_2" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>9h30 - 11h00</span>
                             </div>
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-3">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="3"
-                                >
+                                    name="preference_time_3" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>11h00 - 12:30</span>
                             </div>
                         </div>
@@ -152,25 +155,28 @@
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-4">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="4"
-                                >
+                                    name="preference_time_4" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>13h30 - 15h00</span>
                             </div>
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-5">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="5"
-                                >
+                                    name="preference_time_5" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>15h00 - 16:30</span>
                             </div>
                             <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-6">
                                 <input 
                                     type="checkbox" 
-                                    name="weekday_time" 
-                                    value="6"
-                                >
+                                    name="preference_time_6" 
+                                    value="true"
+                                    hidden="hidden"
+                                />
                                 <span>16h30 - 18h00</span>
                             </div>
                         </div>
@@ -221,7 +227,14 @@
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12">
-                    <textarea class="form-control" rows="2" placeholder=""></textarea>
+                    <textarea 
+                        class="form-control" 
+                        rows="2" 
+                        placeholder="Exemple : Je suis disponible mardi entre 18h00 et 19h30..." 
+                        id="js-preference-note" 
+                        maxlength="150"
+                    ></textarea>
+                    <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/150</p>
                 </div>
             </div>
             
@@ -265,12 +278,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="mx-auto col-md-6">
-        {{ form(preferenceForm) }}
     </div>
 </div>
 

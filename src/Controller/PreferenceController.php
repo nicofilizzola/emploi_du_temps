@@ -29,15 +29,10 @@ class PreferenceController extends AbstractController
     }
     
     /**
-     * @Route("/preference", name="app_preference")
+     * @Route("/preference", name="app_preference", methods="GET")
      */
     public function index(Request $req): Response
     {
-        $preference = new Preference;
-        $form = $this->createForm(PreferenceType::class, $preference);
-        $formView = $form->createView();
-        $form->handleRequest($req);
-
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
         $preferences = $this->preferenceRepo->findBy([
             'state' => true,
@@ -51,9 +46,17 @@ class PreferenceController extends AbstractController
         ]);
 
         return $this->render('preference/index.html.twig', [
-            'preferenceForm' => $formView,
             'preferences' => $preferences,
             'unavailabilities' => $unavailabilities,
         ]);
+    }
+
+
+    /**
+     * @Route("/preference/create", name="app_preference_create", methods="POST")
+     */
+    public function create(Request $req): Response
+    {
+        dd($req->request);
     }
 }
