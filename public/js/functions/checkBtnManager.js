@@ -1,41 +1,3 @@
-// Preference button check and color change
-preferenceBtns = document.querySelectorAll('.js-preference-btn');
-var preferenceRadioInput;
-
-preferenceBtns.forEach(clicked => {
-    clicked.addEventListener('click', function(){
-        preferenceBtns.forEach(element => {
-            preferenceRadioInput = element.children[0];
-            if (element.id !== clicked.id){
-            // not clicked button
-                // radio uncheck
-                preferenceRadioInput.checked = false;
-                // style
-                if (element.id == 'js-preference-btn' && element.classList.contains('btn-success')) {
-                    element.classList.remove('btn-success');
-                } else if (element.id == 'js-unavailability-btn' && element.classList.contains('btn-danger')) {
-                    element.classList.remove('btn-danger');
-                }
-                element.classList.add('btn-dark');
-            } else {
-            // clicked button 
-                // radio check
-                preferenceRadioInput.checked = true;
-                // style
-                if (element.id == 'js-preference-btn') {
-                    element.classList.add('btn-success');
-                } else if (element.id == 'js-unavailability-btn') {
-                    element.classList.add('btn-danger');
-                }
-                element.classList.remove('btn-dark');
-            }
-        });
-    });
-});
-
-
-
-// Buttons check and color change setup
 function checkAndReplaceClass(element, checkbox, checkboxState, oldClass, newClass) {
     checkbox.checked = checkboxState;
     element.classList.replace(oldClass, newClass);
@@ -112,15 +74,3 @@ function checkBtnManager(btns, idPrefix) {
         });
     });
 }
-
-
-
-// Weekday buttons check and color change
-var weekdayBtns = document.querySelectorAll('.js-preference-weekday-btn');
-checkBtnManager(weekdayBtns, 'js-preference-weekday-btn-');
-
-// Time buttons check and color change
-var timeBtns = document.querySelectorAll('.js-preference-time-btn');
-checkBtnManager(timeBtns, 'js-preference-time-btn-');
-
-
