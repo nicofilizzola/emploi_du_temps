@@ -52,7 +52,7 @@ function createVerificationText(preference, verificationWeekdays, times, verific
             // if first displayed weekday
                 daysString = element[0];
                 
-            } else if (dayCounter <= 5) {
+            } else if (dayCounter < 5) {
             // any other case
 
                 // verify if any other days are selected after this one
@@ -77,7 +77,11 @@ function createVerificationText(preference, verificationWeekdays, times, verific
                     daysString += ' et ' + element[0];
 
                 }  
-            }   
+
+            } else if (dayCounter == 5) {
+            // if all days selected
+                daysString = 'tous les jours';
+            }
 
             // DE LUNDI A JEUDI
         } else if (dayCounter == 0) {
@@ -166,14 +170,11 @@ preferenceBtns.forEach(clicked => {
                     element.classList.remove('btn-success');
                     
                     // Send data to verification 
-                    // RELOAD VERSTRING FUNCTION OR IT WON'T WORK DIRECTLY
                     preferenceSelected = false;
                 } else if (element.id == 'js-unavailability-btn' && element.classList.contains('btn-danger')) {
                     element.classList.remove('btn-danger');
 
                     // Send data to verification
-
-                    // RELOAD VERSTRING FUNCTION OR IT WON'T WORK DIRECTLY
                     preferenceSelected = true;
                 }
                 createVerificationText(preferenceSelected, verificationWeekdays, '8h30', verification); 
@@ -242,10 +243,18 @@ function checkBtnManager(btns, idPrefix) {
                             checkAndReplaceClass(element, choiceCheckbox, true, disabledClass, activeClass);
 
                         }
+                    // Other: Send data to verification
+                    verificationWeekdays.forEach(element => {
+                        element[1] = true;
+                    });
     
                     } else if (element.classList.contains('btn-primary')) {
                         checkAndReplaceClass(element, choiceCheckbox, false, activeClass, disabledClass);
-        
+
+                        // Other: Send data to verification
+                        verificationWeekdays.forEach(element => {
+                            element[1] = false;
+                        });
                     }
                 }
     
@@ -256,10 +265,18 @@ function checkBtnManager(btns, idPrefix) {
                         // display 'specific' inputs
 
                         
+
+
+
                         // uncheck all other btns
                         if (clicked.id !== element.id) {
                             checkAndReplaceClass(element, choiceCheckbox, false, activeClass, disabledClass);
                         }
+
+                        // Other: Send data to verification
+                        verificationWeekdays.forEach(element => {
+                            element[1] = false;
+                        });
             
                     } else {
                     // if any other button was clicked, uncheck 'specific' btn
@@ -269,6 +286,7 @@ function checkBtnManager(btns, idPrefix) {
                         }
                     }
                 }   
+                createVerificationText(preferenceSelected, verificationWeekdays, 'de 8h00 à 5h00', verification);
             });     
         });
     });
