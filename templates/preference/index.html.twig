@@ -1,30 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1 class="text-center">Préferences et indisponibilités</h1>
+<h1 class="text-center">Mes disponibilités</h1>
 <div class="mt-4 row justify-content-center">
     <div class="mx-1 p-5 col-md-6 bg-light rounded">
         <form action="{{ path('app_preference_create') }}" method="post">
             <div class="row">
                 <div class="mx-auto col-md-12">
-                    <p class="text-muted">Je veux renseigner une...</p>
+                    <p>Je veux renseigner une...</p>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="js-preference-btn btn btn-success btn-block" id="js-preference-btn">
+                            <div class="js-preference-btn btn btn-success btn-block p-4" id="js-preference-btn">
                                 <input type="radio" 
                                     name="preference_state" 
-                                    value="preference" 
+                                    value="availability" 
                                     hidden="hidden"
                                 >
-                                <span>Préférence</span>
+                                <span>Disponibilité</span>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="js-preference-btn btn btn-danger btn-block" id="js-unavailability-btn">
+                            <div class="js-preference-btn btn btn-danger btn-block p-4" id="js-unavailability-btn">
                                 <input type="radio" 
                                     name="preference_state" 
                                     value="unavailability" 
@@ -40,12 +40,18 @@
 
             <div class="mt-4 row">
                 <div class="mx-auto col-md-12">
-                    <p class="text-muted">Pour tous les...</p>
+                    <p>Choissisez les jours de la semaine :</p>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-1">
+                    <button 
+                        type="button" 
+                        style="height: 75px" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                        id="js-preference-weekday-btn-1" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_monday" 
@@ -53,8 +59,14 @@
                             hidden="hidden"
                         />
                         <span>Lun</span>
-                    </div>
-                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-2">
+                    </button>
+                    <button 
+                        type="button" 
+                        style="height: 75px" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                        id="js-preference-weekday-btn-2" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_tuesday" 
@@ -62,8 +74,14 @@
                             hidden="hidden"
                         />
                         <span>Mar</span>
-                    </div>
-                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-3">
+                    </button>
+                    <button 
+                        type="button" 
+                        style="height: 75px" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                        id="js-preference-weekday-btn-3" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_wednesday" 
@@ -71,8 +89,14 @@
                             hidden="hidden"
                         />
                         <span>Mer</span>
-                    </div>
-                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-4">
+                    </button>
+                    <button 
+                        type="button" 
+                        style="height: 75px" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                        id="js-preference-weekday-btn-4" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_thursday" 
@@ -80,8 +104,14 @@
                             hidden="hidden"
                         />
                         <span>Jeu</span>
-                    </div>
-                    <div style="height: 75px" class="js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" id="js-preference-weekday-btn-5">
+                    </button>
+                    <button 
+                        type="button" 
+                        style="height: 75px" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                        id="js-preference-weekday-btn-5" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_friday" 
@@ -89,41 +119,58 @@
                             hidden="hidden"
                         />
                         <span>Ven</span>
-                    </div>
+                    </button>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div class="js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" id="js-preference-weekday-btn-all">
+                    <button 
+                        type="button" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
+                        id="js-preference-weekday-btn-all" 
+                        disabled="disabled"
+                    >
                         <span>Tous les jours</span>
-                    </div>
+                    </button>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div class="js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" id="js-preference-weekday-btn-specific">
+                    <button 
+                        type="button" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
+                        id="js-preference-weekday-btn-specific" 
+                        disabled="disabled"
+                    >
                         <input 
                             type="checkbox" 
                             name="preference_weekday_specific" 
                             value="true" 
                             hidden="hidden"
                         >
-                        <!-- if checkbox specific check uncheck everything else -->
                         <span>Un jour ou un période spécifique</span>
-                    </div>
+                    </button>
                 </div>
             </div>
 
+
             <div class="mt-4 row">
                 <div class="mx-auto col-md-12">
-                    <p class="text-muted">À ces heures là :</p>
+                    <p>Choisissez vos horaires :</p>
+                    <p class="text-muted">Si vos disponibilités horaires changent en fonction du jour de la semaine, créez des préférences séparées pour chaque jour de la semaine dont les horaires sont différents.</p>
+                    <p class="text-muted">Par exemple : J'enregistre une préférence pour tous les lundis de 9h30 à 15h00, et ensuite je crée une autre pour tous les mercredis de 16h30 à 18h00.</p>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-1">
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-1" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_1" 
@@ -131,8 +178,13 @@
                                     hidden="hidden"
                                 />
                                 <span>8h00 - 9h30</span>
-                            </div>
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-2">
+                            </button>
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-2" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_2" 
@@ -140,8 +192,13 @@
                                     hidden="hidden"
                                 />
                                 <span>9h30 - 11h00</span>
-                            </div>
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-3">
+                            </button>
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-3" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_3" 
@@ -149,10 +206,15 @@
                                     hidden="hidden"
                                 />
                                 <span>11h00 - 12:30</span>
-                            </div>
+                            </button>
                         </div>
                         <div class="col-md-6">
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-4">
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-4" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_4" 
@@ -160,8 +222,13 @@
                                     hidden="hidden"
                                 />
                                 <span>13h30 - 15h00</span>
-                            </div>
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-5">
+                            </button>
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-5" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_5" 
@@ -169,8 +236,13 @@
                                     hidden="hidden"
                                 />
                                 <span>15h00 - 16:30</span>
-                            </div>
-                            <div class="btn btn-dark btn-block js-preference-time-btn" id="js-preference-time-btn-6">
+                            </button>
+                            <button 
+                                type="button" 
+                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                id="js-preference-time-btn-6" 
+                                disabled="disabled"
+                            >
                                 <input 
                                     type="checkbox" 
                                     name="preference_time_6" 
@@ -178,47 +250,24 @@
                                     hidden="hidden"
                                 />
                                 <span>16h30 - 18h00</span>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12 d-flex">
-                    <div class="mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" id="js-preference-time-btn-all">
+                    <button 
+                        type="button" 
+                        class="js-preference-onclick-undisable mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" 
+                        id="js-preference-time-btn-all" 
+                        disable="disabled"
+                        >
                         <span>Toute la journée</span>
-                    </div>
+                    </button>
                 </div>
             </div>
 
-            <!--s
-            <div class="mt-4 row">
-                <div class="mx-auto col-md-12">
-                    <p class="text-muted">Si vous intervenez dans plusieurs matières et que vous avez besoin de matériel ou d'un logiciel particulier dans vos cours, vous devez obligatoirement préciser la matière en question.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mx-auto col-md-12">
-                    <div class="form-group">
-                        <select id="attribution_subject" name="attribution[subject]" class="form-control">
-                            <option value="1">Séléctionnez la matière</option>
-                            <option value="2">DEV_1</option>
-                            <option value="3">PRG_1</option>
-                            <option value="4">Toutes les matières</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <select id="attribution_subject" name="attribution[subject]" class="form-control">
-                            <option value="1">Séléctionnez le matériel nécessaire</option>
-                            <option value="2">DEV_1</option>
-                            <option value="3">PRG_1</option>
-                            <option value="4">Toutes les matières</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            -->
 
             <div class="mt-4 row">
                 <div class="mx-auto col-md-12">
@@ -237,6 +286,26 @@
                     <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/150</p>
                 </div>
             </div>
+
+
+            <div class="row">
+                <div class="mx-auto col-md-12">
+                    <p>Vérifiez :</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mx-auto col-md-12">
+                    <div class="btn btn-block border border-primary">
+                        <span id="js-preference-verification">Vous n'avez rien indiqué pour le moment.</span>
+                    </div>    
+                </div>
+            </div>
+            <div class="mt-2 row">
+                <div class="mx-auto col-md-12">
+                    <p class="text-muted">Cliquez sur le bouton 'Enregistrer' uniquement si le texte ci-dessus correspond à ce que vous avez indiqué.</p>
+                </div>
+            </div>
+
             
             <button class="mt-4 btn btn-block btn-primary">Enregistrer</button>
         </form>
@@ -248,10 +317,10 @@
     <div class="mx-1 col-md-3">
         <div class="my-1 row bg-dark text-light rounded">
             <div class="col-12 p-4">
-                <h4>Vos préférences</h4> 
+                <h4>Vos disponibilités</h4> 
                 <div>
     {% if preferences is empty %}
-                    <p>Vous n'avez pas encore renseigné vos préférences.</p>
+                    <p>Vous n'avez pas encore renseigné vos disponibilités.</p>
     {% else %}
                     <ul>
         {% for preference in preferences %}

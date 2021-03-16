@@ -57,6 +57,19 @@ class PreferenceController extends AbstractController
      */
     public function create(Request $req): Response
     {
-        dd($req->request);
+        $preference = new Preference;
+        $data = $req->request;
+        $weekdays =
+        $timeRanges =
+
+        // if (isset($data['preference_weekday_1'])) {
+            
+        // }
+        // if (isset($data['preference_weekday_2'])) {
+
+        // }
+        
+
+        $this->redirectToRoute('app_preference');
     }
 }
