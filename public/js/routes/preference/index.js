@@ -28,7 +28,7 @@ var verificationTimes = [
 ];
 var verification = document.getElementById('js-preference-verification');
 
-function createVerificationText(preference, verificationWeekdays, times, verification) {
+function createVerificationText(preference, verificationWeekdays, /*verificationTimes*/ times, verification) {
     var preferenceString;
     var daysString;
     var timeString;
@@ -52,7 +52,7 @@ function createVerificationText(preference, verificationWeekdays, times, verific
             // if first displayed weekday
                 daysString = element[0];
                 
-            } else if (dayCounter < 5) {
+            } else if (dayCounter < verificationWeekdays.length) {
             // any other case
 
                 // verify if any other days are selected after this one
@@ -75,25 +75,25 @@ function createVerificationText(preference, verificationWeekdays, times, verific
 
                 } else {
                     daysString += ' et ' + element[0];
-
+              
                 }  
 
-            } else if (dayCounter == 5) {
-            // if all days selected
-                daysString = 'tous les jours';
-            }
+            } 
 
             // DE LUNDI A JEUDI
-        } else if (dayCounter == 0) {
-        // if no days selected
-            string = 'Vous n\'avez pas encore renseigné toutes les informations demandées...'
-            //return verification.innerHTML = 'no';
         }
-
-        
     });
 
+    if (dayCounter == verificationWeekdays.length) {
+    // if all days selected
+        daysString = 'toute la semaine';
+        
 
+    } else if (dayCounter == 0) {
+    // if no days selected
+        string = 'Vous n\'avez pas encore renseigné toutes les informations demandées...';
+
+    }
 
     //set timesString
     var timeCounter = 0;
@@ -106,8 +106,8 @@ function createVerificationText(preference, verificationWeekdays, times, verific
         // if first displayed day
             timesString = ' de ' + element[0];
             
-        } else if (timeCounter <= 5) {
-        // any other case
+        } else if (timeCounter < verificationTimes.length + 1) {
+        // more than one but less than 5
 
             // verify if any other days are selected after this one
             var subCounter = 0;
@@ -130,11 +130,17 @@ function createVerificationText(preference, verificationWeekdays, times, verific
             } else {
                 timesString += ' et ' + element[0];
 
-            }  
-        }   
-    }
+            }
 
-        
+        } else if (timeCounter == verificationTimes.length + 1) {
+        // all selected
+            timesString = 'toute la semaine';
+
+        } else if (timeCounter == 0) {
+        // none selected
+            string = 'Vous n\'avez pas encore renseigné toutes les informations demandées...';
+        }
+    }
 
     if (string === undefined) {
     // If no error message
@@ -148,16 +154,32 @@ function createVerificationText(preference, verificationWeekdays, times, verific
 
 
 
+
+
+
+
+
+// Swiper for specific and constant
+const swiper = new Swiper('.swiper-container', {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    allowTouchMove: false
+});
+var swiperInteractive = document.querySelector('.swiper-container').swiper;
+
+
+
 // Preference button check and color change
 preferenceBtns = document.querySelectorAll('.js-preference-btn');
 var preferenceRadioInput;
 
 preferenceBtns.forEach(clicked => {
     clicked.addEventListener('click', function(){
-        // undisable all other buttons
-        document.querySelectorAll('.js-preference-onclick-undisable').forEach(element => {
-            element.disabled = false;
-        });
+        // undisable next buttons
+        document.getElementById('js-preference-weekday-btn-nonspecific').disabled = false;
+        document.getElementById('js-preference-weekday-btn-specific').disabled = false;
 
         preferenceBtns.forEach(element => {
             preferenceRadioInput = element.children[0];
@@ -208,6 +230,7 @@ function checkBtnManager(btns, idPrefix) {
     var choiceBtnIndex;
     var selectAllId = idPrefix + 'all';
     var selectSpecificId = idPrefix + 'specific';
+    var selectNonspecificId = idPrefix + 'nonspecific';
     var disabledClass = 'btn-dark'
     var activeClass = 'btn-primary'
 
@@ -263,7 +286,7 @@ function checkBtnManager(btns, idPrefix) {
                     // onclick
                     if (clicked.id == selectSpecificId) {
                         // display 'specific' inputs
-
+                        swiperInteractive.slideTo(1);
                         
 
 
@@ -286,8 +309,24 @@ function checkBtnManager(btns, idPrefix) {
                         }
                     }
                 }   
-                createVerificationText(preferenceSelected, verificationWeekdays, 'de 8h00 à 5h00', verification);
-            });     
+
+                // If 'nonspecific' button exists in form
+                if (document.getElementById(selectNonspecificId) !== undefined) {
+                    // onclick
+                    if (clicked.id == selectNonspecificId) {
+                        // display 'nonspecific' inputs
+                        swiperInteractive.slideTo(0);
+                        // undisable all other buttons
+                        if (document.getElementById('js-preference-btn').children[0].checked || document.getElementById('js-unavailability-btn').children[0].checked) {
+                            document.querySelectorAll('.js-preference-onclick-undisable').forEach(element => {
+                                element.disabled = false;
+                                
+                            });
+                        }
+                    } 
+                }
+            });   
+            createVerificationText(preferenceSelected, verificationWeekdays, 'de 8h00 à 5h00', verification);  
         });
     });
 }
@@ -307,7 +346,7 @@ checkBtnManager(timeBtns, 'js-preference-time-btn-');
 // Note character counter
 var noteTextbox = document.getElementById('js-preference-note');
 var characterCounter = document.getElementById('js-preference-note-counter');
-var characterCounterLimit = 150;
+var characterCounterLimit = noteTextbox.maxLength;
 
 noteTextbox.addEventListener('input', function(){
     characterCounter.textContent = noteTextbox.value.length + '/' + characterCounterLimit;
@@ -324,17 +363,10 @@ weekdayBtns.forEach(function(element, key) {
     // only weekdays
         element.addEventListener('click', function(){
         // onclick
-            checkbox.checked ? verificationWeekdays[key][1] = true : verificationWeekdays[key][1] = false;
+            checkbox.checked ? verificationWeekdays[key - 2][1] = true : verificationWeekdays[key - 2][1] = false;
+            // key - 2 because there are two buttons before which have the same class 'nonspecific' anc 'specific'
             createVerificationText(preferenceSelected, verificationWeekdays, '8h30', verification);   
 
         });  
     }
 });
-
-
-
-// GOAL
-/* Display string with selected checkboxes */
-
-
-

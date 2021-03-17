@@ -38,109 +38,36 @@
             </div>
 
 
+
             <div class="mt-4 row">
-                <div class="mx-auto col-md-12">
-                    <p>Choissisez les jours de la semaine :</p>
+                <div class="mx-auto col-md-12 d-flex">
+                    <p>Choissisez</p>
                 </div>
             </div>
             <div class="row">
-                <div class="mx-auto col-md-12 d-flex">
-                    <button 
-                        type="button" 
-                        style="height: 75px" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                        id="js-preference-weekday-btn-1" 
-                        disabled="disabled"
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_monday" 
-                            value="true" 
-                            hidden="hidden"
-                        />
-                        <span>Lun</span>
-                    </button>
-                    <button 
-                        type="button" 
-                        style="height: 75px" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                        id="js-preference-weekday-btn-2" 
-                        disabled="disabled"
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_tuesday" 
-                            value="true" 
-                            hidden="hidden"
-                        />
-                        <span>Mar</span>
-                    </button>
-                    <button 
-                        type="button" 
-                        style="height: 75px" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                        id="js-preference-weekday-btn-3" 
-                        disabled="disabled"
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_wednesday" 
-                            value="true" 
-                            hidden="hidden"
-                        />
-                        <span>Mer</span>
-                    </button>
-                    <button 
-                        type="button" 
-                        style="height: 75px" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                        id="js-preference-weekday-btn-4" 
-                        disabled="disabled"
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_thursday" 
-                            value="true" 
-                            hidden="hidden"
-                        />
-                        <span>Jeu</span>
-                    </button>
-                    <button 
-                        type="button" 
-                        style="height: 75px" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                        id="js-preference-weekday-btn-5" 
-                        disabled="disabled"
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_friday" 
-                            value="true" 
-                            hidden="hidden"
-                        />
-                        <span>Ven</span>
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mx-auto col-md-12 d-flex">
+                <div class="mx-auto col-md-6 d-flex">
                     <button 
                         type="button" 
                         class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
-                        id="js-preference-weekday-btn-all" 
-                        disabled="disabled"
+                        id="js-preference-weekday-btn-nonspecific"
+                        disabled="disabled" 
                     >
-                        <span>Tous les jours</span>
+                        <input 
+                            type="checkbox" 
+                            name="preference_weekday_nonspecific" 
+                            value="true" 
+                            hidden="hidden"
+                        >
+                        <span>Une préférence constante</span>
                     </button>
                 </div>
-            </div>
-            <div class="row">
-                <div class="mx-auto col-md-12 d-flex">
+         
+                <div class="mx-auto col-md-6 d-flex">
                     <button 
                         type="button" 
                         class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
-                        id="js-preference-weekday-btn-specific" 
-                        disabled="disabled"
+                        id="js-preference-weekday-btn-specific"
+                        disabled="disabled" 
                     >
                         <input 
                             type="checkbox" 
@@ -148,144 +75,134 @@
                             value="true" 
                             hidden="hidden"
                         >
-                        <span>Un jour ou un période spécifique</span>
+                        <span>Un jour ou une période spécifique</span>
                     </button>
                 </div>
             </div>
 
+           
+            <div class="mt-4 swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="row">
+                            <div class="mx-auto col-md-12">
+                                <p>Choissisez les jours de la semaine :</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mx-auto col-md-12 d-flex">
+                                {% set weekdays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'] %}
+                                {% for weekday in weekdays %}
+                                    <button 
+                                        type="button" 
+                                        style="height: 75px" 
+                                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                                        id="js-preference-weekday-btn-{{ loop.index }}" 
+                                        disabled="disabled"
+                                    >
+                                        <input 
+                                            type="checkbox" 
+                                            name="preference_weekday_{{ loop.index }}" 
+                                            value="true" 
+                                            hidden="hidden"
+                                        />
+                                        <span>{{ weekday }}</span>
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mx-auto col-md-12 d-flex">
+                                <button 
+                                    type="button" 
+                                    class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
+                                    id="js-preference-weekday-btn-all" 
+                                    disabled="disabled"
+                                >
+                                    <span>Tous les jours</span>
+                                </button>
+                            </div>
+                        </div>
 
-            <div class="mt-4 row">
-                <div class="mx-auto col-md-12">
-                    <p>Choisissez vos horaires :</p>
-                    <p class="text-muted">Si vos disponibilités horaires changent en fonction du jour de la semaine, créez des préférences séparées pour chaque jour de la semaine dont les horaires sont différents.</p>
-                    <p class="text-muted">Par exemple : J'enregistre une préférence pour tous les lundis de 9h30 à 15h00, et ensuite je crée une autre pour tous les mercredis de 16h30 à 18h00.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mx-auto col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-1" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_1" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>8h00 - 9h30</span>
-                            </button>
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-2" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_2" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>9h30 - 11h00</span>
-                            </button>
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-3" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_3" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>11h00 - 12:30</span>
-                            </button>
+
+
+                        <div class="mt-4 row">
+                            <div class="mx-auto col-md-12">
+                                <p>Choisissez vos horaires :</p>
+                                <p class="text-muted">Si vos disponibilités horaires changent en fonction du jour de la semaine, créez des préférences séparées pour chaque jour de la semaine dont les horaires sont différents.</p>
+                                <p class="text-muted">Par exemple : Isabelle enregistre une disponibilité pour tous les lundis de 9h30 à 15h00, et ensuite elle crée une autre pour tous les mercredis de 16h30 à 18h00.</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-4" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_4" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>13h30 - 15h00</span>
-                            </button>
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-5" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_5" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>15h00 - 16:30</span>
-                            </button>
-                            <button 
-                                type="button" 
-                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                id="js-preference-time-btn-6" 
-                                disabled="disabled"
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    name="preference_time_6" 
-                                    value="true"
-                                    hidden="hidden"
-                                />
-                                <span>16h30 - 18h00</span>
-                            </button>
+                        <div class="row">
+                            <div class="mx-auto col-md-12">
+                                <div class="row">
+                                    {% set times = ['8h00 - 9h30', '9h30 - 11h00', '11h00 - 12h30', '13h30 - 15h00', '15h00 - 16h30', '16h30 - 18h00'] %}
+                                    {% for column in times | batch (3) %}
+                                    <div class="col-md-6">
+                                        {% for time in column %}
+                                            <button 
+                                                type="button" 
+                                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                                id="js-preference-time-btn-{{ loop.index }}" 
+                                                disabled="disabled"
+                                            >
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="preference_time_{{ loop.index }}" 
+                                                    value="true"
+                                                    hidden="hidden"
+                                                />
+                                                <span>{{ time }}</span>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+                                    {% endfor %}
+                                        
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="mx-auto col-md-12 d-flex">
+                                <button 
+                                    type="button" 
+                                    class="js-preference-onclick-undisable mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" 
+                                    id="js-preference-time-btn-all" 
+                                    disabled="disabled"
+                                    >
+                                    <span>Toute la journée</span>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="mt-4 row">
+                            <div class="mx-auto col-md-12">
+                                <p class="text-muted">Si vous avez des circonstances spécifiques, vous pouvez laisser une petite note :</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mx-auto col-md-12">
+                                <textarea 
+                                    class="form-control" 
+                                    rows="2" 
+                                    placeholder="Exemple : Je suis disponible mardi entre 18h00 et 19h30..." 
+                                    id="js-preference-note" 
+                                    maxlength="135"
+                                ></textarea>
+                                <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/135</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="swiper-slide">
+                        el pepe gay
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="mx-auto col-md-12 d-flex">
-                    <button 
-                        type="button" 
-                        class="js-preference-onclick-undisable mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" 
-                        id="js-preference-time-btn-all" 
-                        disable="disabled"
-                        >
-                        <span>Toute la journée</span>
-                    </button>
-                </div>
-            </div>
 
 
-            <div class="mt-4 row">
-                <div class="mx-auto col-md-12">
-                    <p class="text-muted">Si vous avez des circonstances spécifiques, vous pouvez laisser une petite note :</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mx-auto col-md-12">
-                    <textarea 
-                        class="form-control" 
-                        rows="2" 
-                        placeholder="Exemple : Je suis disponible mardi entre 18h00 et 19h30..." 
-                        id="js-preference-note" 
-                        maxlength="150"
-                    ></textarea>
-                    <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/150</p>
-                </div>
-            </div>
+            
 
 
             <div class="row">
