@@ -154,7 +154,7 @@ class Subject
     }
 
     public function setCode(){
-        $this->code = $this->PPN . '_' . $this->semester;
+        $this->code = $this->PPN . '_S' . $this->semester;
     }
 
     /**

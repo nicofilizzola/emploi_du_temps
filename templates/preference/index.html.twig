@@ -38,193 +38,187 @@
             </div>
 
 
-
-            <div class="mt-4 row">
-                <div class="mx-auto col-md-12 d-flex">
-                    <p>Choissisez</p>
+            <div class="mt-5 row">
+                <div class="mx-auto col-md-12">
+                    <p>Choissisez la semaine :</p>
                 </div>
             </div>
             <div class="row">
-                <div class="mx-auto col-md-6 d-flex">
-                    <button 
-                        type="button" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
-                        id="js-preference-weekday-btn-nonspecific"
-                        disabled="disabled" 
+                <div class="mx-auto col-md-12">
+
+                    <select class="form-control" name="" id="">
+                        <option value="">Toutes</option>
+                        {% for week in weeks %}
+                        <option value="">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                        {% endfor %}
+                    </select>
+
+                    
+                    <input 
+                        class="mt-4" 
+                        type="checkbox" 
+                        value="" 
+                        id="js-preference-endweek-checkbox" 
+                        onclick="if (document.getElementById('js-preference-endweek-checkbox').checked) { document.getElementById('js-preference-endweek').disable = false; console.log('vrniefn'); }"
                     >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_nonspecific" 
-                            value="true" 
-                            hidden="hidden"
-                        >
-                        <span>Une préférence constante</span>
-                    </button>
-                </div>
-         
-                <div class="mx-auto col-md-6 d-flex">
-                    <button 
-                        type="button" 
-                        class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
-                        id="js-preference-weekday-btn-specific"
-                        disabled="disabled" 
-                    >
-                        <input 
-                            type="checkbox" 
-                            name="preference_weekday_specific" 
-                            value="true" 
-                            hidden="hidden"
-                        >
-                        <span>Un jour ou une période spécifique</span>
-                    </button>
+                    <label for="">Jusqu'à (La semaine de fin sera prise en compte aussi)</label>
+                    <select class="mt-2 form-control" name="" id="js-preference-endweek" disabled="disabled">
+                        {% for week in weeks %}
+                        <option value="">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                        {% endfor %}
+                    </select>
+                        
                 </div>
             </div>
+
+
 
            
-            <div class="mt-4 swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="row">
-                            <div class="mx-auto col-md-12">
-                                <p>Choissisez les jours de la semaine :</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mx-auto col-md-12 d-flex">
-                                {% set weekdays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'] %}
-                                {% for weekday in weekdays %}
-                                    <button 
-                                        type="button" 
-                                        style="height: 75px" 
-                                        class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
-                                        id="js-preference-weekday-btn-{{ loop.index }}" 
-                                        disabled="disabled"
-                                    >
-                                        <input 
-                                            type="checkbox" 
-                                            name="preference_weekday_{{ loop.index }}" 
-                                            value="true" 
-                                            hidden="hidden"
-                                        />
-                                        <span>{{ weekday }}</span>
-                                    </button>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mx-auto col-md-12 d-flex">
+            <div class="mt-5 row">
+                <div class="mx-auto col-md-12">
+                    <p>Choissisez les jours de la semaine :</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mx-auto col-md-12 d-flex">
+                    {% set weekdays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'] %}
+                    {% for weekday in weekdays %}
+                        <button 
+                            type="button" 
+                            style="height: 75px" 
+                            class="js-preference-onclick-undisable js-preference-weekday-btn  m-1 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark text-uppercase" 
+                            id="js-preference-weekday-btn-{{ loop.index }}" 
+                            disabled="disabled"
+                        >
+                            <input 
+                                type="checkbox" 
+                                name="preference_weekday_{{ loop.index }}" 
+                                value="true" 
+                                hidden="hidden"
+                            />
+                            <span>{{ weekday }}</span>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="mx-auto col-md-12 d-flex">
+                    <button 
+                        type="button" 
+                        class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
+                        id="js-preference-weekday-btn-all" 
+                        disabled="disabled"
+                    >
+                        <span>Tous les jours</span>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="mt-5 row">
+                <div class="mx-auto col-md-12">
+                    <p>Choisissez vos horaires :</p>
+                    <small class="text-muted">Si vos disponibilités horaires changent en fonction du jour de la semaine, créez des préférences séparées pour chaque jour de la semaine dont les horaires sont différents.</small>
+                    <small class="text-muted">Per exemple, Isabelle enregistre une disponibilité pour tous les lundis de 9h30 à 15h00, et ensuite elle en crée une autre pour tous les mercredis de 16h30 à 18h00.</small>
+                </div>
+            </div>
+            <div class="mt-4 row">
+                <div class="mx-auto col-md-12">
+                    <div class="row">
+                        {% set times = [1, '8h00 - 9h30', '9h30 - 11h00', '11h00 - 12h30', '13h30 - 15h00', '15h00 - 16h30', '16h30 - 18h00', '18h00 - 19h30'] %}
+                        {% for column in times | batch (4) %}
+                            {% set lastBatch = 0 %}
+                        <div class="col-md-6">
+                            {% for time in column %}
+                                {% if loop.parent.loop.first and loop.first %}
                                 <button 
                                     type="button" 
-                                    class="js-preference-onclick-undisable js-preference-weekday-btn mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark" 
-                                    id="js-preference-weekday-btn-all" 
+                                    class="btn btn-dark btn-block js-preference-time-btn"  
                                     disabled="disabled"
                                 >
-                                    <span>Tous les jours</span>
+                                    <span class="text-dark">{{ time }}</span>
                                 </button>
-                            </div>
-                        </div>
-
-
-
-                        <div class="mt-4 row">
-                            <div class="mx-auto col-md-12">
-                                <p>Choisissez vos horaires :</p>
-                                <p class="text-muted">Si vos disponibilités horaires changent en fonction du jour de la semaine, créez des préférences séparées pour chaque jour de la semaine dont les horaires sont différents.</p>
-                                <p class="text-muted">Par exemple : Isabelle enregistre une disponibilité pour tous les lundis de 9h30 à 15h00, et ensuite elle crée une autre pour tous les mercredis de 16h30 à 18h00.</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mx-auto col-md-12">
-                                <div class="row">
-                                    {% set times = ['8h00 - 9h30', '9h30 - 11h00', '11h00 - 12h30', '13h30 - 15h00', '15h00 - 16h30', '16h30 - 18h00'] %}
-                                    {% for column in times | batch (3) %}
-                                    <div class="col-md-6">
-                                        {% for time in column %}
-                                            <button 
-                                                type="button" 
-                                                class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
-                                                id="js-preference-time-btn-{{ loop.index }}" 
-                                                disabled="disabled"
-                                            >
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="preference_time_{{ loop.index }}" 
-                                                    value="true"
-                                                    hidden="hidden"
-                                                />
-                                                <span>{{ time }}</span>
-                                            </button>
-                                        {% endfor %}
-                                    </div>
-                                    {% endfor %}
-                                        
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mx-auto col-md-12 d-flex">
+                                {% else %}
+                                    {% if loop.parent.loop.index == 2 %}
+                                        {% set lastBatch = 4 %}
+                                    {% endif %}
                                 <button 
                                     type="button" 
-                                    class="js-preference-onclick-undisable mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" 
-                                    id="js-preference-time-btn-all" 
+                                    class="js-preference-onclick-undisable btn btn-dark btn-block js-preference-time-btn" 
+                                    id="js-preference-time-btn-{{ loop.index + lastBatch - 1 }}" 
                                     disabled="disabled"
-                                    >
-                                    <span>Toute la journée</span>
+                                >
+                                    <input 
+                                        type="checkbox" 
+                                        name="preference_time_{{ loop.index + lastBatch - 1 }}" 
+                                        value="true"
+                                        hidden="hidden"
+                                    />
+                                    <span>{{ time }}</span>
                                 </button>
-                            </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-
-
-                        <div class="mt-4 row">
-                            <div class="mx-auto col-md-12">
-                                <p class="text-muted">Si vous avez des circonstances spécifiques, vous pouvez laisser une petite note :</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mx-auto col-md-12">
-                                <textarea 
-                                    class="form-control" 
-                                    rows="2" 
-                                    placeholder="Exemple : Je suis disponible mardi entre 18h00 et 19h30..." 
-                                    id="js-preference-note" 
-                                    maxlength="135"
-                                ></textarea>
-                                <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/135</p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide">
-                        el pepe gay
+                        {% endfor %}
+                            
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="mx-auto col-md-12 d-flex">
+                    <button 
+                        type="button" 
+                        class="js-preference-onclick-undisable mt-2 w-100 rounded d-flex align-items-center justify-content-center btn btn-dark js-preference-time-btn" 
+                        id="js-preference-time-btn-all" 
+                        disabled="disabled"
+                        >
+                        <span>Toute la journée</span>
+                    </button>
+                </div>
+            </div>
+                    
 
 
             
-
-
-            <div class="row">
+            <div class="mt-5 row">
                 <div class="mx-auto col-md-12">
-                    <p>Vérifiez :</p>
+                    <p>Précisions ou commentaires :</p>
                 </div>
             </div>
             <div class="row">
                 <div class="mx-auto col-md-12">
-                    <div class="btn btn-block border border-primary">
+                    <textarea 
+                        class="form-control" 
+                        rows="2" 
+                        placeholder="S'il y a d'autres particularités, faites le nous savoir ici..." 
+                        id="js-preference-note" 
+                        maxlength="135"
+                    ></textarea>
+                    <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/135</p>
+                </div>
+            </div>
+
+            <div class="mt-4 row">
+                <div class="mx-auto col-md-12">
+                    <h5 class="text-danger">Vérifiez !</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mx-auto col-md-12">
+                    <div class="btn btn-block border border-danger text-danger">
                         <span id="js-preference-verification">Vous n'avez rien indiqué pour le moment.</span>
                     </div>    
                 </div>
             </div>
             <div class="mt-2 row">
                 <div class="mx-auto col-md-12">
-                    <p class="text-muted">Cliquez sur le bouton 'Enregistrer' uniquement si le texte ci-dessus correspond à ce que vous avez indiqué.</p>
+                    <small class="text-muted">Cliquez sur le bouton 'Enregistrer' uniquement si le texte ci-dessus correspond à ce que vous avez indiqué.</small>
                 </div>
             </div>
 
             
-            <button class="mt-4 btn btn-block btn-primary">Enregistrer</button>
+            <button class="mt-5 btn btn-block btn-primary">Enregistrer</button>
         </form>
     </div>
 

@@ -15,7 +15,8 @@ var verificationTimeValues = [
     '13h30',
     '15h00',
     '16h30',
-    '18h00'
+    '18h00',
+    '19h30'
 ]
 var verificationTimes = [
     [verificationTimeValues[0], verificationTimeValues[1], false],
@@ -24,7 +25,8 @@ var verificationTimes = [
     // lunch break
     [verificationTimeValues[4], verificationTimeValues[5], false],
     [verificationTimeValues[5], verificationTimeValues[6], false],
-    [verificationTimeValues[6], verificationTimeValues[7], false]
+    [verificationTimeValues[6], verificationTimeValues[7], false],
+    [verificationTimeValues[7], verificationTimeValues[8], false],
 ];
 var verification = document.getElementById('js-preference-verification');
 
@@ -159,15 +161,17 @@ function createVerificationText(preference, verificationWeekdays, /*verification
 
 
 
-// Swiper for specific and constant
-const swiper = new Swiper('.swiper-container', {
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    allowTouchMove: false
-});
-var swiperInteractive = document.querySelector('.swiper-container').swiper;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,8 +182,9 @@ var preferenceRadioInput;
 preferenceBtns.forEach(clicked => {
     clicked.addEventListener('click', function(){
         // undisable next buttons
-        document.getElementById('js-preference-weekday-btn-nonspecific').disabled = false;
-        document.getElementById('js-preference-weekday-btn-specific').disabled = false;
+        document.querySelectorAll('.js-preference-onclick-undisable').forEach(element => {
+            element.disabled = false;
+        });
 
         preferenceBtns.forEach(element => {
             preferenceRadioInput = element.children[0];
@@ -219,6 +224,28 @@ preferenceBtns.forEach(clicked => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Buttons check and color change setup
 function checkAndReplaceClass(element, checkbox, checkboxState, oldClass, newClass) {
     checkbox.checked = checkboxState;
@@ -229,8 +256,6 @@ function checkBtnManager(btns, idPrefix) {
     var choiceCheckbox;
     var choiceBtnIndex;
     var selectAllId = idPrefix + 'all';
-    var selectSpecificId = idPrefix + 'specific';
-    var selectNonspecificId = idPrefix + 'nonspecific';
     var disabledClass = 'btn-dark'
     var activeClass = 'btn-primary'
 
@@ -280,56 +305,26 @@ function checkBtnManager(btns, idPrefix) {
                         });
                     }
                 }
-    
-                // If 'specific' button exists in form
-                if (document.getElementById(selectSpecificId) !== undefined) {
-                    // onclick
-                    if (clicked.id == selectSpecificId) {
-                        // display 'specific' inputs
-                        swiperInteractive.slideTo(1);
-                        
-
-
-
-                        // uncheck all other btns
-                        if (clicked.id !== element.id) {
-                            checkAndReplaceClass(element, choiceCheckbox, false, activeClass, disabledClass);
-                        }
-
-                        // Other: Send data to verification
-                        verificationWeekdays.forEach(element => {
-                            element[1] = false;
-                        });
-            
-                    } else {
-                    // if any other button was clicked, uncheck 'specific' btn
-                        if (element.id == selectSpecificId && element.classList.contains('btn-primary') && choiceCheckbox) {
-                            checkAndReplaceClass(element, choiceCheckbox, false, activeClass, disabledClass);
-
-                        }
-                    }
-                }   
-
-                // If 'nonspecific' button exists in form
-                if (document.getElementById(selectNonspecificId) !== undefined) {
-                    // onclick
-                    if (clicked.id == selectNonspecificId) {
-                        // display 'nonspecific' inputs
-                        swiperInteractive.slideTo(0);
-                        // undisable all other buttons
-                        if (document.getElementById('js-preference-btn').children[0].checked || document.getElementById('js-unavailability-btn').children[0].checked) {
-                            document.querySelectorAll('.js-preference-onclick-undisable').forEach(element => {
-                                element.disabled = false;
-                                
-                            });
-                        }
-                    } 
-                }
             });   
             createVerificationText(preferenceSelected, verificationWeekdays, 'de 8h00 à 5h00', verification);  
         });
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -343,6 +338,18 @@ checkBtnManager(timeBtns, 'js-preference-time-btn-');
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // Note character counter
 var noteTextbox = document.getElementById('js-preference-note');
 var characterCounter = document.getElementById('js-preference-note-counter');
@@ -351,6 +358,26 @@ var characterCounterLimit = noteTextbox.maxLength;
 noteTextbox.addEventListener('input', function(){
     characterCounter.textContent = noteTextbox.value.length + '/' + characterCounterLimit;
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

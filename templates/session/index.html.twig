@@ -188,7 +188,9 @@
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 text-small event event-indicator event-{{ loop.parent.loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div>
+                                                >
+                                                    <small class="mx-1">{{ event.abbreviation }}</small>
+                                                </div>
 
                                         {% endif %}
                                     {% endfor %}
@@ -208,7 +210,9 @@
                                                 />
                                                 <div 
                                                     class="my-1 rounded w-100 d-none text-small event event-indicator event-{{ loop.index }} js-event-indicator-{{ event.id }}"
-                                                ></div> 
+                                                >
+                                                    <small class="mx-1">{{ event.abbreviation }}</small>
+                                                </div> 
 
                                 {% endif %} 
 
