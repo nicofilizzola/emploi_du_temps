@@ -30,10 +30,11 @@ var verificationTimes = [
 ];
 var verification = document.getElementById('js-preference-verification');
 
-function createVerificationText(preference, verificationWeekdays, /*verificationTimes*/ times, verification) {
+function createVerificationText(preference, verificationWeekdays, verificationTimes, verification) {
+    var prefixString = '';
     var preferenceString;
     var daysString;
-    var timeString;
+    var timesString;
     var string;
 
     // set preferenceString
@@ -45,9 +46,11 @@ function createVerificationText(preference, verificationWeekdays, /*verification
 
     // set daysString
     var dayCounter = 0;
+    var selectedNext;
     verificationWeekdays.forEach(element => {
         if (element[1]) {
         // if weekday selected
+            selectedNext = 0;
             dayCounter++;
 
             if (dayCounter == 1) {
@@ -59,27 +62,27 @@ function createVerificationText(preference, verificationWeekdays, /*verification
 
                 // verify if any other days are selected after this one
                 var subCounter = 0;
-                var selectedNext = false;
                 verificationWeekdays.forEach(value => {
+                    subCounter++;
                     if (subCounter > dayCounter){
                     // do this for days ahead
                         if (value[1]){
                         // if other selected days left
-                            selectedNext = true;
+                            selectedNext++;
                         }
                     }
-                    subCounter++;
+                    
                 });
 
-                if (selectedNext) {
+                if (selectedNext >= 1) {
                     // if other selected elements ahead
                     daysString += ', ' + element[0];
+                    
 
                 } else {
                     daysString += ' et ' + element[0];
               
                 }  
-
             } 
 
             // DE LUNDI A JEUDI
@@ -97,61 +100,71 @@ function createVerificationText(preference, verificationWeekdays, /*verification
 
     }
 
+
+
+
     //set timesString
     var timeCounter = 0;
+    var selectedNextTime;
     verificationTimes.forEach(element => {
-    if (element[2]) {
-    // if day selected
-        timeCounter++;
+        if (element[2]) {
+        // if day selected
+        
+            selectedNextTime = false;
+            timeCounter++;
 
-        if (timeCounter == 1) {
-        // if first displayed day
-            timesString = ' de ' + element[0];
-            
-        } else if (timeCounter < verificationTimes.length + 1) {
-        // more than one but less than 5
+            if (timeCounter == 1) {
+            // if first displayed day
+                timesString = ' de ' + element[0] + ' à ' + element[1];
+                
+            } else if (timeCounter < verificationTimes.length + 1) {
+            // more than one but less than 5
 
-            // verify if any other days are selected after this one
-            var subCounter = 0;
-            var selectedNext = false;
-            verificationTimes.forEach(value => {
-                if (subCounter > timeCounter){
-                // do this for days ahead
-                    if (value[1]){
-                    // if other selected days left
-                        selectedNext = true;
+                // verify if any other days are selected after this one
+                var subCounter = 0;
+                verificationTimes.forEach(value => {
+                    if (subCounter > timeCounter){
+                    // do this for days ahead
+                        if (value[1]){
+                        // if other selected days left
+                            selectedNextTime = true;
+                        }
                     }
+                    subCounter++;
+                });
+
+                if (selectedNextTime) {
+                    // if other selected elements ahead
+                    timesString += ', de ' + element[0] + ' à ' + element[1];
+
+                } else {
+                    timesString += ' et de ' + element[0] + ' à ' + element[1];
+
                 }
-                subCounter++;
-            });
 
-            if (selectedNext) {
-                // if other selected elements ahead
-                timesString += ', ' + element[0];
-
-            } else {
-                timesString += ' et ' + element[0];
-
-            }
-
-        } else if (timeCounter == verificationTimes.length + 1) {
-        // all selected
-            timesString = 'toute la semaine';
-
-        } else if (timeCounter == 0) {
-        // none selected
-            string = 'Vous n\'avez pas encore renseigné toutes les informations demandées...';
+            } 
         }
+    
+    });
+
+    if (timeCounter == verificationTimes.length) {
+    // all selected
+        timesString = ' toute la journée';
+
+    } else if (timeCounter == 0) {
+    // none selected
+        string = 'Vous n\'avez pas encore renseigné toutes les informations demandées...';
     }
 
+
+
+    // MASTER STRING
     if (string === undefined) {
     // If no error message
-        string = 'Je suis ' + preferenceString + daysString + ' de 8h00 à 12h30' ;
+        string = prefixString + 'Je suis ' + preferenceString + daysString + timesString;
     }
     
     return verification.innerHTML = string;
-    
-    });
 }
 
 
@@ -204,7 +217,7 @@ preferenceBtns.forEach(clicked => {
                     // Send data to verification
                     preferenceSelected = true;
                 }
-                createVerificationText(preferenceSelected, verificationWeekdays, '8h30', verification); 
+                createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification); 
                 element.classList.add('btn-dark');
             } else {
             // clicked button 
@@ -291,22 +304,14 @@ function checkBtnManager(btns, idPrefix) {
                             checkAndReplaceClass(element, choiceCheckbox, true, disabledClass, activeClass);
 
                         }
-                    // Other: Send data to verification
-                    verificationWeekdays.forEach(element => {
-                        element[1] = true;
-                    });
     
                     } else if (element.classList.contains('btn-primary')) {
                         checkAndReplaceClass(element, choiceCheckbox, false, activeClass, disabledClass);
 
-                        // Other: Send data to verification
-                        verificationWeekdays.forEach(element => {
-                            element[1] = false;
-                        });
                     }
                 }
             });   
-            createVerificationText(preferenceSelected, verificationWeekdays, 'de 8h00 à 5h00', verification);  
+            createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification);  
         });
     });
 }
@@ -335,6 +340,9 @@ checkBtnManager(weekdayBtns, 'js-preference-weekday-btn-');
 // Time buttons check and color change
 var timeBtns = document.querySelectorAll('.js-preference-time-btn');
 checkBtnManager(timeBtns, 'js-preference-time-btn-');
+
+
+
 
 
 
@@ -381,7 +389,7 @@ noteTextbox.addEventListener('input', function(){
 
 
 
-// Preference verification
+// Preference verification for weekdays
 weekdayBtns.forEach(function(element, key) {
 // check in btns
     var checkbox = element.children[0];
@@ -390,10 +398,97 @@ weekdayBtns.forEach(function(element, key) {
     // only weekdays
         element.addEventListener('click', function(){
         // onclick
-            checkbox.checked ? verificationWeekdays[key - 2][1] = true : verificationWeekdays[key - 2][1] = false;
-            // key - 2 because there are two buttons before which have the same class 'nonspecific' anc 'specific'
-            createVerificationText(preferenceSelected, verificationWeekdays, '8h30', verification);   
+            checkbox.checked ? verificationWeekdays[key][1] = true : verificationWeekdays[key][1] = false;
+            createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification);   
 
         });  
     }
 });
+
+// All btn
+var weekdayAllBtn = document.getElementById('js-preference-weekday-btn-all');
+
+weekdayAllBtn.addEventListener('click', function() {
+    if (weekdayAllBtn.classList.contains('btn-dark')){
+        verificationWeekdays.forEach(element => {
+            element[1] = false;
+        }); 
+    } else if (weekdayAllBtn.classList.contains('btn-primary')){
+        verificationWeekdays.forEach(element => {
+            element[1] = true;
+        });   
+    }
+    createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification);    
+});
+
+
+
+
+// Preference verification for times
+timeBtns.forEach(function(element, key) {
+    // check in btns
+    var checkbox = element.children[0];
+
+    if (parseInt(element.id.replace(/\D/g, ""))){
+    // only weekdays
+        element.addEventListener('click', function(){
+        // onclick
+            checkbox.checked ? verificationTimes[key - 1][2] = true : verificationTimes[key - 1][2] = false;
+            createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification);   
+        });  
+    }
+});
+
+// All btn
+var timesAllBtn = document.getElementById('js-preference-time-btn-all');
+
+timesAllBtn.addEventListener('click', function() {
+    if (timesAllBtn.classList.contains('btn-dark')){
+        verificationTimes.forEach(element => {
+            element[2] = false;
+        }); 
+    } else if (timesAllBtn.classList.contains('btn-primary')){
+        verificationTimes.forEach(element => {
+            element[2] = true;
+        });   
+    }
+    createVerificationText(preferenceSelected, verificationWeekdays, verificationTimes, verification);  
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// endweek disable with checkbox
+var endweekSelector =  document.getElementById('js-preference-endweek');
+var endweekCheckbox = document.getElementById('js-preference-endweek-checkbox');
+var startWeekAll = document.getElementById('js-preference-startweek').children[1];
+
+endweekCheckbox.addEventListener('change', function(){
+    if (endweekCheckbox.checked) {
+        endweekSelector.disabled = false;
+        startWeekAll.hidden = true;
+    } else {
+        endweekSelector.disabled = true;
+        startWeekAll.hidden = false;
+    }
+});
+
+
+
+
+
+
+
+

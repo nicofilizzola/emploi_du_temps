@@ -80,8 +80,8 @@ class PreferenceController extends AbstractController
     {
         $preference = new Preference;
         $data = $req->request;
-        $weekdays =
-        $timeRanges =
+        $weekdays = 1;
+        $timeRanges = 1;
 
         // if (isset($data['preference_weekday_1'])) {
             
@@ -91,6 +91,6 @@ class PreferenceController extends AbstractController
         // }
         
 
-        $this->redirectToRoute('app_preference');
+        return $this->redirectToRoute('app_preference');
     }
 }

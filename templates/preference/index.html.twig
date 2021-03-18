@@ -46,7 +46,8 @@
             <div class="row">
                 <div class="mx-auto col-md-12">
 
-                    <select class="form-control" name="" id="">
+                    <select class="form-control" name="" id="js-preference-startweek">
+                        <option value=""></option>
                         <option value="">Toutes</option>
                         {% for week in weeks %}
                         <option value="">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
@@ -59,7 +60,6 @@
                         type="checkbox" 
                         value="" 
                         id="js-preference-endweek-checkbox" 
-                        onclick="if (document.getElementById('js-preference-endweek-checkbox').checked) { document.getElementById('js-preference-endweek').disable = false; console.log('vrniefn'); }"
                     >
                     <label for="">Jusqu'à (La semaine de fin sera prise en compte aussi)</label>
                     <select class="mt-2 form-control" name="" id="js-preference-endweek" disabled="disabled">
@@ -190,12 +190,12 @@
                 <div class="mx-auto col-md-12">
                     <textarea 
                         class="form-control" 
-                        rows="2" 
+                        rows="4" 
                         placeholder="S'il y a d'autres particularités, faites le nous savoir ici..." 
                         id="js-preference-note" 
-                        maxlength="135"
+                        maxlength="300"
                     ></textarea>
-                    <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/135</p>
+                    <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/300</p>
                 </div>
             </div>
 
