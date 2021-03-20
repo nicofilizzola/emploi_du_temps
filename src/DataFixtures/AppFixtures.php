@@ -26,6 +26,7 @@ class AppFixtures extends Fixture
             ['name' => 'Conseil de direction de l\'IUT', 'abbreviation' => 'CDI'],
             ['name' => 'Conseil de département', 'abbreviation' => 'DEP'],
             ['name' => 'Jurys semestre', 'abbreviation' => 'JUR'],
+            ['name' => 'Autre', 'abbreviation' => 'AUT'],
             //['name' => 'Semaines intersemestre', 'abbreviation' => 'SIS'],
             //['name' => 'Immersions Digitales', 'abbreviation' => 'JPO'],
         ];

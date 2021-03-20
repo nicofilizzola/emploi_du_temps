@@ -34,12 +34,6 @@ class Preference
     private $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Subject::class, inversedBy="preferences")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $subject;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $note;
@@ -81,18 +75,6 @@ class Preference
     public function setSession(?Session $session): self
     {
         $this->session = $session;
-
-        return $this;
-    }
-
-    public function getSubject(): ?Subject
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(?Subject $subject): self
-    {
-        $this->subject = $subject;
 
         return $this;
     }

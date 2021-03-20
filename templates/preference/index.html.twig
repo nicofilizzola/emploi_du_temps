@@ -14,24 +14,24 @@
                 <div class="mx-auto col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="js-preference-btn btn btn-success btn-block p-4" id="js-preference-btn">
+                            <button type="button" class="js-preference-btn btn btn-success btn-block p-4" id="js-preference-btn">
                                 <input type="radio" 
                                     name="preference_state" 
-                                    value="availability" 
+                                    value="1" 
                                     hidden="hidden"
                                 >
                                 <span>Disponibilité</span>
-                            </div>
+                            </button>
                         </div>
                         <div class="col-md-6">
-                            <div class="js-preference-btn btn btn-danger btn-block p-4" id="js-unavailability-btn">
+                            <button type="button" class="js-preference-btn btn btn-danger btn-block p-4" id="js-unavailability-btn">
                                 <input type="radio" 
                                     name="preference_state" 
-                                    value="unavailability" 
+                                    value="0" 
                                     hidden="hidden"
                                 >
                                 <span>Indisponibilité</span>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -46,25 +46,27 @@
             <div class="row">
                 <div class="mx-auto col-md-12">
 
-                    <select class="form-control" name="" id="js-preference-startweek">
+                    <select class="form-control" name="preference_week" id="js-preference-startweek">
                         <option value=""></option>
-                        <option value="">Toutes</option>
+                        <option value="all">Toutes</option>
                         {% for week in weeks %}
-                        <option value="">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                            <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                         {% endfor %}
                     </select>
 
                     
                     <input 
                         class="mt-4" 
-                        type="checkbox" 
-                        value="" 
+                        type="checkbox"
+                        name="is_preference_endweek" 
+                        value="1" 
                         id="js-preference-endweek-checkbox" 
                     >
-                    <label for="">Jusqu'à (La semaine de fin sera prise en compte aussi)</label>
-                    <select class="mt-2 form-control" name="" id="js-preference-endweek" disabled="disabled">
+                    <label for="js-preference-endweek-checkbox">Jusqu'à (La semaine de fin sera prise en compte aussi)</label>
+                    <select class="mt-2 form-control" name="preference_endweek" id="js-preference-endweek" disabled="disabled">
+                        <option value=""></option>
                         {% for week in weeks %}
-                        <option value="">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                        <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                         {% endfor %}
                     </select>
                         
@@ -194,6 +196,7 @@
                         placeholder="S'il y a d'autres particularités, faites le nous savoir ici..." 
                         id="js-preference-note" 
                         maxlength="300"
+                        name="preference_note"
                     ></textarea>
                     <p class="mb-0 text-muted text-right" id="js-preference-note-counter">0/300</p>
                 </div>

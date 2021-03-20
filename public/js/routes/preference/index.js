@@ -471,21 +471,40 @@ timesAllBtn.addEventListener('click', function() {
 
 
 // endweek disable with checkbox
-var endweekSelector =  document.getElementById('js-preference-endweek');
-var endweekCheckbox = document.getElementById('js-preference-endweek-checkbox');
-var startWeekAll = document.getElementById('js-preference-startweek').children[1];
+var endWeekSelector =  document.getElementById('js-preference-endweek');
+var endWeekOptions =  endWeekSelector.children;
+var endWeekCheckbox = document.getElementById('js-preference-endweek-checkbox');
+var startWeek = document.getElementById('js-preference-startweek');
+var startWeekAll = startWeek.children[1];
 
-endweekCheckbox.addEventListener('change', function(){
-    if (endweekCheckbox.checked) {
-        endweekSelector.disabled = false;
+// disable and hide if checkbox checked and hide all btn for first
+endWeekCheckbox.addEventListener('change', function(){
+    if (endWeekCheckbox.checked) {
+        endWeekSelector.disabled = false;
         startWeekAll.hidden = true;
+        startWeekAll.disabled = true;
     } else {
-        endweekSelector.disabled = true;
+        endWeekSelector.disabled = true;
         startWeekAll.hidden = false;
+        startWeekAll.disabled = false;
     }
 });
 
+// display only higher values in end select than selected value in start selectbox
+startWeek.addEventListener('change', function(){
+    Array.prototype.forEach.call(endWeekOptions, element => {
+        if (parseInt(element.value) <= parseInt(startWeek.value)) {
+            element.hidden = true;
+            element.disabled = true;
+        } else {
+            element.hidden = false;
+            element.disabled = false;
+        }
+    });
+});
 
+
+//// BLOCK LAST WEEK IF ENDWEEK CHECKED
 
 
 
