@@ -255,7 +255,7 @@
     {% else %}
                     <ul>
         {% for unavailability in unavailabilities %}
-                        <li>{{ unavailability.datetime| date('Y-m-d H:i:s') }}</li>
+                        <li>{{ unavailability.datetime| date('Y-m-d l H:i') }}</li>
         {% endfor %}
                     </ul>
     {% endif %}

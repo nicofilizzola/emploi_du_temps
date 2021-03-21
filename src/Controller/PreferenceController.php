@@ -86,7 +86,7 @@ class PreferenceController extends AbstractController
 
         // set state
         $inputPreferenceState = $data->get('preference_state');
-        if ($inputPreferenceState == 1 || $inputPreferenceState ==0) {
+        if ($inputPreferenceState == 1 || $inputPreferenceState == 0) {
             if ($data->get('preference_state') == 1) {
                 $preferenceState = 1;
                 // $preference->setState(1);
@@ -130,19 +130,24 @@ class PreferenceController extends AbstractController
         $firstWeek = $data->get('preference_week');
         $isEndWeek = $data->get('is_preference_endweek');
         $endWeek = $data->get('preference_endweek');
-
+        $preferenceNote = $data->get('preference_note');
         
         // Error handler: if no (first or only) week selected
         if ($firstWeek == '') {
-            $this->addFlash('danger', 'Vous n\'avez pas séléctionné la semaine ou les semaines concernées.');
+            $this->addFlash('warning', 'Vous n\'avez pas sélectionné la semaine ou les semaines concernées.');
             return $this->redirectToRoute('app_preference');
         }
-        // Error handler: count note chars
-        $preferenceNote = $data->get('preference_note');
-        if (strlen($preferenceNote) > 300) {
-            $this->addFlash('danger', 'Le commentaire que vous avez laissé dépasse la limit de caractères acceptée (300).');
+        // Error handler: is_endweek checked but no week selected
+        if (!is_null($isEndWeek) && $endWeek == '') {
+            $this->addFlash('warning', 'Vous n\'avez pas indiqué la semaine de fin.');
             return $this->redirectToRoute('app_preference');
         }
+        // Error handler: if client side validation breached (no times selected, no weekdays selected, note length too long, preferenceState not selected
+        if ($this->preferenceTimesNoneSelected($preferenceTimes) || strlen($preferenceNote) > 300 || !in_array(true, $preferenceWeekdays) || !isset($preferenceState)) {
+            $this->addFlash('danger', 'Votre requête est invalide.');
+            return $this->redirectToRoute('app_preference');
+        }
+
 
 
         // if all weeks selected and nothing else sent (weekwise)
@@ -152,85 +157,64 @@ class PreferenceController extends AbstractController
                 // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
                 $timestamp = $day->getDate()->getTimestamp();
                 $weekdayIndex = date('w', $timestamp);
-                if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
 
-                    // proceed only if time selected (check $preferenceTimes)
-                    $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
-                }
+                $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+
             }
-            $this->em->flush();
-
-            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
-            return $this->redirectToRoute('app_preference');
         } 
 
-
-
-        // if (first or only) week selected and nothing else sent (weekwise)
-        if ($firstWeek !== 'all' && is_null($isEndWeek) && is_null($endWeek)) {
+        if ($firstWeek !== 'all') {
             $weekIndex = 0;
-            foreach ($days as $day) {
 
-                // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
-                $timestamp = $day->getDate()->getTimestamp();
-                $weekdayIndex = date('w', $timestamp);
-
-                // count weeks
-                if ($weekdayIndex == 1){
-                    $weekIndex++;
-                }
-
-                dd($weekdayIndex == intval($firstWeek));
-                // if loop's week matches selected week
-                if ($weekdayIndex == intval($firstWeek)) {
-
-                    if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
-
-                        // proceed only if time selected (check $preferenceTimes)
-                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
+            // if (first or only) week selected and nothing else sent (weekwise)
+            if (is_null($isEndWeek) && is_null($endWeek)) {
+                foreach ($days as $day) {
+    
+                    // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
+                    $timestamp = $day->getDate()->getTimestamp();
+                    $weekdayIndex = date('w', $timestamp);
+    
+                    // count weeks
+                    if ($weekdayIndex == 1){
+                        $weekIndex++;
                     }
-                } 
+    
+                    // if loop's week matches selected week
+                    if ($weekIndex == intval($firstWeek)) {
+                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+                    } 
+                }
             }
-            $this->em->flush();
+    
 
-            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
-            return $this->redirectToRoute('app_preference');
+            // if start and end week
+            if ($firstWeek !== 'all' && !is_null($isEndWeek) && !is_null($endWeek)) {
+                $weekIndex = 0;
+                foreach ($days as $day) {
+    
+                    // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
+                    $timestamp = $day->getDate()->getTimestamp();
+                    $weekdayIndex = date('w', $timestamp);
+    
+                    // count weeks
+                    if ($weekdayIndex == 1){
+                        $weekIndex++;
+                    }
+    
+                    // if loop's week matches selected week
+                    if ($weekIndex >= intval($firstWeek) && $weekIndex <= intval($endWeek)) {
+                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+                        
+                    } 
+                }
+            }
         }
 
-
-
-
-
-
-        // if start and end week
-        if ($firstWeek !== 'all' && !is_null($isEndWeek) && !is_null($endWeek)) {
-            $weekIndex = 0;
-            foreach ($days as $day) {
-
-                // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
-                $timestamp = $day->getDate()->getTimestamp();
-                $weekdayIndex = date('w', $timestamp);
-
-                // count weeks
-                if ($weekdayIndex == 1){
-                    $weekIndex++;
-                }
-
-                // if loop's week matches selected week
-                if ($weekdayIndex >= intval($firstWeek) && $weekdayIndex <= intval($endWeek)) {
-
-                    if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
-
-                        // proceed only if time selected (check $preferenceTimes)
-                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
-                    }
-                } 
-            }
-            $this->em->flush();
-
-            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
-            return $this->redirectToRoute('app_preference');
-        }
+        $this->em->flush();
+    
+        $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
+        return $this->redirectToRoute('app_preference');
+        
     }
 
 
@@ -257,18 +241,30 @@ class PreferenceController extends AbstractController
 
 
     // functions required for routes
-    public function createPreference($preferenceState, $preferenceDayTimestamp, $preferenceTimes, $preferenceNote, $preferenceSession) {
-        foreach ($preferenceTimes as $preferenceTime) {
-            if ($preferenceTime[1]) {
-                $preference = new Preference;
-                $preference->setState($preferenceState);
-                $preference->setDatetime(new DateTime(date('Y-m-d', $preferenceDayTimestamp) . "T" . $preferenceTime[0])); 
-                $preference->setNote($preferenceNote);
-                $preference->setSession($preferenceSession);
+    public function createPreference($preferenceState, $preferenceDayTimestamp, $preferenceTimes, $preferenceNote, $preferenceSession, $weekdayIndex, $preferenceWeekdays) {
+        // proceed only if not weekend and selected weekday selected
+        if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
+            foreach ($preferenceTimes as $preferenceTime) {
+                if ($preferenceTime[1]) {
+                    $preference = new Preference;
+                    $preference->setState($preferenceState);
+                    $preference->setDatetime(new DateTime(date('Y-m-d', $preferenceDayTimestamp) . "T" . $preferenceTime[0])); 
+                    $preference->setNote($preferenceNote);
+                    $preference->setSession($preferenceSession);
+                    
+                    $this->em->persist($preference);
+                }
+            } 
+        }
+    }
 
-                $this->em->persist($preference);
+    public function preferenceTimesNoneSelected($preferenceTimes) {
+        foreach ($preferenceTimes as $element) {
+            if ($element[1]) {
+                return false;
             }
-        } 
+        }
+        return true;
     }
 
 }
