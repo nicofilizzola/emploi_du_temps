@@ -62,7 +62,7 @@
                         value="1" 
                         id="js-preference-endweek-checkbox" 
                     >
-                    <label for="js-preference-endweek-checkbox">Jusqu'à (La semaine de fin sera prise en compte aussi)</label>
+                    <label for="js-preference-endweek-checkbox">Jusqu'à (La semaine choisie sera prise en compte aussi)</label>
                     <select class="mt-2 form-control" name="preference_endweek" id="js-preference-endweek" disabled="disabled">
                         <option value=""></option>
                         {% for week in weeks %}
@@ -185,6 +185,7 @@
             
             <div class="mt-5 row">
                 <div class="mx-auto col-md-12">
+                    <small class="text-muted">Champ non obligatoire</small>
                     <p>Précisions ou commentaires :</p>
                 </div>
             </div>
@@ -238,7 +239,7 @@
     {% else %}
                     <ul>
         {% for preference in preferences %}
-                        <li>{{ preference }}</li>
+                        <li>{{ preference.datetime| date('Y-m-d l H:i') }}</li>
         {% endfor %}
                     </ul>
     {% endif %}
@@ -254,7 +255,7 @@
     {% else %}
                     <ul>
         {% for unavailability in unavailabilities %}
-                        <li>{{ unavailability }}</li>
+                        <li>{{ unavailability.datetime| date('Y-m-d H:i:s') }}</li>
         {% endfor %}
                     </ul>
     {% endif %}

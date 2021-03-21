@@ -501,10 +501,14 @@ startWeek.addEventListener('change', function(){
             element.disabled = false;
         }
     });
+
+    // Block endweek checkbox if all weeks selected
+    startWeek.value == 'all' ? endWeekCheckbox.disabled = true : endWeekCheckbox.disabled = false;
 });
 
 
 //// BLOCK LAST WEEK IF ENDWEEK CHECKED
+
 
 
 

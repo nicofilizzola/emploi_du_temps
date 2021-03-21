@@ -123,14 +123,6 @@ class PreferenceController extends AbstractController
             }
         }
 
-        // Error handler: count note chars
-        $preferenceNote = $data->get('preference_note');
-        if (strlen($preferenceNote) > 300) {
-            // error here: too many characters
-        }
-
-
-
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
         $days = $this->dayRepo->findBy([
             'session' => $latestSession
@@ -138,6 +130,19 @@ class PreferenceController extends AbstractController
         $firstWeek = $data->get('preference_week');
         $isEndWeek = $data->get('is_preference_endweek');
         $endWeek = $data->get('preference_endweek');
+
+        
+        // Error handler: if no (first or only) week selected
+        if ($firstWeek == '') {
+            $this->addFlash('danger', 'Vous n\'avez pas séléctionné la semaine ou les semaines concernées.');
+            return $this->redirectToRoute('app_preference');
+        }
+        // Error handler: count note chars
+        $preferenceNote = $data->get('preference_note');
+        if (strlen($preferenceNote) > 300) {
+            $this->addFlash('danger', 'Le commentaire que vous avez laissé dépasse la limit de caractères acceptée (300).');
+            return $this->redirectToRoute('app_preference');
+        }
 
 
         // if all weeks selected and nothing else sent (weekwise)
@@ -150,34 +155,120 @@ class PreferenceController extends AbstractController
                 if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
 
                     // proceed only if time selected (check $preferenceTimes)
-                    foreach ($preferenceTimes as $preferenceTime) {
-                        if ($preferenceTime[1]) {
-                            $preference = new Preference;
-                            $preference->setState($preferenceState);
-                            $preference->setDatetime(new DateTime(date('Y-m-d', $timestamp) . "T" . $preferenceTime[0])); 
-                            $preference->setNote($preferenceNote);
-                            $preference->setSession($latestSession);
-
-                            $this->em->persist($preference);
-                        }
-                    } 
+                    $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
                 }
             }
-
             $this->em->flush();
 
-
-
-            
-
-        } /*elseif ($firstweek == nigga) {
-
-        }*/
+            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
+            return $this->redirectToRoute('app_preference');
+        } 
 
 
 
-        
+        // if (first or only) week selected and nothing else sent (weekwise)
+        if ($firstWeek !== 'all' && is_null($isEndWeek) && is_null($endWeek)) {
+            $weekIndex = 0;
+            foreach ($days as $day) {
 
-        return $this->redirectToRoute('app_preference');
+                // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
+                $timestamp = $day->getDate()->getTimestamp();
+                $weekdayIndex = date('w', $timestamp);
+
+                // count weeks
+                if ($weekdayIndex == 1){
+                    $weekIndex++;
+                }
+
+                dd($weekdayIndex == intval($firstWeek));
+                // if loop's week matches selected week
+                if ($weekdayIndex == intval($firstWeek)) {
+
+                    if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
+
+                        // proceed only if time selected (check $preferenceTimes)
+                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
+                    }
+                } 
+            }
+            $this->em->flush();
+
+            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
+            return $this->redirectToRoute('app_preference');
+        }
+
+
+
+
+
+
+        // if start and end week
+        if ($firstWeek !== 'all' && !is_null($isEndWeek) && !is_null($endWeek)) {
+            $weekIndex = 0;
+            foreach ($days as $day) {
+
+                // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
+                $timestamp = $day->getDate()->getTimestamp();
+                $weekdayIndex = date('w', $timestamp);
+
+                // count weeks
+                if ($weekdayIndex == 1){
+                    $weekIndex++;
+                }
+
+                // if loop's week matches selected week
+                if ($weekdayIndex >= intval($firstWeek) && $weekdayIndex <= intval($endWeek)) {
+
+                    if ($weekdayIndex != 0 && $weekdayIndex != 6 && $preferenceWeekdays[intval($weekdayIndex) - 1]) {
+
+                        // proceed only if time selected (check $preferenceTimes)
+                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession);
+                    }
+                } 
+            }
+            $this->em->flush();
+
+            $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
+            return $this->redirectToRoute('app_preference');
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // functions required for routes
+    public function createPreference($preferenceState, $preferenceDayTimestamp, $preferenceTimes, $preferenceNote, $preferenceSession) {
+        foreach ($preferenceTimes as $preferenceTime) {
+            if ($preferenceTime[1]) {
+                $preference = new Preference;
+                $preference->setState($preferenceState);
+                $preference->setDatetime(new DateTime(date('Y-m-d', $preferenceDayTimestamp) . "T" . $preferenceTime[0])); 
+                $preference->setNote($preferenceNote);
+                $preference->setSession($preferenceSession);
+
+                $this->em->persist($preference);
+            }
+        } 
+    }
+
 }
