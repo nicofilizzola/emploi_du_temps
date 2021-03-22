@@ -158,6 +158,11 @@ function createVerificationText(preference, verificationWeekdays, verificationTi
 
 
 
+
+
+
+    
+
     // MASTER STRING
     if (string === undefined) {
     // If no error message
@@ -472,10 +477,11 @@ timesAllBtn.addEventListener('click', function() {
 
 // endweek disable with checkbox
 var endWeekSelector =  document.getElementById('js-preference-endweek');
-var endWeekOptions =  endWeekSelector.children;
+var startWeekSelector = document.getElementById('js-preference-startweek');
 var endWeekCheckbox = document.getElementById('js-preference-endweek-checkbox');
-var startWeek = document.getElementById('js-preference-startweek');
-var startWeekAll = startWeek.children[1];
+var endWeekOptions =  endWeekSelector.children;
+var startWeekAll = startWeekSelector.children[1];
+var startWeekOptions =  startWeekSelector.children;
 
 // disable and hide if checkbox checked and hide all btn for first
 endWeekCheckbox.addEventListener('change', function(){
@@ -491,9 +497,9 @@ endWeekCheckbox.addEventListener('change', function(){
 });
 
 // display only higher values in end select than selected value in start selectbox
-startWeek.addEventListener('change', function(){
+startWeekSelector.addEventListener('change', function(){
     Array.prototype.forEach.call(endWeekOptions, element => {
-        if (parseInt(element.value) <= parseInt(startWeek.value)) {
+        if (parseInt(element.value) <= parseInt(startWeekSelector.value)) {
             element.hidden = true;
             element.disabled = true;
         } else {
@@ -503,11 +509,100 @@ startWeek.addEventListener('change', function(){
     });
 
     // Block endweek checkbox if all weeks selected
-    startWeek.value == 'all' ? endWeekCheckbox.disabled = true : endWeekCheckbox.disabled = false;
+    startWeekSelector.value == 'all' ? endWeekCheckbox.disabled = true : endWeekCheckbox.disabled = false;
+});
+
+// Block last week option in startweek selector if 'until' checkbox checked
+endWeekCheckbox.addEventListener('change', function() {
+    if (endWeekCheckbox.checked) {
+        startWeekOptions[startWeekOptions.length - 1].hidden = true;
+        startWeekOptions[startWeekOptions.length - 1].disabled = true;
+    } else {
+        startWeekOptions[startWeekOptions.length - 1].hidden = false;
+        startWeekOptions[startWeekOptions.length - 1].disabled = false;
+    }
 });
 
 
-//// BLOCK LAST WEEK IF ENDWEEK CHECKED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Undisable save btn once everything is checked (week, day, time and prf state)
+var inputs = document.querySelectorAll('button, select');
+var preferencesSaveBtn = document.getElementById('js-preference-save-btn');
+
+function areInputsSelected() {
+    var state = false;
+    var week = false;
+    var weekday = false;
+    var time = false;
+
+    preferenceBtns.forEach(element => {
+        if (!state) {
+            if (element.children[0].checked) {
+                state = true;
+            }
+        }
+    });
+
+
+
+    verificationWeekdays.forEach(element => {
+        if (!weekday) {
+            if (element[1]){
+                weekday = true 
+            }
+        }
+    });
+
+    verificationTimes.forEach(element => {
+        if (!time) {
+            if (element[2]){
+                time = true 
+            }
+        }
+    });
+
+    if (state && weekday && time) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+inputs.forEach(element => {
+    element.addEventListener('click', function() {
+        console.log('click input');
+        if (areInputsSelected()) {
+            preferencesSaveBtn.disabled = false;
+        } else {
+            preferencesSaveBtn.disabled = true;
+            console.log('else');
+        } 
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
