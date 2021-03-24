@@ -475,7 +475,7 @@ timesAllBtn.addEventListener('click', function() {
 
 
 
-// endweek disable with checkbox
+// endweek and startweek
 var endWeekSelector =  document.getElementById('js-preference-endweek');
 var startWeekSelector = document.getElementById('js-preference-startweek');
 var endWeekCheckbox = document.getElementById('js-preference-endweek-checkbox');
@@ -483,7 +483,7 @@ var endWeekOptions =  endWeekSelector.children;
 var startWeekAll = startWeekSelector.children[1];
 var startWeekOptions =  startWeekSelector.children;
 
-// Except and exceptend checkboxes
+// Except and exceptend 
 var exceptWeekCheckbox = document.getElementById('js-preference-exceptweek-checkbox');
 var exceptEndWeekCheckbox = document.getElementById('js-preference-exceptendweek-checkbox');
 var exceptWeekSelector = document.getElementById('js-preference-exceptweek');
@@ -509,87 +509,17 @@ function exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSe
     }
 }
 
-function exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions) {
-    if (exceptWeekCheckbox.checked && exceptWeekSelector.value !== exceptWeekOptions.length - 1 && startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+function exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekSelector) {
+    console.log();
+    if (exceptWeekCheckbox.checked && exceptWeekSelector.value !== '') {
         exceptEndWeekCheckbox.disabled = false;
     } else {
         exceptEndWeekCheckbox.disabled = true;
     }
+    
 }
 
-
-function exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox) {
-    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
-        Array.prototype.forEach.call(exceptWeekOptions, element => {
-            if (parseInt(element.value) <= parseInt(startWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
-                element.hidden = true;
-                element.disabled = true;
-            } else {
-                element.hidden = false;
-                element.disabled = false;
-            }
-        });
-    }
-}
-
-function exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox) {
-    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
-        Array.prototype.forEach.call(exceptEndWeekOptions, element => {
-            if (parseInt(element.value) <= parseInt(exceptWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
-                element.hidden = true;
-                element.disabled = true;
-            } else {
-                element.hidden = false;
-                element.disabled = false;
-            }
-        });
-    }
-}
-
-
-
-
-// disable and hide if checkbox checked and hide all btn for first
-endWeekCheckbox.addEventListener('change', function(){
-
-    checkboxSelectorManager(endWeekCheckbox, endWeekSelector);
-
-    if (endWeekCheckbox.checked) {
-        startWeekAll.hidden = true;
-        startWeekAll.disabled = true;
-        startWeekOptions[startWeekOptions.length - 1].hidden = true;
-        startWeekOptions[startWeekOptions.length - 1].disabled = true;
-    } else {
-        startWeekAll.hidden = false;
-        startWeekAll.disabled = false;
-        startWeekOptions[startWeekOptions.length - 1].hidden = false;
-        startWeekOptions[startWeekOptions.length - 1].disabled = false;
-        exceptWeekCheckbox.checked = false;
-        exceptEndWeekCheckbox.checked = false;
-    } 
-
-    exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
-    checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
-    exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
-    checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
-});
-
-exceptWeekCheckbox.addEventListener('change', function(){
-
-    checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
-});
-
-exceptEndWeekCheckbox.addEventListener('change', function(){
-
-    checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
-});
-
-
-
-
-
-// display only higher values in end select than selected value in start selectbox
-startWeekSelector.addEventListener('change', function(){
+function endWeekOptionsManager(endWeekOptions, startWeekSelector) {
     Array.prototype.forEach.call(endWeekOptions, element => {
         if (parseInt(element.value) <= parseInt(startWeekSelector.value)) {
             element.hidden = true;
@@ -599,10 +529,100 @@ startWeekSelector.addEventListener('change', function(){
             element.disabled = false;
         }
     });
+}
 
-    // Block endweek checkbox if all weeks selected
+function exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox) {
+    Array.prototype.forEach.call(exceptWeekOptions, element => {
+        if (parseInt(element.value) <= parseInt(startWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
+            element.hidden = true;
+            element.disabled = true;
+        } else {
+            element.hidden = false;
+            element.disabled = false;
+        }
+    });
+}
+
+function exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox) {
+    Array.prototype.forEach.call(exceptEndWeekOptions, element => {
+        if (parseInt(element.value) <= parseInt(exceptWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
+            element.hidden = true;
+            element.disabled = true;
+        } else {
+            element.hidden = false;
+            element.disabled = false;
+        }
+    });
+}
+
+
+
+
+// checkboxes
+
+endWeekCheckbox.addEventListener('change', function(){
+
+    // disable/undisable selector depending on checkbox's state
+    checkboxSelectorManager(endWeekCheckbox, endWeekSelector);
+
+    // toggle 'all' option in start selector
+    // toggle last week option in start selector
+    if (endWeekCheckbox.checked) {
+
+        startWeekAll.hidden = true;
+        startWeekAll.disabled = true;
+        startWeekOptions[startWeekOptions.length - 1].hidden = true;
+        startWeekOptions[startWeekOptions.length - 1].disabled = true;
+    } else {
+        startWeekAll.hidden = false;
+        startWeekAll.disabled = false;
+        startWeekOptions[startWeekOptions.length - 1].hidden = false;
+        startWeekOptions[startWeekOptions.length - 1].disabled = false;
+
+        // Uncheck except and exceptEnd if unchecked
+        exceptWeekCheckbox.checked = false;
+        exceptEndWeekCheckbox.checked = false;
+
+        // Manage except and exceptEnd checkboxes and selectors's disabled state (activate)
+        exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
+        checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
+        exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
+        checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
+    } 
+});
+
+
+exceptWeekCheckbox.addEventListener('change', function(){
+
+    // manage selector's disabled state
+    checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
+    console.log (exceptWeekSelector.value);
+    // manage exceptWeek input
+    if (!exceptWeekCheckbox.checked) {
+        exceptEndWeekCheckbox.checked = false;
+        checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
+        exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
+    }
+});
+
+
+exceptEndWeekCheckbox.addEventListener('change', function(){
+    // manage selector's disabled state
+    checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
+});
+
+
+
+
+// selectors
+
+startWeekSelector.addEventListener('change', function(){
+    // Hide and disable everything inside endWeekOptions that's under the selected value
+    endWeekOptionsManager(endWeekOptions, startWeekSelector)
+
+
+    // Disable endweek if selected 'all' or the last option
     if (startWeekSelector.value == 'all' || startWeekSelector.value == startWeekOptions.length -  2) {
-    // -2 because of blank and all
         endWeekCheckbox.disabled = true;
 
     } else {
@@ -610,6 +630,8 @@ startWeekSelector.addEventListener('change', function(){
 
     }
     
+
+    // Check conditions for except input activation, and hide except options lower than startweek value
     exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
     exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox);
 
@@ -617,15 +639,19 @@ startWeekSelector.addEventListener('change', function(){
 
 
 endWeekSelector.addEventListener('change', function() {
-
+    // Hide except options higher than selected endweek
     exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox);
 
+    // Check conditions for except input activation
     exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
-    exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox);
 });
 
+
 exceptWeekSelector.addEventListener('change', function() {
+    // Check conditions for exceptEnd input activation
     exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
+
+    // Hide exceptEnd options lower than except
     exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox)
 
 });
