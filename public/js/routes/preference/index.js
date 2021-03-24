@@ -483,18 +483,110 @@ var endWeekOptions =  endWeekSelector.children;
 var startWeekAll = startWeekSelector.children[1];
 var startWeekOptions =  startWeekSelector.children;
 
+// Except and exceptend checkboxes
+var exceptWeekCheckbox = document.getElementById('js-preference-exceptweek-checkbox');
+var exceptEndWeekCheckbox = document.getElementById('js-preference-exceptendweek-checkbox');
+var exceptWeekSelector = document.getElementById('js-preference-exceptweek');
+var exceptEndWeekSelector = document.getElementById('js-preference-exceptendweek');
+var exceptWeekOptions = exceptWeekSelector.children;
+var exceptEndWeekOptions = exceptEndWeekSelector.children;
+
+// functions
+function checkboxSelectorManager(checkbox, selector) {
+    if (checkbox.checked) {
+        selector.disabled = false;
+    } else {
+        selector.disabled = true;
+        selector.value = '';
+    }
+}
+
+function exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox) {
+    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+        exceptWeekCheckbox.disabled = false;
+    } else {
+        exceptWeekCheckbox.disabled = true;
+    }
+}
+
+function exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions) {
+    if (exceptWeekCheckbox.checked && exceptWeekSelector.value !== exceptWeekOptions.length - 1 && startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+        exceptEndWeekCheckbox.disabled = false;
+    } else {
+        exceptEndWeekCheckbox.disabled = true;
+    }
+}
+
+
+function exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox) {
+    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+        Array.prototype.forEach.call(exceptWeekOptions, element => {
+            if (parseInt(element.value) <= parseInt(startWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
+                element.hidden = true;
+                element.disabled = true;
+            } else {
+                element.hidden = false;
+                element.disabled = false;
+            }
+        });
+    }
+}
+
+function exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox) {
+    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+        Array.prototype.forEach.call(exceptEndWeekOptions, element => {
+            if (parseInt(element.value) <= parseInt(exceptWeekSelector.value) || parseInt(element.value) >= parseInt(endWeekSelector.value)) {
+                element.hidden = true;
+                element.disabled = true;
+            } else {
+                element.hidden = false;
+                element.disabled = false;
+            }
+        });
+    }
+}
+
+
+
+
 // disable and hide if checkbox checked and hide all btn for first
 endWeekCheckbox.addEventListener('change', function(){
+
+    checkboxSelectorManager(endWeekCheckbox, endWeekSelector);
+
     if (endWeekCheckbox.checked) {
-        endWeekSelector.disabled = false;
         startWeekAll.hidden = true;
         startWeekAll.disabled = true;
+        startWeekOptions[startWeekOptions.length - 1].hidden = true;
+        startWeekOptions[startWeekOptions.length - 1].disabled = true;
     } else {
-        endWeekSelector.disabled = true;
         startWeekAll.hidden = false;
         startWeekAll.disabled = false;
-    }
+        startWeekOptions[startWeekOptions.length - 1].hidden = false;
+        startWeekOptions[startWeekOptions.length - 1].disabled = false;
+        exceptWeekCheckbox.checked = false;
+        exceptEndWeekCheckbox.checked = false;
+    } 
+
+    exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
+    checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
+    exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
+    checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
 });
+
+exceptWeekCheckbox.addEventListener('change', function(){
+
+    checkboxSelectorManager(exceptWeekCheckbox, exceptWeekSelector);
+});
+
+exceptEndWeekCheckbox.addEventListener('change', function(){
+
+    checkboxSelectorManager(exceptEndWeekCheckbox, exceptEndWeekSelector);
+});
+
+
+
+
 
 // display only higher values in end select than selected value in start selectbox
 startWeekSelector.addEventListener('change', function(){
@@ -509,19 +601,48 @@ startWeekSelector.addEventListener('change', function(){
     });
 
     // Block endweek checkbox if all weeks selected
-    startWeekSelector.value == 'all' ? endWeekCheckbox.disabled = true : endWeekCheckbox.disabled = false;
+    if (startWeekSelector.value == 'all' || startWeekSelector.value == startWeekOptions.length -  2) {
+    // -2 because of blank and all
+        endWeekCheckbox.disabled = true;
+
+    } else {
+        endWeekCheckbox.disabled = false;
+
+    }
+    
+    exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
+    exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox);
+
 });
 
-// Block last week option in startweek selector if 'until' checkbox checked
-endWeekCheckbox.addEventListener('change', function() {
-    if (endWeekCheckbox.checked) {
-        startWeekOptions[startWeekOptions.length - 1].hidden = true;
-        startWeekOptions[startWeekOptions.length - 1].disabled = true;
-    } else {
-        startWeekOptions[startWeekOptions.length - 1].hidden = false;
-        startWeekOptions[startWeekOptions.length - 1].disabled = false;
-    }
+
+endWeekSelector.addEventListener('change', function() {
+
+    exceptOptionsManager(exceptWeekOptions, startWeekSelector, endWeekSelector, endWeekCheckbox);
+
+    exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox);
+    exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox);
 });
+
+exceptWeekSelector.addEventListener('change', function() {
+    exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekCheckbox, exceptWeekOptions);
+    exceptEndOptionsManager(exceptEndWeekOptions, exceptWeekSelector, endWeekSelector, endWeekCheckbox)
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -583,15 +704,13 @@ function areInputsSelected() {
 
 inputs.forEach(element => {
     element.addEventListener('click', function() {
-        console.log('click input');
-        if (areInputsSelected()) {
+        if (areInputsSelected(preferenceBtns, verificationWeekdays, verificationTimes)) {
             preferencesSaveBtn.disabled = false;
         } else {
             preferencesSaveBtn.disabled = true;
-            console.log('else');
         } 
     });
-});
+})
 
 
 

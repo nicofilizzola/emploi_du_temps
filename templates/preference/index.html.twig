@@ -54,21 +54,69 @@
                         {% endfor %}
                     </select>
 
-                    
-                    <input 
-                        class="mt-4" 
-                        type="checkbox"
-                        name="is_preference_endweek" 
-                        value="1" 
-                        id="js-preference-endweek-checkbox" 
-                    >
-                    <label for="js-preference-endweek-checkbox">Jusqu'à (La semaine choisie sera prise en compte aussi)</label>
+                    <!-- Week checkboxes start -->
+                    <div>
+                        <input 
+                            class="mt-4" 
+                            type="checkbox"
+                            name="is_preference_endweek" 
+                            value="1" 
+                            id="js-preference-endweek-checkbox" 
+                            disabled="disabled"
+                        >
+                        <label for="js-preference-endweek-checkbox">Jusqu'à</label>
+                        <br>
+                        <!--<small class="text-muted">En cochant la case ci-dessus, vous pourrez indiquer une période spécifique pour votre diponibilité/indisponibilité. La semaine que vous avez choisi dans le champs précédent correspondra donc à la première semaine de la période, et le champ suivant vous permettra de choisir la semaine de fin.</small>-->
+                    </div>
+
                     <select class="mt-2 form-control" name="preference_endweek" id="js-preference-endweek" disabled="disabled">
-                        <option value=""></option>
+                        <option></option>
                         {% for week in weeks %}
                         <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                         {% endfor %}
                     </select>
+
+
+
+                    <div class="mt-5 row">
+                        <div class="col-md-6">
+                            <input 
+                                type="checkbox"
+                                name="is_preference_exceptweek" 
+                                value="1" 
+                                id="js-preference-exceptweek-checkbox"
+                                disabled="disabled" 
+                            >
+                            <label for="js-preference-exceptweek-checkbox">Sauf</label>
+                            <br>
+                            <select class="mt-2 form-control" name="preference_exceptweek" id="js-preference-exceptweek" disabled="disabled">
+                                <option></option>
+                                {% for week in weeks %}
+                                <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input 
+                                type="checkbox"
+                                name="is_preference_exceptendweek" 
+                                value="1" 
+                                id="js-preference-exceptendweek-checkbox"
+                                disabled="disabled" 
+                            >
+                            <label for="js-preference-exceptendweek-checkbox">Jusqu'à</label>
+                            <br>
+                            <select class="mt-2 form-control" name="preference_exceptendweek" id="js-preference-exceptendweek" disabled="disabled">
+                                <option></option>
+                                {% for week in weeks %}
+                                <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                            
+                    </div>
+                    <!-- Week checkboxes end -->
                         
                 </div>
             </div>
