@@ -290,13 +290,24 @@
                     <ul class="overflow-auto preference-list pl-0 pr-1">
         {% for preference in preferences %}
                         <li class="p-2 user-select-none rounded js-availability-result d-flex justify-content-between">
-                            <span>{{ preference.datetime| date('Y-m-d l H:i') }}</span>
-                            <button class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center">
+                            <span>{{ preference.note }}</span>
+                            <a 
+                                class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center" 
+                                onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ preference.id }}').submit();"
+                            >
                                 <img src="{{ asset('img/times-solid.svg') }}" alt="Supprimer cette préférence">
-                            </button>
+                            </a>
                         </li>
+
+                        {# csrf validation and request type #}
+                        <form id="js-preference-request-{{ preference.id }}" action="{{ path('app_preference_delete', {id: preference.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete' ~ preference.id) }}">
+                        </form>
         {% endfor %}
                     </ul>
+
+                        
     {% endif %}
                 </div>
             </div>
@@ -314,16 +325,26 @@
                     </div>
 
                     <ul class="overflow-auto preference-list pl-0 pr-1">
+
         {% for unavailability in unavailabilities %}
-                        
                         <li class="p-2 user-select-none rounded js-unavailability-result d-flex justify-content-between">
-                            <span>{{ unavailability.datetime| date('Y-m-d l H:i') }}</span>
-                            <button class="btn btn-danger rounded-circle btn-icon p-0">
+                            <span>{{ unavailability.note }}</span>
+                            <a 
+                                class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center" 
+                                onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ preference.id }}.submit();')"
+                            >
                                 <img class="btn-icon" src="{{ asset('img/times-solid.svg') }}" alt="">
-                            </button>
+                            </a>
                         </li>
+
+                        {# csrf validation and request type #}
+                        <form id="js-preference-request-{{ preference.id }}" action="{{ path('app_preference_delete', {id: preference.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete' ~ preference.id) }}">
+                        </form>
         {% endfor %}
                     </ul>
+
     {% endif %}
                 </div>
             </div>

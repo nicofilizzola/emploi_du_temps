@@ -68,6 +68,16 @@ class PreferenceController extends AbstractController
             }
         }
 
+        foreach ($preferences as $value) {
+            $timestamp = $value->getDatetime()->getTimestamp();
+            $startTime = date('H:i', $timestamp);
+            $endTime = date('H:i', strtotime($startTime) + 60*60 + 60*30);
+
+            $value->setNote(date('d-m-Y', $timestamp) . ' de ' . $startTime .' à ' . $endTime);
+        }
+
+        
+
         return $this->render('preference/index.html.twig', [
             'preferences' => $preferences,
             'unavailabilities' => $unavailabilities,
@@ -213,6 +223,26 @@ class PreferenceController extends AbstractController
     }
 
 
+    /**
+     * @Route("/preference/{id<\d+>}/delete", name="app_preference_delete", methods="DELETE")
+     */
+    public function delete(Preference $preference, Request $req): Response
+    {
+        // CSRF Validation
+        if ($this->isCsrfTokenValid('app_preference_delete' . $preference->getId(), $req->request->get('_token'))) {
+            // Delete preference
+            $this->em->remove($preference);
+            $this->em->flush();
+
+            $preference->getState() ? $stringState = 'disponible' : $stringState = 'indisponible';
+            $timestamp = $preference->getDatetime()->getTimestamp();
+            $startTime = date('H:i', $timestamp);
+            $endTime = date('H:i', strtotime($startTime) + 60*60 + 60*30);
+
+            $this->addFlash('success', 'Votre préférence (' . $stringState . ' le ' . date('d-m-Y', $timestamp) . ' de ' . $startTime .' à ' . $endTime . ') a été supprimée.');
+            return $this->redirectToRoute('app_preference');
+        }
+    }   
 
 
 
@@ -278,9 +308,6 @@ class PreferenceController extends AbstractController
         } 
         return $weekIndex;
     }
-
-
-
 
     public function startWeekAllManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $weekIndex, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays) {
         // Check if except checkbox was checked and a value was selected
