@@ -190,10 +190,7 @@ class PreferenceController extends AbstractController
                 $timestamp = $value->getDate()->getTimestamp();
                 $weekdayIndex = date('w', $timestamp);
 
-                // count weeks
-                if ($weekdayIndex == 1){
-                    $weekIndex++;
-                }
+                $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
                 
                 // Check if except checkbox was checked and a value was selected
                 if ($isExceptWeek == 1 && !is_null($exceptWeek)) {
@@ -234,21 +231,17 @@ class PreferenceController extends AbstractController
                     $timestamp = $day->getDate()->getTimestamp();
                     $weekdayIndex = date('w', $timestamp);
     
-                    // count weeks
-                    if ($weekdayIndex == 1){
-                        $weekIndex++;
-                    }
-    
+                    $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
+                
                     // if loop's week matches selected week
                     if ($weekIndex == intval($firstWeek)) {
                         $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
                     } 
                 }
-            } 
-    
-
-            // if start and end week
-            if ($firstWeek !== 'all' && !is_null($isEndWeek) && !is_null($endWeek)) {
+            
+                
+            // endWeek selected
+            } else if (!is_null($isEndWeek) && !is_null($endWeek)) {
                 $weekIndex = 0;
                 foreach ($days as $day) {
     
@@ -256,10 +249,7 @@ class PreferenceController extends AbstractController
                     $timestamp = $day->getDate()->getTimestamp();
                     $weekdayIndex = date('w', $timestamp);
     
-                    // // count weeks
-                    // if ($weekdayIndex == 1){
-                    //     $weekIndex++;
-                    // }
+                    $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
     
                     // if loop's week matches selected week
                     if ($weekIndex >= intval($firstWeek) && $weekIndex <= intval($endWeek)) {
@@ -269,11 +259,13 @@ class PreferenceController extends AbstractController
                 }
             }
         }
+    
 
         $this->em->flush();
     
         $this->addFlash('success', 'Votre préférence a été ajoutée avec succès !');
         return $this->redirectToRoute('app_preference');
+        
         
     }
 
@@ -295,7 +287,7 @@ class PreferenceController extends AbstractController
 
 
 
-
+    
 
 
 
@@ -333,6 +325,14 @@ class PreferenceController extends AbstractController
             }
         }
         return true;
+    }
+
+    public function countWeeks($weekdayIndex, $weekIndex) {
+        // count weeks
+        if ($weekdayIndex == 1){
+            $weekIndex++;
+        } 
+        return $weekIndex;
     }
 
 }
