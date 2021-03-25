@@ -744,13 +744,21 @@ inputs.forEach(element => {
 
 
 
+
+// Availability / Unavailability searchbars
 availabilityInput = document.getElementById('js-availability-searchbar');
 unavailabilityInput = document.getElementById('js-unavailability-searchbar');
 availabilityResults = document.querySelectorAll('.js-availability-result');
 unavailabilityResults = document.querySelectorAll('.js-unavailability-result');
 
-searchbar(availabilityInput, availabilityResults);
-searchbar(unavailabilityInput, unavailabilityResults);
+if (availabilityInput) {
+    searchbar(availabilityInput, availabilityResults);
+}
+
+if (unavailabilityInput) {
+    searchbar(unavailabilityInput, unavailabilityResults);
+}
+
 
 
 
