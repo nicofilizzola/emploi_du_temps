@@ -184,40 +184,8 @@ class PreferenceController extends AbstractController
 
         // startWeek: 'all' selected
         if ($firstWeek == 'all') {
-            foreach ($days as $value) {
-                
-                // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
-                $timestamp = $value->getDate()->getTimestamp();
-                $weekdayIndex = date('w', $timestamp);
+            $this->dayLoopManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $days, $weekIndex, $firstWeek, $endWeek, $preferenceState, $preferenceTimes, $preferenceNote, $latestSession, $preferenceWeekdays, 1);
 
-                $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
-                
-                // Check if except checkbox was checked and a value was selected
-                if ($isExceptWeek == 1 && !is_null($exceptWeek)) {
-
-                    // Continue if exceptEnd not selected
-                    if (is_null($isExceptEndWeek) && is_null($exceptEndWeek)) {
-
-                        // Only persist if the current week hasa value different from except
-                        if ($weekIndex !== intval($exceptWeek)) {
-                            $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
-
-                        }
-                    
-                    // Continue if exceptEnd selected
-                    } elseif ($isExceptEndWeek == 1 && !is_null($exceptEndWeek)) {
-                        // Only persist if the current week hasa value different from except range
-                        if ($weekIndex < $exceptWeek || $weekIndex > $exceptEndWeek) {
-                            $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
-    
-                        }
-                    }
-                    
-                } else {
-                    $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
-
-                }
-            }
         }
 
 
@@ -226,37 +194,12 @@ class PreferenceController extends AbstractController
 
             // No endWeek selected
             if (is_null($isEndWeek) && is_null($endWeek)) {
-                foreach ($days as $day) {
-
-                    $timestamp = $day->getDate()->getTimestamp();
-                    $weekdayIndex = date('w', $timestamp);
-    
-                    $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
-                
-                    // if loop's week matches selected week
-                    if ($weekIndex == intval($firstWeek)) {
-                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
-                    } 
-                }
+                $this->dayLoopManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $days, $weekIndex, $firstWeek, $endWeek, $preferenceState, $preferenceTimes, $preferenceNote, $latestSession, $preferenceWeekdays, 2);
             
-                
             // endWeek selected
             } else if (!is_null($isEndWeek) && !is_null($endWeek)) {
-                $weekIndex = 0;
-                foreach ($days as $day) {
-    
-                    // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
-                    $timestamp = $day->getDate()->getTimestamp();
-                    $weekdayIndex = date('w', $timestamp);
-    
-                    $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
-    
-                    // if loop's week matches selected week
-                    if ($weekIndex >= intval($firstWeek) && $weekIndex <= intval($endWeek)) {
-                        $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
-                        
-                    } 
-                }
+                $this->dayLoopManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $days, $weekIndex, $firstWeek, $endWeek, $preferenceState, $preferenceTimes, $preferenceNote, $latestSession, $preferenceWeekdays, 3);
+
             }
         }
     
@@ -306,7 +249,8 @@ class PreferenceController extends AbstractController
 
                     // only persist if the same preference hasn't already been created
                     if (!$this->preferenceRepo->findOneBy([
-                        'datetime' => $preference->getDatetime()/*,
+                        'datetime' => $preference->getDatetime(),
+                        'state' => $preference->getState()/*,
                         user */
                     ])) {
                         $this->em->persist($preference);
@@ -335,4 +279,79 @@ class PreferenceController extends AbstractController
         return $weekIndex;
     }
 
+
+
+
+    public function startWeekAllManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $weekIndex, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays) {
+        // Check if except checkbox was checked and a value was selected
+        if ($isExceptWeek) {
+    
+            // If exceptEnd not selected
+            if (is_null($isExceptEndWeek)) {
+    
+                // Only persist if the current week hasa value different from except
+                if ($weekIndex !== intval($exceptWeek)) {
+                    $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+    
+                }
+            
+            // If exceptEnd selected
+            } elseif ($isExceptEndWeek) {
+                // Only persist if the current week hasa value different from except range
+                if ($weekIndex < $exceptWeek || $weekIndex > $exceptEndWeek) {
+                    $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+    
+                }
+            }
+            
+        // If all weeks
+        } else {
+            $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+    
+        }
+    }
+
+    public function singleWeekManager($weekIndex, $firstWeek, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays) {
+        // if loop's week matches selected week
+        if ($weekIndex == intval($firstWeek)) {
+            $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+        } 
+    }
+
+    public function specificPeriodManager($weekIndex, $firstWeek, $endWeek, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays) {
+        // if loop's week matches selected week
+        if ($weekIndex >= intval($firstWeek) && $weekIndex <= intval($endWeek)) {
+            $this->createPreference($preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+            
+        }
+    }
+
+    public function dayLoopManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $days, $weekIndex, $firstWeek, $endWeek, $preferenceState, $preferenceTimes, $preferenceNote, $latestSession, $preferenceWeekdays, $variation) {
+        foreach ($days as $value) {
+    
+            // proceed only if not weekend and if current day has been selected (check in $preferenceWeekdays)
+            $timestamp = $value->getDate()->getTimestamp();
+            $weekdayIndex = date('w', $timestamp);
+
+            $weekIndex = $this->countWeeks($weekdayIndex, $weekIndex);
+
+            if ($variation == 1) {
+                $this->startWeekAllManager($isExceptWeek, $exceptWeek, $isExceptEndWeek, $exceptEndWeek, $weekIndex, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+
+            } elseif ($variation == 2) {
+                $this->singleWeekManager($weekIndex, $firstWeek, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+
+            }
+            elseif ($variation == 3) {
+                $this->specificPeriodManager($weekIndex, $firstWeek, $endWeek, $preferenceState, $timestamp, $preferenceTimes, $preferenceNote, $latestSession, $weekdayIndex, $preferenceWeekdays);
+
+            }
+            
+        }
+    }
 }
+
+
+
+
+
