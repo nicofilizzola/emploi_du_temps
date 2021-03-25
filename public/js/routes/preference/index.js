@@ -744,6 +744,16 @@ inputs.forEach(element => {
 
 
 
+availabilityInput = document.getElementById('js-availability-searchbar');
+unavailabilityInput = document.getElementById('js-unavailability-searchbar');
+availabilityResults = document.querySelectorAll('.js-availability-result');
+unavailabilityResults = document.querySelectorAll('.js-unavailability-result');
+
+searchbar(availabilityInput, availabilityResults);
+searchbar(unavailabilityInput, unavailabilityResults);
+
+
+
 
 
 

@@ -1,0 +1,16 @@
+ul.preference-list {
+    max-height: 200px;
+    list-style: none;
+
+    li{
+        transition: 0.3s;
+        &:hover {
+            background-color: #191c1f;
+        }
+
+        button img {
+            width: 10px;
+            height: 10px;
+        }
+    }
+}
