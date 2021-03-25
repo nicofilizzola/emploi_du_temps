@@ -153,19 +153,16 @@ class SessionController extends AbstractController
                 $day->setSession($session);
 
                 $this->em->persist($day);
-                $this->em->flush();
             }
 
             // delete n-2 session 
             if ($this->sessionRepo->findBy([], ['id' => 'DESC'])[2]) {
                 $removableSession = $this->sessionRepo->findBy([], ['id' => 'DESC'])[2];
                 $this->em->remove($removableSession);
-                $this->em->flush();
+                
             }
             
-            
-
-
+            $this->em->flush();
 
             $this->addFlash('success', 'Session créée avec succès !');
             return $this->redirectToRoute('app_session');
