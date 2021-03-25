@@ -119,6 +119,7 @@ class SessionController extends AbstractController
         $form->handleRequest($req);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $startDate = $session->getStart();
             $untilDate = $session->getUntil();
             $dateDiff = date_diff($startDate, $untilDate)->days;
@@ -155,7 +156,14 @@ class SessionController extends AbstractController
                 $this->em->flush();
             }
 
-            /* also delete session n-2 */
+            // delete n-2 session 
+            if ($this->sessionRepo->findBy([], ['id' => 'DESC'])[2]) {
+                $removableSession = $this->sessionRepo->findBy([], ['id' => 'DESC'])[2];
+                $this->em->remove($removableSession);
+                $this->em->flush();
+            }
+            
+            
 
 
 
