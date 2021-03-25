@@ -134,10 +134,10 @@ class SessionController extends AbstractController
                 $this->addFlash('danger', 'Une session ne peut pas avoir une durée supérieure à un (1) an.');
                 return $this->redirectToRoute('app_session_create');
             }
-            /*if (date('w', $startDateTimestamp) != 0){
-                $this->addFlash('warning', 'La date de début doit être un dimanche.');
+            if (date('w', $startDateTimestamp) != 1){
+                $this->addFlash('danger', 'La date de début doit être le lundi de la semaine 1.');
                 return $this->redirectToRoute('app_session_create');
-            }*/
+            }
 
 
             $this->em->persist($session);
@@ -154,6 +154,11 @@ class SessionController extends AbstractController
                 $this->em->persist($day);
                 $this->em->flush();
             }
+
+            /* also delete session n-2 */
+
+
+
             $this->addFlash('success', 'Session créée avec succès !');
             return $this->redirectToRoute('app_session');
         }

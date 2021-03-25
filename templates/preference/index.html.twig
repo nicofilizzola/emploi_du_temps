@@ -7,7 +7,7 @@
         <form action="{{ path('app_preference_create') }}" method="post">
             <div class="row">
                 <div class="mx-auto col-md-12">
-                    <p>Je veux renseigner une...</p>
+                    <p><b>Choissisez :</b> Je veux renseigner une...</p>
                 </div>
             </div>
             <div class="row">
@@ -54,28 +54,23 @@
                         {% endfor %}
                     </select>
 
-                    <!-- Week checkboxes start -->
-                    <div>
-                        <input 
-                            class="mt-4" 
-                            type="checkbox"
-                            name="is_preference_endweek" 
-                            value="1" 
-                            id="js-preference-endweek-checkbox" 
-                            disabled="disabled"
-                        >
-                        <label for="js-preference-endweek-checkbox">Jusqu'à</label>
-                        <br>
-                        <!--<small class="text-muted">En cochant la case ci-dessus, vous pourrez indiquer une période spécifique pour votre diponibilité/indisponibilité. La semaine que vous avez choisi dans le champs précédent correspondra donc à la première semaine de la période, et le champ suivant vous permettra de choisir la semaine de fin.</small>-->
-                    </div>
-
+                    <input 
+                        class="mt-4" 
+                        type="checkbox"
+                        name="is_preference_endweek" 
+                        value="1" 
+                        id="js-preference-endweek-checkbox" 
+                        disabled="disabled"
+                    >
+                    <label for="js-preference-endweek-checkbox">Jusqu'à</label>
+                    <br>
                     <select class="mt-2 form-control" name="preference_endweek" id="js-preference-endweek" disabled="disabled">
                         <option></option>
                         {% for week in weeks %}
                         <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                         {% endfor %}
                     </select>
-
+                    <small class="text-muted">Champ non obligatoire</small>
 
 
                     <div class="mt-5 row">
@@ -95,6 +90,7 @@
                                 <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                                 {% endfor %}
                             </select>
+                            <small class="text-muted">Champ non obligatoire</small>
                         </div>
 
                         <div class="col-md-6">
@@ -113,10 +109,11 @@
                                 <option value="{{ loop.index }}">Semaine {{ loop.index }} (du {{ week.start }} au {{ week.end }})</option>
                                 {% endfor %}
                             </select>
+                            <small class="text-muted">Champ non obligatoire</small>
                         </div>
                             
                     </div>
-                    <!-- Week checkboxes end -->
+    
                         
                 </div>
             </div>

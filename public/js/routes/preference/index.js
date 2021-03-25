@@ -502,7 +502,7 @@ function checkboxSelectorManager(checkbox, selector) {
 }
 
 function exceptWeekCheckboxManager(startWeekSelector, endWeekCheckbox, endWeekSelector, exceptWeekCheckbox) {
-    if (startWeekSelector.value !== 'all' && startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
+    if (startWeekSelector.value == 'all' || startWeekSelector.value !== '' && endWeekCheckbox.checked && endWeekSelector.value !== '') {
         exceptWeekCheckbox.disabled = false;
     } else {
         exceptWeekCheckbox.disabled = true;
@@ -515,8 +515,7 @@ function exceptEndWeekCheckboxManager(exceptEndWeekCheckbox, exceptWeekSelector)
         exceptEndWeekCheckbox.disabled = false;
     } else {
         exceptEndWeekCheckbox.disabled = true;
-    }
-    
+    }  
 }
 
 function endWeekOptionsManager(endWeekOptions, startWeekSelector) {
