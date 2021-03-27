@@ -1,7 +1,7 @@
 <header>
     <nav class=" mb-5 navbar navbar-expand-md navbar-dark bg-primary" id="nav">
         <div class="container">
-            <a class="navbar-brand" href="#{#{{ path('app_home') }}#}">
+            <a class="navbar-brand" href="{{ path('app_home') }}">
                 <img style="width:100px;" src="{{ asset('img/logo_white.svg') }}" alt="Revenir à la page d'accueil">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-collapse" aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,6 +10,9 @@
 
             <div class="collapse navbar-collapse" id="nav-collapse">
                 <ul class="navbar-nav ml-auto">
+                    
+                    {% if app.user %}
+                    
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_session') }}">Calendrier</a>
                     </li>
@@ -28,12 +31,21 @@
 
 
 
-
-
-
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_logout') }}">Déconnexion</a>
                     </li>
+
+                    {% else %}
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_login') }}">Connexion</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_register') }}">Inscription</a>
+                    </li>
+
+                    {% endif %}
                     
 
                 <!--

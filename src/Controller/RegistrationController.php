@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\RoleRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,13 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class RegistrationController extends AbstractController
 {
+    private $roleRepo;
+
+    public function __construct(RoleRepository $roleRepo)  
+    {
+        $this->roleRepo = $roleRepo;
+    }
+
     /**
      * @Route("/register", name="app_register")
      */
@@ -23,7 +31,34 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        $userCode = $request->request->get('userCode');
+
+        // If no user code sent
+        
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $userRole = $this->roleRepo->findOneBy(['code' => $request->request->get('registration_form')['userCode']]);
+
+            // If input role code invalid
+            if (is_null($userRole)) {
+                $this->addFlash('danger', 'Vos identifiants sont invalides');
+                return $this->redirectToRoute('app_register');
+            }
+
+            $allRoles = $this->roleRepo->findAll();
+            $userRoles = [];
+
+            foreach ($allRoles as $element) {
+                if ($element->getId() <= $userRole->getId()) {
+                    array_push($userRoles, 'ROLE_' . $element->getName());
+                }
+            }
+
+            
+            $user->setRoles($userRoles);
+
+
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
