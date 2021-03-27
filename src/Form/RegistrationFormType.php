@@ -17,10 +17,15 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
+            ->add('email', null, [
+                'attr' => [
+                    'placeholder' => 'E.g. : pierreblanc@exemple.com'
+                ]
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => 'Mot de passe',
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
@@ -33,10 +38,22 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                
+            ])
+            ->add('verifyPassword', PasswordType::class, [
+                // instead of being set onto the object directly,
+                // this is read and encoded in the controller
+                'label' => 'Vérifiez votre mot de passe',
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Vérifiez votre mot de passe',
+                    ])
+                ],
             ])
             ->add('userCode', PasswordType::class, [
                 'mapped' => false,
-                'label' => 'Code d\'utilisateur',
+                'label' => 'Code d\'utilisateur (Le code qui vous a été fourni par le gestionnaire de l\'emploi du temps)',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un code d\'utilisateur'
@@ -44,6 +61,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
+                'label' => 'Accepter les conditions d\'utilisation',
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([

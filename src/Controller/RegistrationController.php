@@ -31,18 +31,18 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        $userCode = $request->request->get('userCode');
-
-        // If no user code sent
-        
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $userRole = $this->roleRepo->findOneBy(['code' => $request->request->get('registration_form')['userCode']]);
 
-            // If input role code invalid
+            // Error handler : If input role code invalid
             if (is_null($userRole)) {
                 $this->addFlash('danger', 'Vos identifiants sont invalides');
+                return $this->redirectToRoute('app_register');
+            }
+            // Error handler : If passwords don't match
+            if ($request->request->get('registration_form')['plainPassword'] !== $request->request->get('registration_form')['verifyPassword']) {
+                $this->addFlash('danger', 'Vos mots de passe ne coincident pas.');
                 return $this->redirectToRoute('app_register');
             }
 
@@ -54,7 +54,6 @@ class RegistrationController extends AbstractController
                     array_push($userRoles, 'ROLE_' . $element->getName());
                 }
             }
-
             
             $user->setRoles($userRoles);
 
