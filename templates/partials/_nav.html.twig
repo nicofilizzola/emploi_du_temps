@@ -39,17 +39,19 @@
                         <a class="nav-link text-light" href="{{ path('app_logout') }}">Déconnexion</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_register') }}">Inscription</a>
+                    </li>
+
                     {% else %}
 
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_login') }}">Connexion</a>
                     </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_register') }}">Inscription</a>
-                    </li>
 
                     {% endif %}
+
+                    {{ dump(app.user.roles) }}
                     
 
                 <!--
