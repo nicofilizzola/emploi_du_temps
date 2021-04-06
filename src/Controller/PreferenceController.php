@@ -253,6 +253,38 @@ class PreferenceController extends AbstractController
     }   
 
 
+    /**
+     * @Route("/preference/delete/all", name="app_preference_delete_all", methods="DELETE")
+     */
+    public function deleteAll(Request $req): Response
+    {
+        // CSRF Validation
+        if ($this->isCsrfTokenValid('app_preference_delete_all', $req->request->get('_token'))) {
+            
+            // Delete all preference
+            $prefState = $req->request->get('preferenceState');
+            if ($prefState == 'preference') {
+                $preferences = $this->preferenceRepo->findBy(['state' => 1]);
+
+                $this->addFlash('success', 'Toutes vos disponibilités ont été supprimées !');
+
+            } else if ($prefState == 'unavailability') {
+                $preferences = $this->preferenceRepo->findBy(['state' => 0]);
+
+                $this->addFlash('success', 'Toutes vos indisponibilités ont été supprimées !');
+
+            }
+            
+            foreach ($preferences as $value) {
+                $this->em->remove($value);
+            }
+            $this->em->flush();
+
+            return $this->redirectToRoute('app_preference');
+        }
+    }  
+
+
 
 
 

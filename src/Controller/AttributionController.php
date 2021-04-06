@@ -56,7 +56,7 @@ class AttributionController extends AbstractController
             $this->em->persist($attribution);
             $this->em->flush();
 
-            $this->addFlash('success', 'Votre attribution a été ajoutée.');
+            $this->addFlash('success', 'Votre attribution a été ajoutée !');
             return $this->redirectToRoute('app_attribution');
         }
 
@@ -65,5 +65,25 @@ class AttributionController extends AbstractController
             'attributionList' => $attributionList,
             'session' => $latestSession
         ]);
+    }
+
+
+
+    /**
+     * @Route("/attribution/{id<\d+>}/delete", name="app_attribution_delete", methods="DELETE")
+     */
+    public function delete(Attribution $attribution, Request $req): Response
+    {   
+
+        // CSRF Validation
+        if ($this->isCsrfTokenValid('app_attribution_delete' . $attribution->getId(), $req->request->get('_token'))) {
+            // Remove user
+            $this->em->remove($attribution);
+            $this->em->flush();
+        }
+
+        $this->addFlash('success', 'L\'attribution de [NOM PROF ICI] en ' . $attribution->getSubject() . ' a été supprimé !');
+        return $this->redirectToRoute('app_attribution');
+
     }
 }

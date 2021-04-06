@@ -308,9 +308,10 @@
                     </ul>
 
                     {# DELETE ALL #}
-                    <a class="btn btn-danger btn-block">Tout supprimer</a>
+                    <a class="btn btn-danger btn-block" onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer toutes vos disponibilités ?')) { document.getElementById('js-preference-deleteall').submit(); }">Tout supprimer</a>
                     {# csrf validation and request type #}
                     <form id="js-preference-deleteall" action="{{ path('app_preference_delete_all') }}" method="post">
+                        <input type="hidden" name="preferenceState" value="preference">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete_all') }}">
                     </form>
@@ -354,9 +355,10 @@
                     </ul>
 
                     {# DELETE ALL #}
-                    <a class="btn btn-danger btn-block">Tout supprimer</a>
+                    <a class="btn btn-danger btn-block" onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer toutes vos indisponibilités ?')) { document.getElementById('js-unavailability-deleteall').submit(); }">Tout supprimer</a>
                     {# csrf validation and request type #}
-                    <form id="js-preference-deleteall" action="{{ path('app_preference_delete_all') }}" method="post">
+                    <form id="js-unavailability-deleteall" action="{{ path('app_preference_delete_all') }}" method="post">
+                        <input type="hidden" name="preferenceState" value="unavailability">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete_all') }}">
                     </form>

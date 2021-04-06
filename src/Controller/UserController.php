@@ -106,17 +106,20 @@ class UserController extends AbstractController
     /**
      * @Route("/user/{id<\d+>}/delete", name="app_user_delete", methods="DELETE")
      */
-    public function delete(User $user, Request $req, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function delete(User $user, Request $req): Response
     {   
         // Error handler : If deleted user is active user,
         if ($this->getUser() == $user) {
             $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte !');
             return $this->redirectToRoute('app_user');
         } 
-           
-        // Remove user
-        $this->em->remove($user);
-        $this->em->flush();
+
+        // CSRF Validation
+        if ($this->isCsrfTokenValid('app_user_delete' . $user->getId(), $req->request->get('_token'))) {
+            // Remove user
+            $this->em->remove($user);
+            $this->em->flush();
+        }
 
         $this->addFlash('success', 'L\'utilisateur ' . $user->getUsername() . ' a été supprimé !');
         return $this->redirectToRoute('app_user');
