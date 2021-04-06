@@ -6,7 +6,7 @@
     {% endfor %} #}
     <div class="row">
         <div class="mx-auto col-md-9 bg-light rounded p-5">
-            <h1 class="text-center">Ajouter un nouvel utilisateur</h1>
+            <h1 class="text-center">Modifier un utilisateur</h1>
 
             {{ form_start(editUserForm) }}
                 <div class="mt-4 row">
@@ -20,10 +20,14 @@
                 
                 
                 {{ form_row(editUserForm.username) }}
+
+                <small><span class="text-danger font-weight-bold">Attention :</span> Si cet utilisateur n'est pas un enseignant, il faut réindiquer son rôle avant d'enregistrer les changements.</small>
                 {{ form_row(editUserForm.higherRole) }}
+
+                <small><span class="text-danger font-weight-bold">Attention :</span> Si vous ne souhaitez pas modifier le mot de passe de l'utilisateur, laissez les deux champs suivants vides.</small>
                 {{ form_row(editUserForm.plainPassword) }}
 
-                <button type="submit" class="mt-4 btn btn-primary btn-block">Ajouter utilisateur</button>
+                <button type="submit" class="mt-4 btn btn-primary btn-block" formnovalidate>Enregistrer les changements</button>
             {{ form_end(editUserForm) }}
         </div>
     </div>

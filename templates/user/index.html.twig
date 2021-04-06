@@ -4,6 +4,13 @@
 <div class="row">
     <div class="mx-auto col-md-9 bg-light rounded p-5">
         <a class="btn btn-primary btn-block" href="{{ path('app_register') }}">Créer un nouvel utilisateur</a>
+
+        <!-- Searchbar --> 
+        <div class="mt-2 mb-2 form-control d-flex align-items-center justify-content-between">
+            <input class="w-100" type="text" placeholder="Chercher un utilisateur..." id="js-user-searchbar">
+            <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
+        </div>
+
         <table class="mt-4 w-100">
             <thead class="bg-dark text-light">
                 <th class="px-2 py-3">Prénom NOM</th>
@@ -14,7 +21,7 @@
             <tbody>
         {% set rolesTranslate = ['Enseignant', 'Responsable de diplôme', 'Gestionnaire EDT', 'Administrateur', null] %}
         {% for user in users %}
-                <tr>
+                <tr class="js-user-result">
                     <td class="p-2"> {{ user.firstName }} {{ user.lastName | upper }}</td>
                     <td class="p-2"> {{ user.username }}</td>
                     <td class="p-2"> {{ rolesTranslate[user.roles | length - 2] }}</td>
@@ -22,14 +29,25 @@
                         <a class="btn btn-success btn-block" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
                     </td>
                     <td class="p-2">
-                        <a class="btn btn-danger btn-block" href="">Supprimer</a>
+                        <a 
+                            class="btn btn-danger btn-block"
+                            onclick="event.preventDefault(); if (window.confirm('Êtes vous sûr de vouloir supprimer l\'utilisateur {{ user.username }} ?')) { document.getElementById('js-user-delete-{{ user.id }}').submit(); }"
+                        >
+                            Supprimer
+                        </a>
+                        {# csrf validation and request type #}
+                        <form id="js-user-delete-{{ user.id }}" action="{{ path('app_user_delete', {id: user.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('app_user_delete' ~ user.id) }}">
+                        </form>
                     </td>
                 </tr>
         {% endfor %}
             </tbody>
         </table>
-        
-    
     </div>
 </div>
+
+<script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/routes/user/index.js') }}" type="text/javascript"></script>
 {% endblock %}

@@ -76,6 +76,14 @@ class PreferenceController extends AbstractController
             $value->setNote(date('d-m-Y', $timestamp) . ' de ' . $startTime .' à ' . $endTime);
         }
 
+        foreach ($unavailabilities as $value) {
+            $timestamp = $value->getDatetime()->getTimestamp();
+            $startTime = date('H:i', $timestamp);
+            $endTime = date('H:i', strtotime($startTime) + 60*60 + 60*30);
+
+            $value->setNote(date('d-m-Y', $timestamp) . ' de ' . $startTime .' à ' . $endTime);
+        }
+
         
 
         return $this->render('preference/index.html.twig', [

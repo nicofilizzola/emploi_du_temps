@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +15,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     private $userRepo;
+    private $em;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(UserRepository $userRepo, EntityManagerInterface $em)
     {
         $this->userRepo = $userRepo;
+        $this->em = $em;
     }
 
     /**
@@ -92,15 +95,31 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
-
-
-
-
-
-
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'editUserForm' => $formView
         ]);
+    }
+
+
+
+    /**
+     * @Route("/user/{id<\d+>}/delete", name="app_user_delete", methods="DELETE")
+     */
+    public function delete(User $user, Request $req, UserPasswordEncoderInterface $passwordEncoder): Response
+    {   
+        // Error handler : If deleted user is active user,
+        if ($this->getUser() == $user) {
+            $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte !');
+            return $this->redirectToRoute('app_user');
+        } 
+           
+        // Remove user
+        $this->em->remove($user);
+        $this->em->flush();
+
+        $this->addFlash('success', 'L\'utilisateur ' . $user->getUsername() . ' a été supprimé !');
+        return $this->redirectToRoute('app_user');
+
     }
 }

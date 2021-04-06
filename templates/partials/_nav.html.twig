@@ -17,7 +17,7 @@
                     
                     {% if app.user %}
 
-                        {% if 'ROLE_DIR' in app.user.roles %}
+                        {# {% if 'ROLE_DIR' in app.user.roles %} #}
                     
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_session') }}">Calendrier</a>
@@ -31,15 +31,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
                     </li>
-                        {% endif %}
+                        {# {% endif %} #}
 
-                        {% if 'ROLE_PRO' %}
+                        {# {% if 'ROLE_PRO' %} #}
 
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_preference') }}">Mes dispo</a>
                     </li>
                     
-                        {% endif %}
+                        {# {% endif %} #}
 
                     {# OPTIONS AVAILABLE FOR ALL USERS #}
                     <li class="nav-item">

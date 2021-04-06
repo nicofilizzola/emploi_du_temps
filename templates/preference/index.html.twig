@@ -283,7 +283,7 @@
                     <p>Vous n'avez pas encore renseigné vos disponibilités.</p>
     {% else %}
                     <div class="mt-2 mb-2 form-control d-flex align-items-center justify-content-between">
-                        <input type="text" placeholder="Ex : Lundi 8:00" id="js-availability-searchbar">
+                        <input type="text" placeholder="E.g. : de 9:30 à 11:00" id="js-availability-searchbar">
                         <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
                     </div>
 
@@ -307,11 +307,19 @@
         {% endfor %}
                     </ul>
 
-                        
+                    {# DELETE ALL #}
+                    <a class="btn btn-danger btn-block">Tout supprimer</a>
+                    {# csrf validation and request type #}
+                    <form id="js-preference-deleteall" action="{{ path('app_preference_delete_all') }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete_all') }}">
+                    </form>
+
     {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="my-1 row bg-dark text-light rounded">
             <div class="col-12 p-4">
                 <h4>Vos indisponibilités</h4> 
@@ -320,7 +328,7 @@
                     <p>Vous n'avez pas encore renseigné vos indisponibilités.</p>
     {% else %}  
                     <div class="mt-2 mb-2 form-control d-flex align-items-center justify-content-between">
-                        <input type="text" placeholder="Chercher un événement..." id="js-unavailability-searchbar">
+                        <input type="text" placeholder="E.g. : de 9:30 à 11:00" id="js-unavailability-searchbar">
                         <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
                     </div>
 
@@ -331,19 +339,27 @@
                             <span>{{ unavailability.note }}</span>
                             <a 
                                 class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center" 
-                                onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ preference.id }}.submit();')"
+                                onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ unavailability.id }}.submit();')"
                             >
                                 <img class="btn-icon" src="{{ asset('img/times-solid.svg') }}" alt="">
                             </a>
                         </li>
 
                         {# csrf validation and request type #}
-                        <form id="js-preference-request-{{ preference.id }}" action="{{ path('app_preference_delete', {id: preference.id}) }}" method="post">
+                        <form id="js-preference-request-{{ unavailability.id }}" action="{{ path('app_preference_delete', {id: unavailability.id}) }}" method="post">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete' ~ preference.id) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete' ~ unavailability.id) }}">
                         </form>
         {% endfor %}
                     </ul>
+
+                    {# DELETE ALL #}
+                    <a class="btn btn-danger btn-block">Tout supprimer</a>
+                    {# csrf validation and request type #}
+                    <form id="js-preference-deleteall" action="{{ path('app_preference_delete_all') }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('app_preference_delete_all') }}">
+                    </form>
 
     {% endif %}
                 </div>

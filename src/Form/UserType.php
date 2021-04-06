@@ -8,16 +8,32 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
+            ->add('firstName', null, [
+                'label' => 'Prénom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez le prénom de l\'utilisateur'
+                    ])
+                ]
+            ])
+            ->add('lastName', null, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez le nom famille de l\'utilisateur'
+                    ])
+                ]
+            ])
             ->add('higherRole', ChoiceType::class, [
                 'choices' => [
                     'Enseignant' => 1,
@@ -28,7 +44,14 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'label' => 'Role de l\'utilisateur'
             ])
-            ->add('username')
+            ->add('username', null, [
+                'label' => 'Nom d\'utilisateur',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez le nom de l\'utilisateur'
+                    ])
+                ]
+            ])
             // ->add('roles')
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
