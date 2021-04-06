@@ -3,9 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Attribution;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttributionType extends AbstractType
@@ -15,7 +16,10 @@ class AttributionType extends AbstractType
         $builder
             ->add('user', EntityType::class, [
                 'label' => 'Enseignant',
-                'class' => 'App\Entity\User'
+                'class' => 'App\Entity\User',
+                'query_builder' => function(EntityRepository $repository) { 
+                    return $repository->createQueryBuilder('u')->orderBy('u.lastName', 'ASC');
+                }
             ])
             ->add('cmAmount', null, [
                 'label' => 'Cours magistraux'

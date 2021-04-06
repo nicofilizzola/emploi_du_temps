@@ -28,7 +28,6 @@ class RegistrationController extends AbstractController
             $userRole = $request->request->get('registration_form')['higherRole'];
 
             $allRoles = [
-                null,
                 'PRO',
                 'DIR',
                 'MAN',
@@ -66,7 +65,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             $this->addFlash('success', 'l\'utilisateur ' . $user->getUsername() . ' a été ajouté avec succès !');
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_user');
         }
 
         return $this->render('registration/register.html.twig', [

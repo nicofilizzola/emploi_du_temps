@@ -37,9 +37,14 @@ class AttributionController extends AbstractController
 
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
 
-        // If no session
+        // Error handler : If no session
         if (is_null($latestSession)) {
             return $this->redirectToRoute('app_session');
+        }
+
+        // Error handler : If user has no access
+        if (!in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
         }
 
         $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
@@ -82,7 +87,7 @@ class AttributionController extends AbstractController
             $this->em->flush();
         }
 
-        $this->addFlash('success', 'L\'attribution de [NOM PROF ICI] en ' . $attribution->getSubject() . ' a été supprimé !');
+        $this->addFlash('success', 'L\'attribution de ' . $attribution->getUser() .' en ' . $attribution->getSubject() . ' a été supprimé !');
         return $this->redirectToRoute('app_attribution');
 
     }

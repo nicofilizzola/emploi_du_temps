@@ -21,7 +21,7 @@
             <tbody>
         {% set rolesTranslate = ['Enseignant', 'Responsable de diplôme', 'Gestionnaire EDT', 'Administrateur', null] %}
         {% for user in users %}
-                <tr class="js-user-result">
+                <tr class="js-user-result hoverable">
                     <td class="p-2"> {{ user.firstName }} {{ user.lastName | upper }}</td>
                     <td class="p-2"> {{ user.username }}</td>
                     <td class="p-2"> {{ rolesTranslate[user.roles | length - 2] }}</td>

@@ -99,6 +99,21 @@ class AppFixtures extends Fixture
                 'PPN' => 'EMN', 
                 'semester' => 1
             ],
+            [
+                'name' => 'Communication, expression écrite et orale', 
+                'PPN' => 'ECE', 
+                'semester' => 1
+            ],
+            [
+                'name' => 'Esthétique et expréssion artistique', 
+                'PPN' => 'EEA', 
+                'semester' => 1
+            ],
+            [
+                'name' => 'Adaptation de parcours', 
+                'PPN' => 'AP', 
+                'semester' => 1
+            ],
         ];
         foreach ($subjects as $element) {
             $subject = new Subject;

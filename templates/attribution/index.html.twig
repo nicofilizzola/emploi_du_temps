@@ -74,7 +74,7 @@
                             <td class="p-2">
                                 <a 
                                     class="btn btn-danger btn-block"
-                                    onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer l\'attribution de [NOM PROF ICI] en {{ attribution.subject }} ?')) { document.getElementById('js-attribution-delete-{{ attribution.id }}').submit(); }"
+                                    onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer l\'attribution de {{ attribution.user }} en {{ attribution.subject }} ?')) { document.getElementById('js-attribution-delete-{{ attribution.id }}').submit(); }"
                                 >
                                     Supprimer
                                 </a>
