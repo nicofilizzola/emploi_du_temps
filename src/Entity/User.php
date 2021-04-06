@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +47,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Attribution::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $attributions;
+
+    public function __construct()
+    {
+        $this->attributions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -144,5 +156,40 @@ class User implements UserInterface
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Attribution[]
+     */
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
+    }
+
+    public function addAttribution(Attribution $attribution): self
+    {
+        if (!$this->attributions->contains($attribution)) {
+            $this->attributions[] = $attribution;
+            $attribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribution(Attribution $attribution): self
+    {
+        if ($this->attributions->removeElement($attribution)) {
+            // set the owning side to null (unless already changed)
+            if ($attribution->getUser() === $this) {
+                $attribution->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString() {
+        $string = strtoupper(substr($this->firstName, 0, 1)) . '. ' . strtoupper($this->lastName);
+        return $string;
     }
 }

@@ -9,17 +9,19 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    {{ form_row(attributionForm.cmAmount) }}
-                    {{ form_errors(attributionForm.cmAmount) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_row(attributionForm.tdAmount) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_row(attributionForm.tpAmount) }}
+                    {{ form_row(attributionForm.user) }}
                 </div>
                 <div class="col-md-3">
                     {{ form_row(attributionForm.subject) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(attributionForm.cmAmount) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(attributionForm.tdAmount) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(attributionForm.tpAmount) }}
                 </div>
             </div>
             
@@ -53,21 +55,21 @@
                     <thead>
                         <tr class="bg-dark text-light">
                             <th class="px-2 py-3">Enseignant</th>
+                            <th class="px-2 py-3">Matière</th>
                             <th class="px-2 py-3">Cours magistraux</th>
                             <th class="px-2 py-3">Cours de TD</th>
                             <th class="px-2 py-3">Cours de TP</th>
-                            <th class="px-2 py-3">Matière</th>
                             <th class="px-2 py-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
             {% for attribution in attributionList %}
                         <tr class="hoverable js-attribution-result">
-                            <td class="p-2">Enseignant</td>
+                            <td class="p-2">{{ attribution.user }}</td>
+                            <td class="p-2">{{ attribution.subject }}</td>
                             <td class="p-2">{{ attribution.cmAmount }}</td>
                             <td class="p-2">{{ attribution.tdAmount }}</td>
                             <td class="p-2">{{ attribution.tpAmount }}</td>
-                            <td class="p-2">{{ attribution.subject }}</td>
                             {# DELETE CELL #}
                             <td class="p-2">
                                 <a 

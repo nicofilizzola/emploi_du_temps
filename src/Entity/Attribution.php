@@ -49,6 +49,12 @@ class Attribution
      */
     private $subject;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="attributions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,6 +116,18 @@ class Attribution
     public function setSubject(?Subject $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

