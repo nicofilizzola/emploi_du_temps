@@ -156,7 +156,7 @@ class SessionController extends AbstractController
             }
 
             // delete n-2 session 
-            if ($this->sessionRepo->findBy([], ['id' => 'DESC'])[2]) {
+            if (array_key_exists(2, $this->sessionRepo->findBy([], ['id' => 'DESC']))) {
                 $removableSession = $this->sessionRepo->findBy([], ['id' => 'DESC'])[2];
                 $this->em->remove($removableSession);
                 

@@ -36,6 +36,12 @@ class AttributionController extends AbstractController
         $form->handleRequest($req);
 
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+
+        // If no session
+        if (is_null($latestSession)) {
+            return $this->redirectToRoute('app_session');
+        }
+
         $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
         // sort by professor name
 

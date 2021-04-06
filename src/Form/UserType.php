@@ -4,40 +4,20 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
-use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
 
-class RegistrationFormType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', null, [
-                'label' => 'Prénom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Entrez le prénom de l\'utilisateur'
-                    ])
-                ]
-            ])
-            ->add('lastName', null, [
-                'label' => 'Nom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Entrez le nom famille de l\'utilisateur'
-                    ])
-                ]
-            ])
+            ->add('firstName')
+            ->add('lastName')
             ->add('higherRole', ChoiceType::class, [
                 'choices' => [
                     'Enseignant' => 1,
@@ -48,16 +28,8 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'label' => 'Role de l\'utilisateur'
             ])
-
-            // BUG HERE: constraint not working -> only client side validation active
-            ->add('username', null, [
-                'label' => 'Nom d\'utilisateur',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Entrez un nom d\'utilisateur'
-                    ])
-                ]
-            ])
+            ->add('username')
+            // ->add('roles')
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -71,9 +43,7 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Vérifiez le mot de passe'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Entrez un mot de passe',
-                    ]),
+                    // can be null
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
@@ -81,6 +51,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'required' => false
             ])
         ;
     }

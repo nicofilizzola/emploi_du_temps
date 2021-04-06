@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="mx-auto col-md-9 bg-light rounded p-5">
+        <a class="btn btn-primary btn-block" href="{{ path('app_register') }}">Créer un nouvel utilisateur</a>
+        <table class="mt-4 w-100">
+            <thead class="bg-dark text-light">
+                <th class="px-2 py-3">Prénom NOM</th>
+                <th class="px-2 py-3">Nom d'utilisateur</th>
+                <th class="px-2 py-3">Rôle</th>
+                <th class="px-2 py-3" colspan="2">Actions</th>
+            </thead>
+            <tbody>
+        {% set rolesTranslate = ['Enseignant', 'Responsable de diplôme', 'Gestionnaire EDT', 'Administrateur', null] %}
+        {% for user in users %}
+                <tr>
+                    <td class="p-2"> {{ user.firstName }} {{ user.lastName | upper }}</td>
+                    <td class="p-2"> {{ user.username }}</td>
+                    <td class="p-2"> {{ rolesTranslate[user.roles | length - 2] }}</td>
+                    <td class="p-2">
+                        <a class="btn btn-success btn-block" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+                    </td>
+                    <td class="p-2">
+                        <a class="btn btn-danger btn-block" href="">Supprimer</a>
+                    </td>
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        
+    
+    </div>
+</div>
+{% endblock %}

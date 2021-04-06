@@ -28,6 +28,7 @@ class RegistrationController extends AbstractController
             $userRole = $request->request->get('registration_form')['higherRole'];
 
             $allRoles = [
+                null,
                 'PRO',
                 'DIR',
                 'MAN',
@@ -42,7 +43,7 @@ class RegistrationController extends AbstractController
 
             // assign user roles
             $userRoles = [];
-            $loopIndex = 0;
+            $loopIndex = 1;
             foreach ($allRoles as $element) {
                 if ($loopIndex <= intval($userRole)) {
                     array_push($userRoles, 'ROLE_' . $element);
