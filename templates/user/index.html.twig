@@ -6,10 +6,16 @@
         <a class="btn btn-primary btn-block" href="{{ path('app_register') }}">Créer un nouvel utilisateur</a>
 
         <!-- Searchbar --> 
-        <div class="mt-2 mb-2 form-control d-flex align-items-center justify-content-between">
+        <div class="mt-4 row">
+            <div class="col-md-6">
+                <label>Recherche spécifique :</label>
+            </div>
+        </div>
+        <div class="mb-2 form-control d-flex align-items-center justify-content-between">
             <input class="w-100" type="text" placeholder="Chercher un utilisateur..." id="js-user-searchbar">
             <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
         </div>
+        
 
         <table class="mt-4 w-100">
             <thead class="bg-dark text-light">

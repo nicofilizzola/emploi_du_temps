@@ -57,6 +57,12 @@ class SessionController extends AbstractController
      */
     public function index(Request $req): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
         if ($req->isMethod('POST')) {
             foreach ($req->request as $key => $value) {
                 // watch each value sent
@@ -113,6 +119,12 @@ class SessionController extends AbstractController
      */
     public function create(Request $req): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
         $session = new Session;
         $form = $this->createForm(SessionType::class, $session);
         $formView = $form->createView();

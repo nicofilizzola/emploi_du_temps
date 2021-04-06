@@ -35,18 +35,18 @@ class PreferenceController extends AbstractController
     /**
      * @Route("/preference", name="app_preference", methods="GET")
      */
-    public function index(Request $req): Response
+    public function index(): Response
     {
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
         $preferences = $this->preferenceRepo->findBy([
             'state' => true,
-            // 'user' => ,
-            // 'session' => latestSession
+            'user' => $this->getUser(),
+            'session' => $latestSession
         ]);
         $unavailabilities = $this->preferenceRepo->findBy([
             'state' => false,
-            // 'user' => ,
-            // 'session' => latestSession
+            'user' => $this->getUser(),
+            'session' => $latestSession
         ]);
         
         $days = $this->dayRepo->findBy([
@@ -316,6 +316,7 @@ class PreferenceController extends AbstractController
                     $preference->setDatetime(new DateTime(date('Y-m-d', $preferenceDayTimestamp) . "T" . $preferenceTime[0])); 
                     $preference->setNote($preferenceNote);
                     $preference->setSession($preferenceSession);
+                    $preference->setUser($this->getUser());
 
                     // only persist if the same preference hasn't already been created
                     if (!$this->preferenceRepo->findOneBy([

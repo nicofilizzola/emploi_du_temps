@@ -42,14 +42,19 @@ class AttributionController extends AbstractController
             return $this->redirectToRoute('app_session');
         }
 
-        // Error handler : If user has no access
-        if (!in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_home');
         }
 
         $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
         // sort by professor name
 
+        
+        
+        
+        
+        
         if ($form->isSubmitted() && $form->isValid()){
         // Create new attribution with form
             if (is_null($attribution->getCmAmount()) && is_null($attribution->getTdAmount()) && is_null($attribution->getTpAmount())){
@@ -57,11 +62,33 @@ class AttributionController extends AbstractController
                 return $this->redirectToRoute('app_attribution');
             }
 
+            // If attribution already exists
+            $data = $req->request->get('attribution');
+            if ($this->attributionRepo->findOneBy([
+                'user' => $data['user'],
+                'subject' => $data['subject'],
+                'session' => $latestSession
+            ])) {
+                // delete it
+                $oldAttribution = $this->attributionRepo->findOneBy([
+                    'user' => $data['user'],
+                    'subject' => $data['subject'],
+                    'session' => $latestSession
+                ]);
+                
+                $this->em->remove($oldAttribution);
+
+                $this->addFlash('success', 'L\'attribution de ' . $attribution->getUser() . ' dans le module de ' . $attribution->getSubject() . ' a été mise à jour !');
+
+            } else {
+                $this->addFlash('success', 'Votre attribution a été ajoutée !');
+
+            }
+
             $attribution->setSession($latestSession);
             $this->em->persist($attribution);
             $this->em->flush();
 
-            $this->addFlash('success', 'Votre attribution a été ajoutée !');
             return $this->redirectToRoute('app_attribution');
         }
 
@@ -79,6 +106,11 @@ class AttributionController extends AbstractController
      */
     public function delete(Attribution $attribution, Request $req): Response
     {   
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
 
         // CSRF Validation
         if ($this->isCsrfTokenValid('app_attribution_delete' . $attribution->getId(), $req->request->get('_token'))) {

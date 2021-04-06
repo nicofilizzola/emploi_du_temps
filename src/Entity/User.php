@@ -53,9 +53,15 @@ class User implements UserInterface
      */
     private $attributions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Preference::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $preferences;
+
     public function __construct()
     {
         $this->attributions = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,5 +197,35 @@ class User implements UserInterface
     public function __toString() {
         $string = strtoupper(substr($this->firstName, 0, 1)) . '. ' . strtoupper($this->lastName);
         return $string;
+    }
+
+    /**
+     * @return Collection|Preference[]
+     */
+    public function getPreferences(): Collection
+    {
+        return $this->preferences;
+    }
+
+    public function addPreference(Preference $preference): self
+    {
+        if (!$this->preferences->contains($preference)) {
+            $this->preferences[] = $preference;
+            $preference->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreference(Preference $preference): self
+    {
+        if ($this->preferences->removeElement($preference)) {
+            // set the owning side to null (unless already changed)
+            if ($preference->getUser() === $this) {
+                $preference->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

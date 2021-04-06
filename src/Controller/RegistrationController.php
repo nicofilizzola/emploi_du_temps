@@ -18,6 +18,12 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
 

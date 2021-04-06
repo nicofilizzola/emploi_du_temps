@@ -17,7 +17,17 @@
                     
                     {% if app.user %}
 
-                        {# {% if 'ROLE_DIR' in app.user.roles %} #}
+                        {% if 'ROLE_MAN' in app.user.roles %}
+                        {# MANAGER ONLY #}
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
+                    </li>
+
+                        {% endif %}
+
+                        {% if 'ROLE_DIR' in app.user.roles %}
+                        {# DIRECTOR AND MANAGER #}
                     
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_session') }}">Calendrier</a>
@@ -28,18 +38,17 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_session_create') }}">Nouvelle année</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
-                    </li>
-                        {# {% endif %} #}
 
-                        {# {% if 'ROLE_PRO' %} #}
+                        {% endif %}
+
+                        {% if 'ROLE_PRO' in app.user.roles %}
+                        {# PROFESSOR AND HIGHER #}
 
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_preference') }}">Mes dispo</a>
                     </li>
                     
-                        {# {% endif %} #}
+                        {% endif %}
 
                     {# OPTIONS AVAILABLE FOR ALL USERS #}
                     <li class="nav-item">

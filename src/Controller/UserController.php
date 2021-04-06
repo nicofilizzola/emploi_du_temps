@@ -28,6 +28,12 @@ class UserController extends AbstractController
      */
     public function index(): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
         $users = $this->userRepo->findAll();
 
         return $this->render('user/index.html.twig', [
@@ -40,6 +46,12 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $req, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
         //$user = new User;
         $form = $this->createForm(UserType::class, $user);
         $formView = $form->createView();
@@ -108,7 +120,12 @@ class UserController extends AbstractController
      */
     public function delete(User $user, Request $req): Response
     {   
-        // Error handler : If deleted user is active user,
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Error handler : If deleted user is active user
         if ($this->getUser() == $user) {
             $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte !');
             return $this->redirectToRoute('app_user');

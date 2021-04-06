@@ -11,13 +11,56 @@
     </div>
     <div class="mt-4 row">
         <div class="mx-auto col-md-9 bg-light rounded p-5">
-            <h2 class="text-center">Bienvenue dans votre espace EDT, voici vos actions :</h2>
-            <a href="{{ path('app_login') }}" class="mt-3 btn btn-primary btn-block p-3">Créer une nouvelle année scolaire</a>
-            <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Modifier le calendrier de cette année</a>
-            <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Modifier la maquette de cette année</a>
-            <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Gérer mes disponibilités</a>
-            <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Gérer les préférences des enseignants</a>
-            <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Gérer les utilisateurs</a>
+            <h2 class="mb-3 text-center">Bienvenue dans votre espace EDT, voici vos actions :</h2>
+
+            {% if 'ROLE_MAN' in app.user.roles %}
+             {# MANAGER ONLY #}
+
+            <div class="my-5 row">
+                <div class="col-md-3 d-flex align-items-center justify-content-center">
+                    <p>Actions de gestionnaire EDT :</p>
+                </div>
+                <div class="col-md-9">
+                    <a href="{{ path('app_user') }}" class="btn btn-primary btn-block p-3">Gérer les utilisateurs</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-primary btn-block p-3">Gérer les préférences des enseignants</a>
+                </div>
+            </div>
+            
+
+            {% endif %}
+
+            {% if 'ROLE_DIR' in app.user.roles %}
+            {# DIRECTOR AND MANAGER #}
+
+            <div class="my-5 row">
+                <div class="col-md-3 d-flex align-items-center justify-content-center">
+                    <p>Actions de responsable de diplôme :</p>
+                </div>
+                <div class="col-md-9">
+                    <a href="{{ path('app_session_create') }}" class="btn btn-primary btn-block p-3">Créer une nouvelle année scolaire</a>
+                    <a href="{{ path('app_session') }}" class="btn btn-primary btn-block p-3">Modifier le calendrier de cette année</a>
+                    <a href="{{ path('app_attribution') }}" class="btn btn-primary btn-block p-3">Modifier la maquette de cette année</a>
+                </div>
+            </div>
+
+            {% endif %}
+
+            {% if 'ROLE_PRO' in app.user.roles %}
+            {# PROFESSOR AND HIGHER #}
+
+            <div class="my-5 row">
+                <div class="col-md-3 d-flex align-items-center justify-content-center">
+                    <p>Actions en tant que prof :</p>
+                </div>
+                <div class="col-md-9">
+                    <a href="{{ path('app_preference') }}" class="btn btn-primary btn-block p-3">Gérer mes disponibilités</a>
+                </div>
+            </div>
+            
+        
+            {% endif %}
+
+            
         </div>
     </div>
 
