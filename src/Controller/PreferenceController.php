@@ -84,13 +84,18 @@ class PreferenceController extends AbstractController
             $value->setNote(date('d-m-Y', $timestamp) . ' de ' . $startTime .' à ' . $endTime);
         }
 
-        
+        // Get current user's attributions
+        $userAttributions = $this->attributionRepo->findBy([
+            'session' => $latestSession,
+            'user' => $this->getUser()
+        ]);
 
         return $this->render('preference/index.html.twig', [
             'preferences' => $preferences,
             'unavailabilities' => $unavailabilities,
             'session' => $latestSession,
-            'weeks' => $weeks
+            'weeks' => $weeks,
+            'userAttributions' => $userAttributions
         ]);
     }
 

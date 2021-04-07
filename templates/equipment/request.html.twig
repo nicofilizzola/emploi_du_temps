@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="mx-auto p-5 col-md-9 bg-light rounded">
+
+    {# If user hasn't made any equipmentRequests during this session #}
+    {% if equipmentReqs is empty %}
+
+        {# If no attributions assigned to the user yet #}
+        {% if userAttributions is empty %}
+
+        <h3>Cette fonctionnalité est actuellement indisponible.</h3>
+
+        {% else %}
+
+        <h3 class="mb-3 text-center">Vous n'avez aucune demande de matériel pour l'année scolaire {{ latestSession.start | date('Y') }} - {{ latestSession.until | date('Y') }}. Faites-en une <a href="#">en cliquant ici !</a></h3>
+
+        {% endif %}
+    {# If there are equipmentRequests recorded for this user in the current session #}
+    {% else %}
+
+        <h3 class="mb-3 text-center">Mes demandes de matériel</h3>
+
+    {% endif %}
+       
+    </div>
+
+</div>
+
+
+
+<script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/routes/equipment/index.js') }}" type="text/javascript"></script>
+
+{% endblock %}

@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Equipment;
 use App\Form\EquipmentType;
+use App\Repository\AttributionRepository;
 use App\Repository\EquipmentRepository;
+use App\Repository\EquipmentRequestRepository;
+use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +18,17 @@ class EquipmentController extends AbstractController
 {
     private $equipmentRepo;
     private $em;
+    private $sessionRepo;
+    private $equipmentRequestRepo;
+    private $attributionRepo;
 
 
-    public function __construct(EquipmentRepository $equipmentRepo, EntityManagerInterface $em) {
+    public function __construct(EquipmentRepository $equipmentRepo, EntityManagerInterface $em, SessionRepository $sessionRepo, EquipmentRequestRepository $equipmentRequestRepo, AttributionRepository $attributionRepo) {
         $this->equipmentRepo = $equipmentRepo;
         $this->em = $em;
+        $this->sessionRepo = $sessionRepo;
+        $this->equipmentRequestRepo = $equipmentRequestRepo;
+        $this->attributionRepo = $attributionRepo;
     }
 
     /**
@@ -31,7 +40,6 @@ class EquipmentController extends AbstractController
         if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_home');
         }
-
 
 
         // Get all equipments by category
@@ -57,6 +65,7 @@ class EquipmentController extends AbstractController
             'equipmentsForm' => $formView
         ]);
     }
+
 
 
     /**
@@ -85,14 +94,27 @@ class EquipmentController extends AbstractController
 
 
 
-
     /**
      * @Route("/equipment/request", name="app_equipment_request")
      */
     public function request(): Response
     {
-        return $this->render('equipment/index.html.twig', [
-            'controller_name' => 'EquipmentController',
+        $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+
+        $userEquipmentReqs = $this->equipmentRequestRepo->findBy([
+            'user' => $this->getUser(),
+            'session' => $latestSession
+        ]);
+
+        $userAttributions = $this->attributionRepo->findBy([
+            'session' => $latestSession,
+            'user' => $this->getUser()
+        ]);
+
+        return $this->render('equipment/request.html.twig', [
+            'equipmentReqs' => $userEquipmentReqs,
+            'latestSession' => $latestSession,
+            'userAttributions' => $userAttributions
         ]);
     }
 

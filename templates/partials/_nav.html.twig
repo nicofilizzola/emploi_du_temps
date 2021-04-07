@@ -10,10 +10,6 @@
 
             <div class="collapse navbar-collapse" id="nav-collapse">
                 <ul class="navbar-nav ml-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_home') }}">Accueil</a>
-                    </li>
                     
                     {% if app.user %}
 
@@ -21,11 +17,13 @@
                         {# MANAGER ONLY #}
 
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
+                        <a class="nav-link text-light" href="{{ path('app_user') }}">Personnel</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_equipment') }}">Matériel disponible</a>
+                        <a class="nav-link text-light" href="{{ path('app_equipment') }}">Matériel dispo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_equipment') }}">Gestion EDT</a>
                     </li>
 
                         {% endif %}
@@ -50,6 +48,9 @@
 
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_preference') }}">Mes dispo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_equipment_request') }}">Demandes matériel</a>
                     </li>
                     
                         {% endif %}
