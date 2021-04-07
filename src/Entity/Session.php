@@ -44,12 +44,18 @@ class Session
      */
     private $preferences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=EquipmentRequest::class, mappedBy="session", orphanRemoval=true)
+     */
+    private $equipmentRequests;
+
 
     public function __construct()
     {
         $this->days = new ArrayCollection();
         $this->attributions = new ArrayCollection();
         $this->preferences = new ArrayCollection();
+        $this->equipmentRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,6 +171,36 @@ class Session
             // set the owning side to null (unless already changed)
             if ($preference->getSession() === $this) {
                 $preference->setSession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EquipmentRequest[]
+     */
+    public function getEquipmentRequests(): Collection
+    {
+        return $this->equipmentRequests;
+    }
+
+    public function addEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if (!$this->equipmentRequests->contains($equipmentRequest)) {
+            $this->equipmentRequests[] = $equipmentRequest;
+            $equipmentRequest->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if ($this->equipmentRequests->removeElement($equipmentRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($equipmentRequest->getSession() === $this) {
+                $equipmentRequest->setSession(null);
             }
         }
 

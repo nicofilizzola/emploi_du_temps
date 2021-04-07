@@ -49,6 +49,7 @@ class Subject
     {
         $this->attributions = new ArrayCollection();
         //$this->setCode();
+        $this->equipmentRequests = new ArrayCollection();
     }
 
     public function __toString()
@@ -143,6 +144,11 @@ class Subject
     // Attribute not in database, only used for display
     private $code;
 
+    /**
+     * @ORM\OneToMany(targetEntity=EquipmentRequest::class, mappedBy="subject", orphanRemoval=true)
+     */
+    private $equipmentRequests;
+
 
     public function getCode(){
         return $this->code;
@@ -150,5 +156,35 @@ class Subject
 
     public function setCode(){
         $this->code = $this->PPN . '_S' . $this->semester;
+    }
+
+    /**
+     * @return Collection|EquipmentRequest[]
+     */
+    public function getEquipmentRequests(): Collection
+    {
+        return $this->equipmentRequests;
+    }
+
+    public function addEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if (!$this->equipmentRequests->contains($equipmentRequest)) {
+            $this->equipmentRequests[] = $equipmentRequest;
+            $equipmentRequest->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if ($this->equipmentRequests->removeElement($equipmentRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($equipmentRequest->getSubject() === $this) {
+                $equipmentRequest->setSubject(null);
+            }
+        }
+
+        return $this;
     }
 }

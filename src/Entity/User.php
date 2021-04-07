@@ -58,10 +58,16 @@ class User implements UserInterface
      */
     private $preferences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=EquipmentRequest::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $equipmentRequests;
+
     public function __construct()
     {
         $this->attributions = new ArrayCollection();
         $this->preferences = new ArrayCollection();
+        $this->equipmentRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,6 +229,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($preference->getUser() === $this) {
                 $preference->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EquipmentRequest[]
+     */
+    public function getEquipmentRequests(): Collection
+    {
+        return $this->equipmentRequests;
+    }
+
+    public function addEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if (!$this->equipmentRequests->contains($equipmentRequest)) {
+            $this->equipmentRequests[] = $equipmentRequest;
+            $equipmentRequest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipmentRequest(EquipmentRequest $equipmentRequest): self
+    {
+        if ($this->equipmentRequests->removeElement($equipmentRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($equipmentRequest->getUser() === $this) {
+                $equipmentRequest->setUser(null);
             }
         }
 

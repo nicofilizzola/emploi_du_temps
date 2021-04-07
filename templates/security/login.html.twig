@@ -2,11 +2,11 @@
 
 {% block body %}
 
-    {# {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% if error %}
+        <div class="mx-auto col-md-9 alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
+    {# {% if app.user %}
         <div class="mb-3">
             You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
@@ -42,7 +42,7 @@
             #}
 
             <button class="mt-4 btn btn-primary btn-block" type="submit">
-                Sign in
+                Me connecter
             </button>
         </form>
     </div>
