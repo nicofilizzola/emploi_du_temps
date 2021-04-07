@@ -45,7 +45,7 @@ class EquipmentRequest
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipment::class, inversedBy="equipmentRequests")
+     * @ORM\ManyToOne(targetEntity=Equipment::class, inversedBy="equipmentRequests")
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipment;

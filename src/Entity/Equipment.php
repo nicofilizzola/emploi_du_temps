@@ -29,6 +29,11 @@ class Equipment
      */
     private $equipmentRequests;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $category;
+
     public function __construct()
     {
         $this->equipmentRequests = new ArrayCollection();
@@ -77,6 +82,18 @@ class Equipment
                 $equipmentRequest->setEquipment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

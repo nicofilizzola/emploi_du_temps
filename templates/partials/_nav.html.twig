@@ -24,6 +24,10 @@
                         <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('app_equipment') }}">Matériel disponible</a>
+                    </li>
+
                         {% endif %}
 
                         {% if 'ROLE_DIR' in app.user.roles %}

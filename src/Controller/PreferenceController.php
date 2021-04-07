@@ -261,7 +261,7 @@ class PreferenceController extends AbstractController
         // CSRF Validation
         if ($this->isCsrfTokenValid('app_preference_delete_all', $req->request->get('_token'))) {
             
-            // Delete all preference
+            // Delete all preferences
             $prefState = $req->request->get('preferenceState');
             if ($prefState == 'preference') {
                 $preferences = $this->preferenceRepo->findBy(['state' => 1]);

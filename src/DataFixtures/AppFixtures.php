@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Equipment;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Event;
@@ -137,7 +138,28 @@ class AppFixtures extends Fixture
         $user->setPassword('$argon2id$v=19$m=65536,t=4,p=1$OTdodGJhOVZWQ1gzSDVqMA$qR7aIO64e8oPqKxDvL/mQOSkBL3o4TAEVyjC56nR1TI');
         $user->setRoles(["ROLE_","ROLE_PRO","ROLE_DIR","ROLE_MAN"]);
         
+        $om->persist($user);
 
+
+        $equipments = [
+            ['name' => 'Suite Adobe', 'category' => 'Logiciel'],
+            ['name' => 'Blender', 'category' => 'Logiciel'],
+            ['name' => 'Imprimante 3D', 'category' => 'Matériel physique'],
+            ['name' => 'Linux - Ubuntu', 'category' => 'Système d\'exploitation'],
+            ['name' => 'Caméra(s)', 'category' => 'Matériel physique'],
+            ['name' => 'Stabilisateur(s)', 'category' => 'Matériel physique'],
+            ['name' => 'Appareil(s) photo', 'category' => 'Matériel physique'],
+            ['name' => 'Microphone(s)', 'category' => 'Matériel physique'],
+            ['name' => 'Ordinateurs Mac - MacOS', 'category' => 'Système d\'exploitation'],
+            // etc
+        ];
+        foreach ($equipments as $element) {
+            $equipment = new Equipment;
+            $equipment->setName($element['name']);
+            $equipment->setCategory($element['category']);
+            
+            $om->persist($equipment);
+        }
 
 
 

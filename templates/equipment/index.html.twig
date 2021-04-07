@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="mx-auto p-5 col-md-9 bg-light rounded">
+        <h3 class="mb-3 text-center">Liste de matériel disponible dans le département</h3>
+
+        {% if equipments is empty %}
+
+        <small class="text-muted">La liste de matériel est vide. Ajoutez-en !</small>
+
+        {% else %}
+
+
+        {{ form_start(equipmentsForm) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(equipmentsForm.category) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(equipmentsForm.name) }}
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-block">Ajouter du matériel</button>
+        {{ form_end(equipmentsForm) }}
+
+        <div class="mt-4 row">
+            <div class="col-md-6">
+                <label>Recherche spécifique :</label>
+            </div>
+        </div>
+        <div class="mb-2 form-control d-flex align-items-center justify-content-between">
+            <input class="w-100" type="text" placeholder="Chercher du matériel..." id="js-equipment-searchbar">
+            <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
+        </div>
+
+        <table class="mt-4 w-100">
+            <thead class="bg-dark text-light">
+                <th class="px-2 py-3">Catégorie</th>
+                <th class="px-2 py-3">Nom</th>
+                <th class="px-2 py-3">Actions</th>
+            </thead>
+            <tbody>
+            {% for equipment in equipments %}
+                <tr class="js-equipment-result hoverable">
+                    <td class="p-2"> {{ equipment.category }}</td>
+                    <td class="p-2"> {{ equipment.name }}</td>
+                    <td class="p-2">
+                        <a 
+                            class="btn btn-danger btn-block"
+                            onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer {{ equipment.name }} de la liste de matétiel ?')) { document.getElementById('js-equipment-delete-{{ equipment.id }}').submit(); }"
+                        >
+                            Supprimer
+                        </a>
+                        {# csrf validation and request type #}
+                        <form id="js-equipment-delete-{{ equipment.id }}" action="{{ path('app_equipment_delete', {id: equipment.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('app_equipment_delete' ~ equipment.id) }}">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+<script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/routes/equipment/index.js') }}" type="text/javascript"></script>
+
+{% endblock %}
