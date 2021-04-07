@@ -14,7 +14,7 @@
 
         {% else %}
 
-        <h3 class="mb-3 text-center">Vous n'avez aucune demande de matériel pour l'année scolaire {{ latestSession.start | date('Y') }} - {{ latestSession.until | date('Y') }}. Faites-en une <a href="#">en cliquant ici !</a></h3>
+        <h3 class="mb-3 text-center">Vous n'avez aucune demande de matériel pour l'année scolaire {{ latestSession.start | date('Y') }} - {{ latestSession.until | date('Y') }}. Faites-en une <a href="{{ path('app_equipment_request_create') }}">en cliquant ici !</a></h3>
 
         {% endif %}
     {# If there are equipmentRequests recorded for this user in the current session #}

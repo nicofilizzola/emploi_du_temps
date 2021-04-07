@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Equipment;
 use App\Form\EquipmentType;
-use App\Repository\AttributionRepository;
-use App\Repository\EquipmentRepository;
-use App\Repository\EquipmentRequestRepository;
+use App\Entity\EquipmentRequest;
 use App\Repository\SessionRepository;
+use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AttributionRepository;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\EquipmentRequestRepository;
+use App\Repository\SubjectRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,14 +23,16 @@ class EquipmentController extends AbstractController
     private $sessionRepo;
     private $equipmentRequestRepo;
     private $attributionRepo;
+    private $subjectRepo;
 
 
-    public function __construct(EquipmentRepository $equipmentRepo, EntityManagerInterface $em, SessionRepository $sessionRepo, EquipmentRequestRepository $equipmentRequestRepo, AttributionRepository $attributionRepo) {
+    public function __construct(EquipmentRepository $equipmentRepo, EntityManagerInterface $em, SessionRepository $sessionRepo, EquipmentRequestRepository $equipmentRequestRepo, AttributionRepository $attributionRepo, SubjectRepository $subjectRepo) {
         $this->equipmentRepo = $equipmentRepo;
         $this->em = $em;
         $this->sessionRepo = $sessionRepo;
         $this->equipmentRequestRepo = $equipmentRequestRepo;
         $this->attributionRepo = $attributionRepo;
+        $this->subjectRepo = $subjectRepo;
     }
 
     /**
@@ -95,10 +99,17 @@ class EquipmentController extends AbstractController
 
 
     /**
-     * @Route("/equipment/request", name="app_equipment_request")
+     * @Route("/equipment/request", name="app_equipment_request", methods="GET")
      */
     public function request(): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_PRO' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
+
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
 
         $userEquipmentReqs = $this->equipmentRequestRepo->findBy([
@@ -120,12 +131,122 @@ class EquipmentController extends AbstractController
 
 
     /**
-     * @Route("/equipment/request/create", name="app_equipment_request_create")
+     * @Route("/equipment/request/create", name="app_equipment_request_create", methods="GET|POST")
      */
-    public function createRequest(): Response
+    public function createRequest(Request $req): Response
     {
-        return $this->render('equipment/index.html.twig', [
-            'controller_name' => 'EquipmentController',
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
+        $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+
+        $userAttributions = $this->attributionRepo->findBy([
+            'session' => $latestSession,
+            'user' => $this->getUser()
+        ]);
+
+        // Error handler : If user has no attributions for the current session
+        if (empty($userAttributions)) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
+        $equipments = $this->equipmentRepo->findBy([], ['category' => 'ASC']);
+
+        
+        // If form sent
+        if ($req->isMethod('POST')) {
+
+            $data = $req->request;
+            
+            // Error handler: Client side validation breached
+                // subject input null
+                // equipment input null
+                // TO DO: user checked class different from chosen subject
+            if (
+                is_null($data->get('subject')) || 
+                is_null($data->get('equipment'))
+            ) {
+                $this->addFlash('danger', 'Votre requête est invalide');
+                return $this->redirectToRoute('app_equipment_request_create');
+
+            }
+
+            // Error handler: No classes selected
+            $checkedAmount = 0;
+            foreach ($data as $key => $value) {
+                if (str_contains($key, 'subject-')) {
+                    $checkedAmount++;
+                }
+            }
+            if ($checkedAmount <= 0) {
+
+                $this->addFlash('danger', 'Vous n\'avez choisi aucun cours pour votre demande de matériel.');
+                return $this->redirectToRoute('app_equipment_request_create');
+            }
+
+            // Error handler: Note not filled
+            if (is_null($data->get('note'))) {
+
+                $this->addFlash('danger', 'Vous n\'avez pas justifié votre demande (Voir le dernier champ).');
+                return $this->redirectToRoute('app_equipment_request_create');
+            }
+
+            // set tds and tps
+            $checkboxesChecked = [];
+            $td = [];
+            $tp = [];
+            foreach ($data as $key => $value) {
+                if (str_contains($key, 'subject-')) {
+                    array_push($checkboxesChecked, $key);
+                }
+            }
+            
+            foreach ($checkboxesChecked as $key) {
+                // get only checkbox data from the selected subject
+                // example: value="subject-5-td-3"
+                $checkboxValue = explode('-', $key);
+
+                if ($checkboxValue[1] == $data->get('subject')) {
+                    if ($checkboxValue[2] == 'td') {
+                        array_push($td, $checkboxValue[3]);
+
+                    } else if ($checkboxValue[2] == 'tp') {
+                        array_push($tp, $checkboxValue[3]);
+
+                    }
+                }
+            }
+
+            // Instance class
+            $equipmentRequest = new EquipmentRequest;
+            $equipmentRequest->setSession($latestSession);
+            $equipmentRequest->setUser($this->getUser());
+            $equipmentRequest->setEquipment($this->equipmentRepo->findOneBy(['id' => $data->get('equipment')]));
+            $equipmentRequest->setSubject($this->subjectRepo->findOneBy(['id' => $data->get('subject')]));
+            $equipmentRequest->setTds($td);
+            $equipmentRequest->setTps($tp);
+            $equipmentRequest->setNote($data->get('note'));
+
+            
+
+            $this->em->persist($equipmentRequest);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Votre demande de matériel a étée envoyée !');
+            return $this->redirectToRoute('app_equipment_request_create');
+
+        }
+        
+        // if submitted subject value not in user attributions => exception
+
+
+        return $this->render('equipment/createRequest.html.twig', [
+            'userAttributions' => $userAttributions,
+            'equipments' => $equipments
         ]);
     }
 }

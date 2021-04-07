@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="mx-auto p-5 col-md-9 bg-light rounded">
+        <form action="{{ path('app_equipment_request_create') }}" method="post">
+
+    {# If professor only has one subject attributed #}
+    {% if userAttributions | length == 1 %}
+
+            <label for="subject">Matière concernée :</label>
+            <select name="subject" class="form-control" disabled="disabled" id="js-subject-select">
+                <option value="{{ userAttributions[0].subject.id }}">{{ userAttributions[0].subject.name }} (Semestre {{ userAttributions[0].subject.semester }})</option>    
+            </select>
+
+    {# If professor has multiple subjects #}
+    {% else %}
+
+            <label for="subject">Matière concernée :</label>
+            <select name="subject" class="form-control" id="js-subject-select">
+    {% for attribution in userAttributions %}
+                <option value="{{ attribution.subject.id }}">{{ attribution.subject.name }} (Semestre {{ attribution.subject.semester }})</option>  
+    {% endfor %}  
+            </select>
+
+    {% endif %}
+
+
+    {# WHAT EQUIPMENT #}
+            <div class="mt-5 row">
+                <div class="col-md-12">
+                    <p>Qu'est-ce qu'il vous faut ?</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="equipment" class="form-control">
+                    {% for equipment in equipments %}
+                        <option value="{{ equipment.id }}">{{equipment.category}} : {{ equipment.name }}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+        {# WHICH CLASSES #}
+            <div class="mt-5 row">
+                <div class="col-md-12">
+                    <p>Pour quel(s) cours avez-vous besoin de matériel ?</p>
+                </div>
+            </div>
+        
+    {% for attribution in userAttributions %}
+    {# TD classes #}
+        {# Only display first one by default as first subject is selected by default #}
+        {% if loop.first %}
+            <div class="row js-classes" id="js-classes-{{ attribution.subject.id }}">
+
+        {% else %}
+            <div class="row js-classes" id="js-classes-{{ attribution.subject.id }}" hidden="hidden">
+
+        {% endif %}
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <small class="text-muted">En cours de TD :</small>
+                        </div>
+                    </div>
+        {% for i in 1..attribution.tdAmount %}
+                    <div class="mr-1 my-1 border border-primary rounded p-3 d-inline-block pointer" onclick="this.children[1].checked = !this.children[1].checked;">
+                        <label class="m-0 pointer user-select-none">Cours de TD  n°{{ i }}</label>
+                        <input type="checkbox" name="subject-{{ attribution.subject.id }}-td-{{ i }}">
+                    </div>
+        {% endfor %}
+                </div>
+
+        {# TP Classes #}
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <small class="text-muted">En cours de TP :</small>
+                        </div>
+                    </div>
+
+        {% for i in 1..attribution.tpAmount %}
+                    <div class="mr-1 my-1 border border-primary rounded p-3 d-inline-block pointer" onclick="this.children[1].checked = !this.children[1].checked;">
+                        <label class="m-0 pointer user-select-none">Cours de TP  n°{{ i }}</label>
+                        <input type="checkbox" name="subject-{{ attribution.subject.id }}-tp-{{ i }}">
+                    </div> 
+        {% endfor %}
+                </div>
+            </div>
+    {% endfor %}
+
+    
+            <div class="mt-5 row">
+                <div class="col-md-12">
+                    <p><span class="text-danger font-weight-bold">IMPORTANT : </span>Justifiez dans la case ci-dessous la pertinence de votre demande pour l'enseignement de la matière.</p>
+                    <textarea name="note" class="form-control" placeholder="E.g. : J'ai besoin des caméras parce qu'on va travailler sur un projet pratique de tournage..."></textarea>
+                </div>
+            </div>
+
+            <button class="mt-5 btn btn-primary btn-block">Envoyer ma demande</button>
+        </form>
+
+    </div>
+           
+</div>
+
+
+<script src="{{ asset('js/routes/equipment/createRequest.js') }}" type="text/javascript"></script>
+
+{% endblock %}
