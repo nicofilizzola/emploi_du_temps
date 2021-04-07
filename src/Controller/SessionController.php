@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Controller\Traits\Calendar;
 use App\Entity\Day;
 use App\Entity\Session;
 use App\Form\SessionType;
@@ -17,6 +18,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SessionController extends AbstractController
 {
+    use Calendar;
+
+
     private $em;
     private $sessionRepo;
     private $dayRepo;
@@ -30,26 +34,6 @@ class SessionController extends AbstractController
         $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
         $this->eventRepo = $eventRepo;
-    }
-
-    public function getMonthsDays($days)
-    {
-        $monthsDays = [
-            // 12 months max
-            [], [], [], [], [], [], [], [], [], [], [], [], []
-        ];
-        $i = 0;
-        foreach ($days as $key => $day) {
-            $dayMonth = date('Ym', $day->getDate()->getTimestamp());
-
-            if (isset($prevDayMonth) && $dayMonth > $prevDayMonth) {
-                $i++;
-            }
-
-            array_push($monthsDays[$i], $day);
-            $prevDayMonth = $dayMonth;
-        };
-        return $monthsDays;
     }
 
     /**

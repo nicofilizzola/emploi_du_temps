@@ -240,8 +240,6 @@ class EquipmentController extends AbstractController
             return $this->redirectToRoute('app_equipment_request_create');
 
         }
-        
-        // if submitted subject value not in user attributions => exception
 
 
         return $this->render('equipment/createRequest.html.twig', [

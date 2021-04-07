@@ -17,13 +17,13 @@
                         {# MANAGER ONLY #}
 
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_user') }}">Personnel</a>
+                        <a class="nav-link text-light" href="{{ path('app_user') }}">Utilisateurs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_equipment') }}">Matériel dispo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_equipment') }}">Gestion EDT</a>
+                        <a class="nav-link text-light" href="{{ path('app_manager') }}">Gestion EDT</a>
                     </li>
 
                         {% endif %}
@@ -36,9 +36,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ path('app_attribution') }}">Maquette</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{{ path('app_session_create') }}">Nouvelle année</a>
                     </li>
 
                         {% endif %}

@@ -242,10 +242,10 @@
 
         {# EVENT BAR #}
         <div class="mx-1 p-3 col-md-3 bg-dark rounded">
-            <button class="btn btn-success btn-block d-flex justify-content-between p-3">
+            {# <button class="btn btn-success btn-block d-flex justify-content-between p-3">
                 <span>Assigner</span>   
                 <img class="btn-icon" src="{{ asset('img/pen-solid.svg') }}" alt="Créer manuellement"> 
-            </button>
+            </button> #}
             <button class="btn btn-dark border-light btn-block d-flex justify-content-between px-3 py-2" id="js-eraser-mode-btn">
                 <span>Mode gomme</span>   
                 <img class="btn-icon" src="{{ asset('img/eraser-solid.svg') }}" alt="Créer manuellement"> 
@@ -269,6 +269,11 @@
     <div class="my-2 row">
         <div class="col-md-9 mx-auto px-0">
             <button class=" btn btn-primary btn-block p-5" id="js-session-form-submit">Sauvegarder les changements</button>
+        </div>
+    </div>
+    <div class="my-2 row">
+        <div class="col-md-9 mx-auto px-0">
+            <a href="{{ path('app_session_create') }}" class="btn btn-success btn-block" id="js-session-form-submit">Créer une nouvelle année scolaire</a>
         </div>
     </div>
 
