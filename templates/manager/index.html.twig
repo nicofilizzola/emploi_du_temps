@@ -231,6 +231,52 @@
 
             </div>
         </div>
+
+
+
+        {# EQUIPMENT REQUESTS #}
+        <div class="mt-2 row">
+            <div class="col-md-12 bg-dark text-light rounded p-3">
+
+                {# If current session attributions not sent yet #}
+                {% if professors is empty %}
+                <h3>La gestion des utilisateurs est indisponible pour le moment...</h3>
+                <p>Le responsable de dîplome n'a pas encore assigné les cours pour les enseignants de cette année...</p>
+
+                {# If all set #}
+                {% else %}
+                <h5 class="mb-3">Demandes de matériel</h5>
+                <div class="mt-2 mb-4 form-control d-flex align-items-center justify-content-between">
+                    <input type="text" placeholder="Chercher une demande..." id="js-user-searchbar">
+                    <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
+                </div>
+
+                <div class="custom-scrollbar maxh-200 pr-1">
+                    {% for equipmentRequest in equipmentRequests %}
+                    <div class="btn btn-block border border-light text-light d-flex justify-content-between align-items-center js-user-result cursor-initial">
+                        <span class="text-left d-inline-block">{{ equipmentRequest.user }} - {{ equipmentRequest.equipment.name }} - {{ equipmentRequest.subject }} - 
+                        {% if equipmentRequest.tds is empty %}
+                        {% else %}
+                            {% for td in equipmentRequest.tds %}
+                                TD{{ td }}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if equipmentRequest.tds is empty %}
+                        {% else %}
+                            {% for tp in equipmentRequest.tps %}
+                                TP{{ tp }}
+                            {% endfor %}
+                        {% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+
+            </div>
+        </div>
         
 
 

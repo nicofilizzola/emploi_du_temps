@@ -9,6 +9,7 @@ use App\Controller\Traits\Calendar;
 use App\Repository\EventRepository;
 use App\Repository\SessionRepository;
 use App\Repository\AttributionRepository;
+use App\Repository\EquipmentRequestRepository;
 use App\Repository\PreferenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,14 +25,16 @@ class ManagerController extends AbstractController
     private $userRepo;
     private $attributionRepo;
     private $preferenceRepo;
+    private $equipmentRequestRepo;
 
-    public function __construct(SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo, UserRepository $userRepo, AttributionRepository $attributionRepo, PreferenceRepository $preferenceRepo) {
+    public function __construct(SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo, UserRepository $userRepo, AttributionRepository $attributionRepo, PreferenceRepository $preferenceRepo, EquipmentRequestRepository $equipmentRequestRepo) {
         $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
         $this->eventRepo = $eventRepo;
         $this->userRepo = $userRepo;
         $this->attributionRepo = $attributionRepo;
         $this->preferenceRepo = $preferenceRepo;
+        $this->equipmentRequestRepo = $equipmentRequestRepo;
     }
 
     /**
@@ -53,9 +56,6 @@ class ManagerController extends AbstractController
         }
 
         $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
-        $monthsDays = $this->getMonthsDays($days);
-        $events = $this->eventRepo->findAll();
-
         $currentAttributions = $this->attributionRepo->findBy(['session' => $latestSession]);
         
         // Get all professors ids within currentAttributions
@@ -66,16 +66,14 @@ class ManagerController extends AbstractController
             };
         }
 
-        // Get professors from professorsIds
-        $professors = $this->userRepo->findBy(['id' => $professorIds]);
-
 
 
         return $this->render('manager/index.html.twig', [
             'session' => $latestSession,
-            'monthsDays' => $monthsDays,
-            'events' => $events,
-            'professors' => $professors
+            'monthsDays' => $this->getMonthsDays($days),
+            'events' => $this->eventRepo->findAll(),
+            'professors' => $this->userRepo->findBy(['id' => $professorIds]),
+            'equipmentRequests' => $this->equipmentRequestRepo->findBy(['session' => $latestSession])
         ]);
     }
 
@@ -89,7 +87,7 @@ class ManagerController extends AbstractController
     /**
      * @Route("/user/{id<\d+>}", name="app_user_view", methods="GET")
      */
-    public function view(User $user): Response
+    public function view(User $user, EquipmentRequestRepository $equipmentRequestRepo): Response
     {   
         // Error handler : If user has no access or isn't connected
         if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
@@ -107,17 +105,26 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $userPrefs = $this->preferenceRepo->findBy([
-            'session' => $latestSession,
-            'user' => $user
-        ]);
+
 
         return $this->render('user/view.html.twig', [
             'user' => $user,
             'session' => $latestSession,
             'attributions' => $userAttributions,
-            'preferences' => $userPrefs
+            'preferences' => $this->preferenceRepo->findBy([
+                'session' => $latestSession,
+                'user' => $user,
+                'state' => true
+            ]),
+            'unavailabilities' => $this->preferenceRepo->findBy([
+                'session' => $latestSession,
+                'user' => $user,
+                'state' => false
+            ]),
+            'equipmentRequests' => $equipmentRequestRepo->findBy([
+                'user' => $user,
+                'session' => $latestSession
+            ])
         ]);
-
     }
 }

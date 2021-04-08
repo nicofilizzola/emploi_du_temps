@@ -119,7 +119,7 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/user/{id<\d+>}/delete", name="app_user_delete", methods="DELETE")
+     * @Route("/user/{id</d+>}/delete", name="app_user_delete", methods="DELETE")
      */
     public function delete(User $user, Request $req): Response
     {   

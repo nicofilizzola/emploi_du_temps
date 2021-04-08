@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div class="row">
+    <div class="mx-auto col-md-9 bg-light rounded p-5">
+        
+        {{ form_start(subjectForm) }}
+            {{ form_row(subjectForm.name) }}
+            {{ form_row(subjectForm.PPN) }}
+            {{ form_row(subjectForm.CA) }}
+            {{ form_row(subjectForm.semester) }}
+            <button class="btn btn-primary btn-block">Ajouter matière</button>
+        {{ form_end(subjectForm) }}
+
+
+    </div>
+</div>
+
+<script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/routes/subject/index.js') }}" type="text/javascript"></script>
+{% endblock %}

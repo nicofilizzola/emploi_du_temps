@@ -47,8 +47,19 @@ class AttributionController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $attributionList = $this->attributionRepo->findBy(['session' => $latestSession]);
+        $attributionListDoctrine = $this->attributionRepo->findBy(['session' => $latestSession]);
         // sort by professor name
+
+        $attributionList = [];
+        // 6 is higher semester
+        for ($i = 1; $i <= 6; $i++) {
+            foreach ($attributionListDoctrine as $value) {
+                if ($value->getSubject()->getSemester() == $i) {
+                    array_push($attributionList, $value);
+                }
+            }
+        }
+        
 
         
         

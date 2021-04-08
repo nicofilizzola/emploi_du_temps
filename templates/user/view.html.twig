@@ -7,27 +7,45 @@
     
         <h3>Fiche enseignant : {{ user.firstName }} {{ user.lastName }} ({{ session.start | date('Y') }} - {{ session.until | date('Y') }})</h3>
 
-        <h5 class="mt-4">Matières enseignées</h5>
-        <ul>
-            {% for attribution in attributions %}
-            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
-            {% endfor %}
-        </ul>
+        <h5 class="mt-4">Matières enseignées :</h5>
+        {% for attribution in attributions %}
+        <button class="d-inline-block btn btn-dark"><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</button>
+        {% endfor %}
 
-        <h5 class="mt-4">Préférences</h5>
-        <ul>
-            {% for preference in preferences %}
-            <li>{{ preference }}</li>
-            {% endfor %}
-        </ul>
+        <h5 class="mt-4">Préférences :</h5>
+        <div class="row px-3">
+            <div class="mr-2 col-md-5 bg-success text-light rounded p-3 transition-default" onmouseover="this.classList.add('col-md-6')" onmouseleave="this.classList.remove('col-md-6')">
+                <h6>Disponibilités :</h6>
+                {% if unavailabilities is empty %}
+                <p>&#10005; Cet utilisateur n'a pas encore renseigné ses disponibilités pour cette année.</p>
+                {% else %}
+                <ul>
+                    {% for preference in preferences %}
+                    <li>{{ preference }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
 
-        <h5 class="mt-4">Demandes de matériel</h5>
-        <ul>
-            {% for attribution in attributions %}
-            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
-            {% endfor %}
-        </ul>
+            <div class="col-md-5 bg-danger text-light rounded p-3 transition-default" onmouseover="this.classList.add('col-md-6')" onmouseleave="this.classList.remove('col-md-6')">
+                <h6>Indisponibilités :</h6>
+                {% if unavailabilities is empty %}
+                <p>&#10005; Cet utilisateur n'a pas encore renseigné ses indisponibilités pour cette année.</p>
+                {% else %}
+                <ul>
+                    {% for preference in unavailabilities %}
+                    <li>{{ preference }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        
 
+        <h5 class="mt-4">Demandes de matériel :</h5>
+        {% for equipmentRequest in equipmentRequests %}
+        <button class="d-inline-block btn btn-light border border-dark"><b>{{ equipmentRequest.equipment.name }}</b> en {{ equipmentRequest.subject }}</button>
+        {% endfor %}
     </div>
 </div>
 
