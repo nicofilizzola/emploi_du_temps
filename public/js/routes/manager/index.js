@@ -15,3 +15,9 @@ searchbar(userSearchbar, userResults);
 var eventSearchbar = document.getElementById('js-event-searchbar');
 var eventResults = document.querySelectorAll('.js-event-result');
 searchbar(eventSearchbar, eventResults);
+// Equipment Request Searchbar
+var equipmentReqSearchbar = document.getElementById('js-equipmentReq-searchbar');
+var equipmentReqResults = document.querySelectorAll('.js-equipmentReq-result');
+searchbar(equipmentReqSearchbar, equipmentReqResults);
+
+console.log(equipmentReqResults);

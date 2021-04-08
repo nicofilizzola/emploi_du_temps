@@ -1,0 +1,23 @@
+{# Verify if week matches preference:
+    startWeek (all weeks selected)
+    current week same as startWeek
+    current week bigger than or startWeek and lesser than or endWeek   
+    #}
+{% if 
+    pref.startWeek == 100 or
+    pref.startWeek == weekIndex or 
+    weekIndex >= pref.startWeek and weekIndex <= pref.endWeek
+%}
+
+    
+    {# Verify excepts #}
+    {% if 
+        pref.ExceptEndWeek is null and weekIndex != pref.ExceptStartWeek or
+        pref.ExceptEndWeek is not null and weekIndex < pref.ExceptStartWeek or
+        pref.ExceptEndWeek is not null and weekIndex > pref.ExceptEndWeek
+    %}
+
+        <small>{{ pref.user }}</small>
+
+    {% endif %}
+{% endif %}

@@ -16,7 +16,7 @@
         <div class="row px-3">
             <div class="mr-2 col-md-5 bg-success text-light rounded p-3 transition-default" onmouseover="this.classList.add('col-md-6')" onmouseleave="this.classList.remove('col-md-6')">
                 <h6>Disponibilités :</h6>
-                {% if unavailabilities is empty %}
+                {% if preferences is empty %}
                 <p>&#10005; Cet utilisateur n'a pas encore renseigné ses disponibilités pour cette année.</p>
                 {% else %}
                 <ul>

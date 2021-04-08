@@ -73,7 +73,15 @@ class ManagerController extends AbstractController
             'monthsDays' => $this->getMonthsDays($days),
             'events' => $this->eventRepo->findAll(),
             'professors' => $this->userRepo->findBy(['id' => $professorIds]),
-            'equipmentRequests' => $this->equipmentRequestRepo->findBy(['session' => $latestSession])
+            'equipmentRequests' => $this->equipmentRequestRepo->findBy(['session' => $latestSession]),
+            'preferences' => $this->preferenceRepo->findBy([
+                'state' => true,
+                'session' => $latestSession
+            ]),
+            'unavailabilities' => $this->preferenceRepo->findBy([
+                'state' => false,
+                'session' => $latestSession
+            ])
         ]);
     }
 

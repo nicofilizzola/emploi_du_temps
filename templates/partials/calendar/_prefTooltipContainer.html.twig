@@ -1,0 +1,18 @@
+<img class="btn-icon js-preference-trigger" id="js-av-{{ day.id }}" src="{{ asset('img/check-solid.svg') }}" alt="Disponibilités du jour">
+<img class="btn-icon js-preference-trigger" id="js-unav-{{ day.id }}" src="{{ asset('img/unav-solid.svg') }}" alt="Indisponibilités du jour">
+
+<div class="position-absolute">
+    <div class="bg-success rounded p-3 transparent transition-default js-preference-block" id="js-av-{{ day.id }}">
+{% for pref in preferences %}
+    {% include 'partials/calendar/_prefTooltip.html.twig' %}
+
+{% endfor %}
+    </div>
+    
+    <div class="bg-danger rounded p-3 transparent transition-default js-preference-block" id="js-unav-{{ day.id }}">
+{% for pref in unavailabilities %}
+    {% include 'partials/calendar/_prefTooltip.html.twig' %}
+
+{% endfor %}
+    </div>
+</div>
