@@ -194,4 +194,94 @@ class Preference
 
         return $this;
     }
+
+    public function __toString()
+    {
+        // WEEK STRING
+        $weekString = "";
+        // All weeks
+        if ($this->startWeek == 100) {
+            $weekString = 'Toute l\'année ';
+
+            $weekString = $this->weekExceptString($weekString);
+
+        } else {
+            // Single week
+            if (is_null($this->endWeek)) {
+                $weekString = 'La semaine ' . strval($this->startWeek);
+
+            // Multiple weeks
+            } else {
+                $weekString = 'De la semaine ' . strval($this->startWeek) . ' à la semaine ' . strval($this->endWeek);
+
+                $weekString = $this->weekExceptString($weekString);
+            }
+        }
+        $weekString .= ': ';
+
+        // DAY STRING
+        $dayString = "";
+        $weekdays = [
+            'lundi',
+            'mardi',
+            'mercredi',
+            'jeudi',
+            'vendredi'
+        ];
+
+        foreach ($this->weekdays as $value) {
+
+            if ($value !== end($this->weekdays)) {
+                $dayString .= $weekdays[$value] . ', ';
+            } else {
+                $dayString .= 'et ' . $weekdays[$value] . ' ';
+            }
+        }
+
+        // TIME STRING
+        $timeString = "";
+        $times = [
+            'de 8h00 à 9h30',
+            'de 9h30 à 11h00',
+            'de 11h00 à 12h30',
+            'de 13h30 à 15h00',
+            'de 15h00 à 16h30',
+            'de 16h30 à 18h00',
+            'de 18h00 à 19h30'
+        ];
+
+        foreach ($this->times as $value) {
+
+            if ($value !== end($this->times)) {
+                $timeString .= $times[$value] . ', ';
+            } else {
+                $timeString .= 'et ' . $times[$value];
+            }
+        }
+
+        $string = $weekString . $dayString . $timeString;
+        return $string;
+    }
+
+
+    private function weekExceptString($weekString) {
+        // Except
+        if (!is_null($this->ExceptStartWeek)) {
+            $weekString .= ' (sauf ';
+
+            // One week except
+            if (is_null($this->ExceptEndWeek)) {
+                $weekString .= 'la semaine ' . strval($this->ExceptStartWeek);
+
+            // Multiple week except
+            } else {
+                $weekString .= 'de la semaine ' . strval($this->ExceptStartWeek) . ' jusqu\'à la semaine ' .  strval($this->ExceptEndWeek);
+            }
+        
+            $weekString .= ') ';
+        }
+        return $weekString;
+    }
+
+    
 }

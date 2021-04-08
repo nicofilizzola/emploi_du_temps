@@ -9,6 +9,7 @@ use App\Controller\Traits\Calendar;
 use App\Repository\EventRepository;
 use App\Repository\SessionRepository;
 use App\Repository\AttributionRepository;
+use App\Repository\PreferenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,13 +23,15 @@ class ManagerController extends AbstractController
     private $eventRepo;
     private $userRepo;
     private $attributionRepo;
+    private $preferenceRepo;
 
-    public function __construct(SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo, UserRepository $userRepo, AttributionRepository $attributionRepo) {
+    public function __construct(SessionRepository $sessionRepo, DayRepository $dayRepo, EventRepository $eventRepo, UserRepository $userRepo, AttributionRepository $attributionRepo, PreferenceRepository $preferenceRepo) {
         $this->sessionRepo = $sessionRepo;
         $this->dayRepo = $dayRepo;
         $this->eventRepo = $eventRepo;
         $this->userRepo = $userRepo;
         $this->attributionRepo = $attributionRepo;
+        $this->preferenceRepo = $preferenceRepo;
     }
 
     /**
@@ -104,10 +107,16 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $userPrefs = $this->preferenceRepo->findBy([
+            'session' => $latestSession,
+            'user' => $user
+        ]);
+
         return $this->render('user/view.html.twig', [
             'user' => $user,
             'session' => $latestSession,
-            'attributions' => $userAttributions
+            'attributions' => $userAttributions,
+            'preferences' => $userPrefs
         ]);
 
     }

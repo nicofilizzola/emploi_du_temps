@@ -303,7 +303,7 @@
                     <ul class="overflow-auto preference-list pl-0 pr-1 custom-scrollbar">
         {% for preference in preferences %}
                         <li class="p-2 user-select-none rounded js-availability-result d-flex justify-content-between">
-                            <span>{{ preference.note }}</span>
+                            <span>{{ preference }}</span>
                             <a 
                                 class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center" 
                                 onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ preference.id }}').submit();"
@@ -350,7 +350,7 @@
 
         {% for unavailability in unavailabilities %}
                         <li class="p-2 user-select-none rounded js-unavailability-result d-flex justify-content-between">
-                            <span>{{ unavailability.note }}</span>
+                            <span>{{ unavailability }}</span>
                             <a 
                                 class="btn btn-danger rounded-circle btn-icon p-0 d-flex justify-content-center align-items-center" 
                                 onclick="event.preventDefault(); document.getElementById('js-preference-request-{{ unavailability.id }}.submit();')"

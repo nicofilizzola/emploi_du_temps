@@ -78,7 +78,7 @@ class PreferenceController extends AbstractController
         }
 
         foreach ($preferences as $value) {
-            
+                
         }
 
         foreach ($unavailabilities as $value) {
@@ -99,6 +99,61 @@ class PreferenceController extends AbstractController
             'userAttributions' => $userAttributions
         ]);
     }
+
+    private function getPreferenceString($preference) {
+        $weekString = "";
+        // All weeks
+        if ($preference->getStartWeek == 100) {
+            $weekString = 'Toute l\'année ';
+
+            // Except
+            if (!is_null($preference->getExceptStartWeek)) {
+                $weekString += '(sauf ';
+
+                // One week except
+                if (is_null($preference->getExceptEndWeek)) {
+                    $weekString += 'la semaine ' . strval($preference->getExceptStartWeek);
+
+                // Multiple week except
+                } else {
+                    $weekString += 'de la semaine ' . strval($preference->getExceptStartWeek) . 'jusqu\'à la semaine ' .  strval($preference->getExceptEndWeek);
+                }
+            
+                $weekString += ') ';
+            }
+        } else {
+            // Single week
+            if (is_null($preference->getEndWeek)) {
+                $weekString = 'La semaine ' . strval($preference->getStartWeek);
+
+            // Multiple weeks
+            } else {
+                $weekString = 'De la semaine ' . strval($preference->getStartWeek) . ' à la semaine ' . strval($preference->getEndWeek);
+
+                // Except
+                if (!is_null($preference->getExceptStartWeek)) {
+                    $weekString += '(sauf ';
+
+                    // One week except
+                    if (is_null($preference->getExceptEndWeek)) {
+                        $weekString += 'la semaine ' . strval($preference->getExceptStartWeek);
+
+                    // Multiple week except
+                    } else {
+                        $weekString += 'de la semaine ' . strval($preference->getExceptStartWeek) . 'jusqu\'à la semaine ' .  strval($preference->getExceptEndWeek);
+                    }
+                
+                    $weekString += ') ';
+                }
+            }
+        }
+
+        return $weekString;
+    }
+
+
+
+
 
 
     /**

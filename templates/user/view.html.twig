@@ -16,8 +16,8 @@
 
         <h5 class="mt-4">Préférences</h5>
         <ul>
-            {% for attribution in attributions %}
-            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
+            {% for preference in preferences %}
+            <li>{{ preference }}</li>
             {% endfor %}
         </ul>
 
