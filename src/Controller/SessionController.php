@@ -160,7 +160,7 @@ class SessionController extends AbstractController
             
             $this->em->flush();
 
-            $this->addFlash('success', 'Session créée avec succès !');
+            $this->addFlash('success', 'Année scolaire créée avec succès !');
             return $this->redirectToRoute('app_session');
         }
         return $this->render('session/create.html.twig', [

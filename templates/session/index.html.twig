@@ -241,17 +241,18 @@
         </form> 
 
         {# EVENT BAR #}
-        <div class="mx-1 p-3 col-md-3 bg-dark rounded">
+        <div class="mx-1 p-3 col-md-3 bg-dark text-light rounded">
             {# <button class="btn btn-success btn-block d-flex justify-content-between p-3">
                 <span>Assigner</span>   
                 <img class="btn-icon" src="{{ asset('img/pen-solid.svg') }}" alt="Créer manuellement"> 
             </button> #}
+
             <button class="btn btn-dark border-light btn-block d-flex justify-content-between px-3 py-2" id="js-eraser-mode-btn">
                 <span>Mode gomme</span>   
                 <img class="btn-icon" src="{{ asset('img/eraser-solid.svg') }}" alt="Créer manuellement"> 
             </button>
             <div class="mt-2 mb-4 form-control d-flex align-items-center justify-content-between">
-                <input type="text" placeholder="Chercher un événement..." id="js-session-searchbar">
+                <input type="text" placeholder="Chercher un évènement..." id="js-session-searchbar">
                 <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
             </div>
             
@@ -277,13 +278,27 @@
         </div>
     </div>
 
+
+    {# <button class="btn btn-icon position-fixed tooltip">
+        <img class="btn-icon" src="{{ asset('img/question-circle-solid.svg') }}" alt="Signe d'intérrogation">
+
+        <div class="position-absolute">
+            <h5>Pour assigner un évènement :</h5>
+            <p>1) Cliquez sur l'évènement que vous voulez assigner dans la liste ci-dessous ;</p>
+            <p>2) Cliquez sur la date de début de la période à laquelle vous voulez assigner cet évènement ;</p>
+            <p>3) Cliquez sur la date de fin de la période. Toutes les dates entre le debut et la fin recevront l'évènement indiqué.</p>
+            <p>Vous pouvez également utiliser le mode gomme pour supprimer des évènements assignés à la mauvaise date. Mais faites attention, l'outil gomme supprime tous les évènements sur les dâtes séléctionnées.</p>
+        </div>
+    </button> #}
+
+
     <script src="{{ asset('js/functions/searchbar.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/routes/session/index.js') }}" type="text/javascript"></script>
 
     {% else %}
     {# If no sessions #}
-    <div class="row mt-5">  
-    <div class="col-md-6 mx-auto bg-light rounded p-5"> 
+    <div class="row">  
+    <div class="col-md-9 mx-auto bg-light rounded p-5"> 
         <h1 class="text-center">Il n'y a pas d'année scolaire disponible....</h1>
         <h1 class="text-center"><a href="{{ path('app_session_create') }}">Cliquez ici pour en créer une !</a></h1>
         </div>

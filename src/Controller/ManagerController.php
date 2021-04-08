@@ -44,12 +44,27 @@ class ManagerController extends AbstractController
 
 
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
+        if (is_null($latestSession)) {
+            $this->addFlash('warning', 'L\'espace gestionnaire EDT est indisponible car l\'année scolaire n\'a pas encore été créée...');
+            return $this->redirectToRoute('app_session');
+        }
+
         $days = $this->dayRepo->findBy(['session' => $latestSession->getId()], ['id' => 'ASC']);
         $monthsDays = $this->getMonthsDays($days);
         $events = $this->eventRepo->findAll();
 
         $currentAttributions = $this->attributionRepo->findBy(['session' => $latestSession]);
         
+        // Get all professors ids within currentAttributions
+        $professorIds = [];
+        foreach ($currentAttributions as $value) {
+            if (!in_array($value->getUser()->getId(), $professorIds)) {
+                array_push($professorIds, $value->getUser()->getId());
+            };
+        }
+
+        // Get professors from professorsIds
+        $professors = $this->userRepo->findBy(['id' => $professorIds]);
 
 
 
@@ -57,7 +72,7 @@ class ManagerController extends AbstractController
             'session' => $latestSession,
             'monthsDays' => $monthsDays,
             'events' => $events,
-            'attributions' => $currentAttributions
+            'professors' => $professors
         ]);
     }
 

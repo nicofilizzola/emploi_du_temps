@@ -4,6 +4,7 @@
 @import 'utils/color';
 @import 'utils/interactions';
 @import 'utils/dimensions';
+@import 'utils/position';
 
 @import 'components/calendar';
 @import 'components/events';
@@ -12,6 +13,7 @@
 @import 'components/input';
 @import 'components/preference-list';
 @import 'components/custom-scrollbar';
+@import 'components/tooltip';
 
 body {
     background-color: lightgray;

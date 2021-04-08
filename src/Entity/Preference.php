@@ -18,11 +18,6 @@ class Preference
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $datetime;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $state;
@@ -44,21 +39,40 @@ class Preference
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $startWeek;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $endWeek;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ExceptStartWeek;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ExceptEndWeek;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $weekdays = [];
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $times = [];
+
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDatetime(): ?\DateTimeInterface
-    {
-        return $this->datetime;
-    }
-
-    public function setDatetime(\DateTimeInterface $datetime): self
-    {
-        $this->datetime = $datetime;
-
-        return $this;
     }
 
     public function getState(): ?bool
@@ -105,6 +119,78 @@ class Preference
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getStartWeek(): ?int
+    {
+        return $this->startWeek;
+    }
+
+    public function setStartWeek(int $startWeek): self
+    {
+        $this->startWeek = $startWeek;
+
+        return $this;
+    }
+
+    public function getEndWeek(): ?int
+    {
+        return $this->endWeek;
+    }
+
+    public function setEndWeek(?int $endWeek): self
+    {
+        $this->endWeek = $endWeek;
+
+        return $this;
+    }
+
+    public function getExceptStartWeek(): ?int
+    {
+        return $this->ExceptStartWeek;
+    }
+
+    public function setExceptStartWeek(?int $ExceptStartWeek): self
+    {
+        $this->ExceptStartWeek = $ExceptStartWeek;
+
+        return $this;
+    }
+
+    public function getExceptEndWeek(): ?int
+    {
+        return $this->ExceptEndWeek;
+    }
+
+    public function setExceptEndWeek(?int $ExceptEndWeek): self
+    {
+        $this->ExceptEndWeek = $ExceptEndWeek;
+
+        return $this;
+    }
+
+    public function getWeekdays(): ?array
+    {
+        return $this->weekdays;
+    }
+
+    public function setWeekdays(array $weekdays): self
+    {
+        $this->weekdays = $weekdays;
+
+        return $this;
+    }
+
+    public function getTimes(): ?array
+    {
+        return $this->times;
+    }
+
+    public function setTimes(array $times): self
+    {
+        $this->times = $times;
 
         return $this;
     }
