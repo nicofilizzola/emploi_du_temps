@@ -77,19 +77,13 @@ class PreferenceController extends AbstractController
             }
         }
 
-        foreach ($preferences as $value) {
-                
-        }
-
-        foreach ($unavailabilities as $value) {
-            
-        }
-
         // Get current user's attributions
         $userAttributions = $this->attributionRepo->findBy([
             'session' => $latestSession,
             'user' => $this->getUser()
         ]);
+
+        // dd($unavailabilities);
 
         return $this->render('preference/index.html.twig', [
             'preferences' => $preferences,

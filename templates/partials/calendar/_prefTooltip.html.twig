@@ -1,3 +1,13 @@
+{% set times = [
+    '8h00 - 9h30',
+    '9h30 - 11h00',
+    '11h00 - 12h30',
+    '8h00 - 9h30',
+    '15h00 - 16h30',
+    '16h30 - 18h00',
+    '18h00 - 19h30',
+] %}
+
 {# Verify if week matches preference:
     startWeek (all weeks selected)
     current week same as startWeek
@@ -17,7 +27,14 @@
         pref.ExceptEndWeek is not null and weekIndex > pref.ExceptEndWeek
     %}
 
-        <small>{{ pref.user }}</small>
+        <small>{{ pref.user }} : 
+            {% for timeIndex in pref.times %}
+        
+                {{ times[timeIndex - 1] }}
+
+            {% endfor %}
+
+        </small>
 
     {% endif %}
 {% endif %}

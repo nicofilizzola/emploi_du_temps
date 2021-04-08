@@ -20,4 +20,21 @@ var equipmentReqSearchbar = document.getElementById('js-equipmentReq-searchbar')
 var equipmentReqResults = document.querySelectorAll('.js-equipmentReq-result');
 searchbar(equipmentReqSearchbar, equipmentReqResults);
 
-console.log(equipmentReqResults);
+
+
+
+var prefTrigger = document.querySelectorAll('.js-preference-trigger');
+
+prefTrigger.forEach(element => {
+    element.addEventListener('mouseover', function() {
+        index = this.id.split('-'); 
+        console.log()
+        document.getElementById('js-block-' + index[1] + '-' + index[2]).classList.remove('transparent');
+    });
+
+    element.addEventListener('mouseout', function() {
+        index = this.id.split('-'); 
+        document.getElementById('js-block-' + index[1] + '-' + index[2]).classList.add('transparent');
+    });
+})
+

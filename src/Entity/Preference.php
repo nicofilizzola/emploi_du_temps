@@ -208,7 +208,7 @@ class Preference
         } else {
             // Single week
             if (is_null($this->endWeek)) {
-                $weekString = 'La semaine ' . strval($this->startWeek);
+                $weekString = 'La semaine ' . strval($this->startWeek) . ' ';
 
             // Multiple weeks
             } else {
@@ -253,9 +253,9 @@ class Preference
         foreach ($this->times as $value) {
 
             if ($value !== end($this->times)) {
-                $timeString .= $times[$value] . ', ';
+                $timeString .= $times[$value - 1] . ', ';
             } else {
-                $timeString .= 'et ' . $times[$value];
+                $timeString .= 'et ' . $times[$value - 1];
             }
         }
 
