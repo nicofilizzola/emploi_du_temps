@@ -161,7 +161,6 @@ class EquipmentController extends AbstractController
         if ($req->isMethod('POST')) {
 
             $data = $req->request;
-            
             // Error handler: Client side validation breached
                 // subject input null
                 // equipment input null
@@ -237,7 +236,7 @@ class EquipmentController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Votre demande de matériel a étée envoyée !');
-            return $this->redirectToRoute('app_equipment_request_create');
+            return $this->redirectToRoute('app_equipment_request');
 
         }
 
@@ -246,5 +245,37 @@ class EquipmentController extends AbstractController
             'userAttributions' => $userAttributions,
             'equipments' => $equipments
         ]);
+    }
+
+
+
+
+
+
+        /**
+     * @Route("/equipment/request/{id<\d+>}/delete", name="app_equipment_request_delete", methods="DELETE")
+     */
+    public function deleteRequest(EquipmentRequest $equipmentRequest, Request $req): Response
+    {   
+        // Error handler: If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_PRO' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Error handler: If equipmentRequest doesn't belong to the user
+        if ($this->getUser() !== $equipmentRequest->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // CSRF Validation
+        if ($this->isCsrfTokenValid('app_equipment_request_delete' . $equipmentRequest->getId(), $req->request->get('_token'))) {
+            // Remove user
+            $this->em->remove($equipmentRequest);
+            $this->em->flush();
+        }
+
+        $this->addFlash('success', 'Votre demande de matériel a été supprimée !');
+        return $this->redirectToRoute('app_equipment_request');
+
     }
 }

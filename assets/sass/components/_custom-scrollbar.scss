@@ -1,0 +1,18 @@
+.custom-scrollbar {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 0.5em;
+        height: 0.5em;
+    }
+     
+    &::-webkit-scrollbar-thumb {
+        background-color: $light;
+        border-radius: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: darken($light, 50);
+        border-radius: 0.5rem;
+    }
+}

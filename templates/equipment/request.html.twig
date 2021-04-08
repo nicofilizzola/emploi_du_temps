@@ -22,6 +22,70 @@
 
         <h3 class="mb-3 text-center">Mes demandes de matériel</h3>
 
+        <a href="{{ path('app_equipment_request_create') }}" class="mb-3 btn btn-primary btn-block">Faire une nouvelle demande</a>
+
+        <div class="row">
+                <div class="col-md-6">
+                    <label>Recherche spécifique :</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-control d-flex align-items-center justify-content-between">
+                        <input class="w-75" type="text" placeholder="Recherchez soit par le nom de l'enseignant ou par sa matière..." id="js-professor-searchbar">
+                        <img class="btn-icon" src="{{ asset('img/search-solid.svg') }}" alt="research button">
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 row">    
+                <table class="w-100 scrollable">
+                    <thead>
+                        <tr class="bg-dark text-light">
+                            <th class="px-2 py-3">Matériel demandé</th>
+                            <th class="px-2 py-3">Matière concernée</th>
+                            <th class="px-2 py-3">Cours concernés</th>
+                            <th class="px-2 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            {% for equipmentReq in equipmentReqs %}
+                        <tr class="hoverable js-attribution-result">
+                            <td class="p-2">{{ equipmentReq.equipment.name }}</td>
+                            <td class="p-2">{{ equipmentReq.subject.name }}</td>
+                            <td class="p-2">
+                                {% for td in equipmentReq.tds %}
+                                    TD{{ td }}
+                                {% endfor %}
+
+                                {% for tp in equipmentReq.tps %}
+                                    TP{{ tp }}
+                                {% endfor %}
+                                
+                            
+                            </td>
+                            {# DELETE CELL #}
+                            <td class="p-2">
+                                <a 
+                                    class="btn btn-danger btn-block"
+                                    onclick="event.preventDefault(); if (window.confirm('Êtes-vous sûr(e) de vouloir supprimer cette demande de matériel ?')) { document.getElementById('js-equipment-request-delete-{{ equipmentReq.id }}').submit(); }"
+                                >
+                                    Supprimer
+                                </a>
+                                {# csrf validation and request type #}
+                                <form id="js-equipment-request-delete-{{ equipmentReq.id }}" action="{{ path('app_equipment_request_delete', {id: equipmentReq.id}) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('app_equipment_request_delete' ~ equipmentReq.id) }}">
+                                </form>
+                            </td>
+                        </tr>
+            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
     {% endif %}
        
     </div>

@@ -15,18 +15,5 @@ ul.preference-list {
         }
     }
 
-    &::-webkit-scrollbar {
-        width: 0.5em;
-        height: 0.5em;
-    }
-     
-    &::-webkit-scrollbar-thumb {
-        background-color: $light;
-        border-radius: 0.5rem;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: darken($light, 50);
-        border-radius: 0.5rem;
-    }
+    
 }

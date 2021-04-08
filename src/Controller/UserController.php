@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Session;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +19,11 @@ class UserController extends AbstractController
     private $userRepo;
     private $em;
 
-    public function __construct(UserRepository $userRepo, EntityManagerInterface $em)
+    public function __construct(UserRepository $userRepo, EntityManagerInterface $em, SessionRepository $sessionRepo)
     {
         $this->userRepo = $userRepo;
         $this->em = $em;
+        $this->sessionRepo = $sessionRepo;
     }
 
     /**
@@ -142,4 +145,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
 
     }
+
+
 }

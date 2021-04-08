@@ -3,6 +3,7 @@
 @import 'utils/variables';
 @import 'utils/color';
 @import 'utils/interactions';
+@import 'utils/dimensions';
 
 @import 'components/calendar';
 @import 'components/events';
@@ -10,6 +11,7 @@
 @import 'components/table';
 @import 'components/input';
 @import 'components/preference-list';
+@import 'components/custom-scrollbar';
 
 body {
     background-color: lightgray;

@@ -9,7 +9,7 @@
     {% if userAttributions | length == 1 %}
 
             <label for="subject">Matière concernée :</label>
-            <select name="subject" class="form-control" disabled="disabled" id="js-subject-select">
+            <select name="subject" class="form-control" readonly="readonly" id="js-subject-select">
                 <option value="{{ userAttributions[0].subject.id }}">{{ userAttributions[0].subject.name }} (Semestre {{ userAttributions[0].subject.semester }})</option>    
             </select>
 

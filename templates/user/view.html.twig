@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="mx-auto col-md-9 bg-light p-5 rounded">
+    
+        <h3>Fiche enseignant : {{ user.firstName }} {{ user.lastName }} ({{ session.start | date('Y') }} - {{ session.until | date('Y') }})</h3>
+
+        <h5 class="mt-4">Matières enseignées</h5>
+        <ul>
+            {% for attribution in attributions %}
+            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
+            {% endfor %}
+        </ul>
+
+        <h5 class="mt-4">Préférences</h5>
+        <ul>
+            {% for attribution in attributions %}
+            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
+            {% endfor %}
+        </ul>
+
+        <h5 class="mt-4">Demandes de matériel</h5>
+        <ul>
+            {% for attribution in attributions %}
+            <li><b>{{ attribution.subject }} :</b> {{ attribution.subject.name }} au semestre {{ attribution.subject.semester }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -43,7 +43,7 @@ class AttributionController extends AbstractController
         }
 
         // Error handler : If user has no access or isn't connected
-        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+        if (!$this->getUser() || !in_array('ROLE_DIR' , $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_home');
         }
 
@@ -107,7 +107,7 @@ class AttributionController extends AbstractController
     public function delete(Attribution $attribution, Request $req): Response
     {   
         // Error handler : If user has no access or isn't connected
-        if (!$this->getUser() || !in_array('ROLE_MAN' , $this->getUser()->getRoles())) {
+        if (!$this->getUser() || !in_array('ROLE_DIR' , $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_home');
         }
 

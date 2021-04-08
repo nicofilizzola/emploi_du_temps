@@ -37,6 +37,15 @@ class PreferenceController extends AbstractController
      */
     public function index(): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_PRO' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
+
+
+
         $latestSession = $this->sessionRepo->findOneBy([], ['id' => 'DESC']);
         $preferences = $this->preferenceRepo->findBy([
             'state' => true,
@@ -105,6 +114,15 @@ class PreferenceController extends AbstractController
      */
     public function create(Request $req): Response
     {
+        // Error handler : If user has no access or isn't connected
+        if (!$this->getUser() || !in_array('ROLE_PRO' , $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_home');
+        }
+
+
+        
+
+
         $data = $req->request;
 
         // set state
