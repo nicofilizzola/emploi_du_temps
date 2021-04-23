@@ -21,6 +21,13 @@ git clone https://github.com/nicofilizzola/emploi_du_temps.git
 composer install
 ```
 
+5) Installer [Node.js (npm)](https://nodejs.org/en/download/)
+
+6) Exporter les dépendances en utilisant la commande suivante (au niveau du repertoire "emploi_du_temps") :
+```bash
+npm run watch
+```
+
 ## Ouvrir dans le navigateur
 
 1) Démarrer le serveur Apache ainsi que le serveur MySQL au niveau de XAMPP
